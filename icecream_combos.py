@@ -9,14 +9,14 @@ flavors = ["Banana", "Chocolate", "Lemon", "Pistachio", "Raspberry", "Strawberry
 
 i = 0
 
-while i > len(flavors):
-  print(flavors[i])
+while i < len(flavors):
+  
   f = 0
   while f < len(flavors):
-    print(flavors[f], flavors[i])
-    f += 1
+    print(flavors[i + 1], flavors[f - 1])
+    f += 2
 
-  i -= 1
+  i += 1
 
 # banana, chocolate,
 # banana, lemon

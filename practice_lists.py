@@ -4,7 +4,7 @@ breeds = ["Appaloosa", "Shetland", "Fresian", "Morgan"]
 
 
 breeds.append("thoroughbred")
-breeds[-1] = ("Throughbred")
+breeds[-1] = ("Thoroughbred")
 
 for name in breeds:
     print(name)
