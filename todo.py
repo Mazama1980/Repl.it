@@ -30,7 +30,7 @@ def groceries():
         "tortillas",
         "cereal",
     ]
-    fh = open("groceries.txt", "w")
+    fh = open("data/groceries.txt", "w")
     for item in groceries:
         fh.write(f" - {item}\n")
     fh.close()
@@ -51,13 +51,13 @@ def append_todos():
 
 
 def append_groceries():
-    fh = open("groceries.txt", "a")
+    fh = open("data/groceries.txt", "a")
     fh.write(" - milk\n")
     fh.close()
 
 
 def with_groceries():
-    with open("groceries.txt") as fp:
+    with open("data/groceries.txt") as fp:
         contents = fp.read()
 
     print("groceries")

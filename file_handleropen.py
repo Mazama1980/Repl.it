@@ -1,4 +1,4 @@
-fh = open("groceries.txt")
+fh = open("data/groceries.txt")
 contents = fh.read()
 fh.close()
 

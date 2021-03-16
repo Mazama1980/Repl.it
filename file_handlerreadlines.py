@@ -1,7 +1,7 @@
 print("Groceries")
 print("=========")
 
-fh = open("groceries.txt")
+fh = open("data/groceries.txt")
 for line in fh.readlines():
     print(line, end="")
 
