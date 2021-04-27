@@ -40,4 +40,49 @@ def touchtmp():
 
 # touchtmp()
 
+def listcontents():
+    path = Path("contacts.txt")
+    path = path.absolute()
+    print(path)
+    path.touch()
 
+# listcontents()
+
+
+def datacontents():
+    """Touch contacts.txt in the data directory."""
+    cwd = Path.cwd()
+    basedir = cwd.joinpath("data")
+    path = basedir.joinpath("flowers.txt")
+    print("datacontents():", path)
+    path.touch()
+
+# datacontents()
+
+def data_tmp():
+    """1. If it does not already exist, create the data/tmp directory
+       2. Create the empty file file_1.txt using the touch() method. """
+    path = Path("data/tmp")
+    path.mkdir(exist_ok=True)
+    filepath = path.joinpath("file_1.txt")
+    filepath.touch()
+
+    print("data_tmp:", filepath)
+
+data_tmp()
+
+def delete():
+    """1. Choose one of your generated files to delete.
+
+       2. Ask the user to confirm they want to delete the file.
+
+       3. Use unlink() to delete the file."""
+    path = Path("data/tmp/file_1.txt")
+    print("Are you sure you want to throw good code away?")
+    if input() != "y":
+        print("Sorry to hear that.")
+    else:
+        path.unlink(missing_ok=True)   
+
+    
+delete()
