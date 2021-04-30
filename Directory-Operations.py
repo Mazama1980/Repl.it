@@ -57,7 +57,7 @@ def datacontents():
     print("datacontents():", path)
     path.touch()
 
-# datacontents()
+datacontents()
 
 def data_tmp():
     """1. If it does not already exist, create the data/tmp directory
@@ -80,7 +80,7 @@ def delete():
     path = Path("data/tmp/file_1.txt")
     print("Are you sure you want to throw good code away?")
     if input() != "y":
-        print("Sorry to hear that.")
+        print("Okay. It's deleted.")
     else:
         path.unlink(missing_ok=True)   
 
