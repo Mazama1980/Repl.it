@@ -57,7 +57,7 @@ def datacontents():
     print("datacontents():", path)
     path.touch()
 
-datacontents()
+# datacontents()
 
 def data_tmp():
     """1. If it does not already exist, create the data/tmp directory
@@ -69,7 +69,7 @@ def data_tmp():
 
     print("data_tmp:", filepath)
 
-data_tmp()
+# data_tmp()
 
 def delete():
     """1. Choose one of your generated files to delete.
@@ -85,4 +85,53 @@ def delete():
         path.unlink(missing_ok=True)   
 
     
-delete()
+# delete()
+
+def presents():
+    """
+    People files
+
+    This exercise is to generate files for a list of people that you can use to
+    keep track of notes, birthday info, gift ideas etc.
+
+    At the end of the exercise you should have a folder containing a file for each
+    person that contains something related to that person.
+
+    [x] Make a list of people's names that you'd like to keep track of information about.
+    [x] Create a new directory called something like `people` if it does not exist.
+    [x] Iterate over the list of people.
+        [x] Create a blank file called `{name}.txt` in the `people` directory if it doesn't exist.
+        [x] Write something to the file about that person
+
+    [ ] Write something different for each person in the list
+        [ ] Change the list to a dict where the key is the name of the person
+            and the value is a gift idea.
+        [ ] Change your for loop to get the name and gift of each item
+            in the dict using the .items() method
+        [ ] Write a second line to the file with their gift idea
+
+    """
+    
+    print("Hello")
+    people = ["Grumpy", 
+    "Doc", 
+    "Sleepy", 
+    "Dopey", 
+    "Bashful", 
+    "Happy"]
+    folder = Path("data") / "Presents"
+    folder.mkdir(exist_ok=True)
+    for name in people:
+        filename = f"{name}.txt"
+        filepath = folder / filename
+        print(f"file for {name} is: {filepath}")
+        filehandler = open(filepath, "w")
+        filehandler.write(f"Presents for {name}\n")
+        filehandler.close()
+        filepath.touch(exist_ok=True)
+        
+       
+    
+
+
+presents()
