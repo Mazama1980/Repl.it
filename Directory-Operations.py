@@ -103,30 +103,48 @@ def presents():
         [x] Create a blank file called `{name}.txt` in the `people` directory if it doesn't exist.
         [x] Write something to the file about that person
 
-    [ ] Write something different for each person in the list
-        [ ] Change the list to a dict where the key is the name of the person
+    [x] Write something different for each person in the list
+        [x] Change the list to a dict where the key is the name of the person
             and the value is a gift idea.
-        [ ] Change your for loop to get the name and gift of each item
+        [x] Change your for loop to get the name and gift of each item
             in the dict using the .items() method
-        [ ] Write a second line to the file with their gift idea
+        [x] Write a second line to the file with their gift idea
 
     """
     
     print("Hello")
-    people = ["Grumpy", 
-    "Doc", 
-    "Sleepy", 
-    "Dopey", 
-    "Bashful", 
-    "Happy"]
+    people = {
+        "Grumpy": "massager", 
+        "Doc": "hemp oil", 
+        "Sleepy": "Redbull", 
+        "Dopey": "reminder diary", 
+        "Bashful": "flowers ", 
+        "Happy": "chocolates"
+    }
+
+    # number = 42
+    # number, meaning = 42, "life, the universe, everything"
+
+    # # these three lines are all handled automaticaly by the for loop
+    # # you don't need an i
+    # i = 0
+    # people_items = people.items()
+    # while i < len(people_items):
+    #     # this assignment line is the key part of the for loop
+    #     # here, `name, gift` is the x in `for x in y`
+    #     name, gift = people_items[i]
+    #     # the rest of the for loop
+        # ...
+
     folder = Path("data") / "Presents"
     folder.mkdir(exist_ok=True)
-    for name in people:
+    for name, gift in people.items():
         filename = f"{name}.txt"
         filepath = folder / filename
         print(f"file for {name} is: {filepath}")
         filehandler = open(filepath, "w")
-        filehandler.write(f"Presents for {name}\n")
+        filehandler.write(f"Presents for {name}\n\n")
+        filehandler.write(f"* {gift}\n")
         filehandler.close()
         filepath.touch(exist_ok=True)
         
