@@ -4,7 +4,7 @@
     -----
     1. Create a folder data/flashcards if it doesn't exist
     2.Make flashcard csv files
-        [] In the dataflashcards directory manually make file called ending in .csv
+        [] In the data/flashcards directory manually make file called ending in .csv
         [] Each line shoud be one card with the format: "text for front, text for back".
         Here is my "path.csv" example:
         
@@ -16,10 +16,10 @@
     Exercise
     -------
     1. Start your flashcards.py file
-        [] write a main () function, and in it print sokething, then call it
+        [x] write a main () function, and in it print something, then call it
     2. Write a load_csv function
         [] open the csv file you made using the 'open()' function
-        [] use'fp.readlines()' o interate through each line in the file
+        [] use'fp.readlines()' to interate through each line in the file
         [] print each line for now
         
   """
