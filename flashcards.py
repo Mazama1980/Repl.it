@@ -19,18 +19,22 @@
         [x] write a main () function, and in it print something, then call it
     2. Write a load_csv function
         [] open the csv file you made using the 'open()' function
-        [] use'fp.readlines()' to interate through each line in the file
+        [] use'fp.readlines()' to iterate through each line in the file
         [] print each line for now
         
   """
-
-def main():
-      print("Hello World")
-main()
+# ### Imports ################################################################
 
 from pathlib import Path
+
+# ## Global Variables ########################################################
+
+
+# ## Functions ###############################################################
+
 def load_csv():
-    path = Path("data/flashcards/flashcards.csv").absolute()
+    print("hello")
+    path = Path("data/flashcards/flashcards.csv")
     if not path.exists():
         print(f"This path {path} does not exist.")
         return
@@ -40,4 +44,23 @@ def load_csv():
     # fp = open("data/flashcards.csv")
     # fp.readlines()
 
-load_csv() 
+
+# The main() function should be at the last function defined
+#
+
+def main():
+    print("Hello World")
+    load_csv() 
+
+# ## Runner ##################################################################
+
+# This calls the main() function if the script is being run directly
+#   but not if it is being imported as a module
+
+# This should always be at the very end of the script
+#
+
+if __name__ == "__main__":
+    main()
+
+
