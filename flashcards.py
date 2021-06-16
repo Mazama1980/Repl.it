@@ -23,7 +23,7 @@ https://alissa-huskey.github.io/python-class/exercises/flashcards.html
     [x] for temporary debugging, print something from it
 
     main()
-    [ ] call play() passing it the list of cards
+    [x] call play() passing it the list of cards
 
 """
 # ### Imports ################################################################
@@ -55,6 +55,8 @@ def load_csv(path):
         card["back"] = row[1]
         card["front"] = card["front"].strip()
         card["back"] = card["back"].strip()
+        if card["front"] == "front" and card["back"] == "back":
+            continue
         cards.append(card)
         print(card)
     fp.close()
