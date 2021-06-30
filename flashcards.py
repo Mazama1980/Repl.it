@@ -10,24 +10,26 @@ https://alissa-huskey.github.io/python-class/exercises/flashcards.html
 [x] Part 6: Return the card data to main()
 [x] Part 7: Remove extra whitespace
 [x] Part 8: Skip the header row
-[ ] Part 9: Start the play() function¶
+[x] Part 9: Start the play() function
+[x] Part 10: Go through each card in random order
+[x] Part 11: Test the user
 
-    This function should take one argument, the list of cards. Eventually it
-    will contain the user interface for running through each card, getting the
-    answers from the user, and printing the score.
+   in play(), in the loop
 
-    For now we'll just write a play() function and call it.
+    [x] print card["front"]
 
-    play()
-    [x] write a play() function that takes one argument: cards
-    [x] for temporary debugging, print something from it
+    [x] prompt the user for their answer using the input() function and assign the result to a variable named answer
 
-    main()
-    [x] call play() passing it the list of cards
+    [x] check if the answer is the same as card["back"]
+        * [x] if so, increment score by one and print "CORRECT"
+        * [x] if not, print "INCORRECT", then cards["back"]
 
+    [x] call input() asking if the user wants to continue
+
+    in play(), after the loop
 """
 # ### Imports ################################################################
-
+import random
 from pathlib import Path
 
 # ## Global Variables ########################################################
@@ -41,7 +43,7 @@ def load_csv(path):
     if not path.is_file():
         print(f"Unable to read {path}.")
         return
-    print(f"Loading file: {path}.")
+    # print(f"Loading file: {path}.")
     fp = open("data/flashcards/flashcards.csv")
     cards = list()
     for line in fp.readlines():
@@ -58,13 +60,30 @@ def load_csv(path):
         if card["front"] == "front" and card["back"] == "back":
             continue
         cards.append(card)
-        print(card)
     fp.close()
     return(cards)
 
 
 def play(cards):
-    print("Hello from the Play Function")
+    score = 0
+    while cards:
+        card = random.choice(cards)
+        cards.remove(card)
+        print(card["front"])
+        print("Cheat-- the answer is:", card["back"])
+        answer = input("Your answer: ")
+        if answer == card["back"]:
+            score = score + 1
+            print("Correct! Your score is: ", score)
+        else:
+            print("INCORRECT", card["back"])
+        reply = input("Would you like to continue? ")
+        if reply == "n":
+            break
+        
+
+        # print("Hi", card)
+
     
 
 # The main() function should be at the last function defined
@@ -77,8 +96,6 @@ def main():
     if not cards:
         print("This file is empty.")
         return
-    else:
-        print(cards)
     play(cards)
     
 
