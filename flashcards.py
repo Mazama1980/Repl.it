@@ -13,26 +13,39 @@ https://alissa-huskey.github.io/python-class/exercises/flashcards.html
 [x] Part 9: Start the play() function
 [x] Part 10: Go through each card in random order
 [x] Part 11: Test the user
+[x] Part 12: Scorekeeping
+[ ] Part 13: Prettify flashcards
 
-   in play(), in the loop
+    throughout your file:
 
-    [x] print card["front"]
+        [x] get rid of any debug print() statements
 
-    [x] prompt the user for their answer using the input() function and assign the result to a variable named answer
+    at the top of your file:
 
-    [x] check if the answer is the same as card["back"]
-        * [x] if so, increment score by one and print "CORRECT"
-        * [x] if not, print "INCORRECT", then cards["back"]
+        [x] make a global variable WIDTH and set it to around 75
 
-    [x] call input() asking if the user wants to continue
+    in play():
 
-    in play(), after the loop
+        [x] print a line to the beginning and end of each card
+
+        [x] add some extra newlines around various elements
+
+        [x] center any string by calling the .center() method on it and pass the
+            argument WIDTH. For example, the card["front"] line.
+
+        [x] right align any string by calling the .rjust() method on it and
+            passing the argument WIDTH. For example, the card x of y line.
+
+        [ ] print "score of total" after the end of each card
+  
 """
 # ### Imports ################################################################
 import random
 from pathlib import Path
 
 # ## Global Variables ########################################################
+WIDTH = 75
+
 
 # ## Functions ###############################################################
 
@@ -65,24 +78,31 @@ def load_csv(path):
 
 
 def play(cards):
+    total = len(cards)
+    num = 1
     score = 0
     while cards:
+        print("-" * WIDTH)
+        tallytext = f"card {num} of {total}"
+        print(tallytext.rjust(WIDTH), "\n")
         card = random.choice(cards)
         cards.remove(card)
-        print(card["front"])
-        print("Cheat-- the answer is:", card["back"])
+        print(card["front"].center(WIDTH), "\n")
+        print("Cheat-- the answer is:", card["back"], "\n")
         answer = input("Your answer: ")
         if answer == card["back"]:
             score = score + 1
+            print("-" * WIDTH)
             print("Correct! Your score is: ", score)
         else:
             print("INCORRECT", card["back"])
+            print("-" * WIDTH)
         reply = input("Would you like to continue? ")
         if reply == "n":
             break
+        num = num + 1
+    print("score of ", score)
         
-
-        # print("Hi", card)
 
     
 
@@ -90,7 +110,6 @@ def play(cards):
 #
 
 def main():
-    print("Hello World")
     path = Path("data/flashcards/flashcards.csv")
     cards = load_csv(path)
     if not cards:
