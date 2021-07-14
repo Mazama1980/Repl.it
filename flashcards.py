@@ -42,10 +42,13 @@ https://alissa-huskey.github.io/python-class/exercises/flashcards.html
 # ### Imports ################################################################
 import random
 from pathlib import Path
+import textwrap
 
 # ## Global Variables ########################################################
-WIDTH = 75
-
+WIDTH = 60
+MARGIN = 20
+MAXWIDTH = WIDTH - MARGIN
+DEBUG_MODE = True
 
 # ## Functions ###############################################################
 
@@ -60,6 +63,8 @@ def load_csv(path):
     fp = open("data/flashcards/flashcards.csv")
     cards = list()
     for line in fp.readlines():
+        if line == '\n':
+            continue
         card = dict()
         row = line.split(",")
         items = len(row)
@@ -84,14 +89,16 @@ def play(cards):
     while cards:
         print("*" * WIDTH)
         tallytext = f"card {num} of {total}"
-        print("|" + tallytext.rjust(WIDTH-2) + "|")
+        print("|" + tallytext.rjust(WIDTH-2) + "|", "\n")
         card = random.choice(cards)
         cards.remove(card)
         head = "Question:"
-        border = "|"
         print("|" + head.center(WIDTH-2) + "|")
-        print("|" + card["front"].center(WIDTH-2) + "|")
-        # print("Cheat-- the answer is:", card["back"], "\n")
+        query = textwrap.wrap(card["front"], MAXWIDTH)
+        for line in query:
+            print("|" + line.center(WIDTH-2) + "|")
+        if DEBUG_MODE:
+            print("Cheat-- the answer is:", card["back"], "\n")
         answer = input("| " + "Your answer: ")
         if answer == card["back"]:
             score = score + 1
