@@ -82,17 +82,20 @@ def play(cards):
     num = 1
     score = 0
     while cards:
-        print("-" * WIDTH)
+        print("*" * WIDTH)
         tallytext = f"card {num} of {total}"
-        print(tallytext.rjust(WIDTH), "\n")
+        print("|" + tallytext.rjust(WIDTH-2) + "|")
         card = random.choice(cards)
         cards.remove(card)
-        print(card["front"].center(WIDTH), "\n")
-        print("Cheat-- the answer is:", card["back"], "\n")
-        answer = input("Your answer: ")
+        head = "Question:"
+        border = "|"
+        print("|" + head.center(WIDTH-2) + "|")
+        print("|" + card["front"].center(WIDTH-2) + "|")
+        # print("Cheat-- the answer is:", card["back"], "\n")
+        answer = input("| " + "Your answer: ")
         if answer == card["back"]:
             score = score + 1
-            print("-" * WIDTH)
+            print("*" * WIDTH)
             print("Correct! Your score is: ", score)
         else:
             print("INCORRECT", card["back"])
