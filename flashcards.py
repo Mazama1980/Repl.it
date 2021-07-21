@@ -14,7 +14,7 @@ https://alissa-huskey.github.io/python-class/exercises/flashcards.html
 [x] Part 10: Go through each card in random order
 [x] Part 11: Test the user
 [x] Part 12: Scorekeeping
-[ ] Part 13: Prettify flashcards
+[x] Part 13: Prettify flashcards
 
     throughout your file:
 
@@ -36,13 +36,14 @@ https://alissa-huskey.github.io/python-class/exercises/flashcards.html
         [x] right align any string by calling the .rjust() method on it and
             passing the argument WIDTH. For example, the card x of y line.
 
-        [ ] print "score of total" after the end of each card
+        [x] print "score of total" after the end of each card
   
 """
 # ### Imports ################################################################
 import random
 from pathlib import Path
 import textwrap
+import time
 
 # ## Global Variables ########################################################
 WIDTH = 60
@@ -88,8 +89,11 @@ def play(cards):
     score = 0
     while cards:
         print("*" * WIDTH)
+        box = "|"
+        print(box.ljust(WIDTH-59), box.rjust(WIDTH-2))
         tallytext = f"card {num} of {total}"
-        print("|" + tallytext.rjust(WIDTH-2) + "|", "\n")
+        print("|" + tallytext.rjust(WIDTH-2) + "|")
+        print(box.ljust(WIDTH-59), box.rjust(WIDTH-2))
         card = random.choice(cards)
         cards.remove(card)
         head = "Question:"
@@ -97,8 +101,15 @@ def play(cards):
         query = textwrap.wrap(card["front"], MAXWIDTH)
         for line in query:
             print("|" + line.center(WIDTH-2) + "|")
+            print(box.ljust(WIDTH-59), box.rjust(WIDTH-2))
         if DEBUG_MODE:
-            print("Cheat-- the answer is:", card["back"], "\n")
+            i = 5
+            while i > 0:
+                print("| " "Cheat-- the answer is:", card["back"])
+                print(box.ljust(WIDTH-59), box.rjust(WIDTH-2))
+                # print(".", end="")
+                time.sleep(1)
+                i = i - 5
         answer = input("| " + "Your answer: ")
         if answer == card["back"]:
             score = score + 1
