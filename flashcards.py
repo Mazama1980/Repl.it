@@ -15,29 +15,63 @@ https://alissa-huskey.github.io/python-class/exercises/flashcards.html
 [x] Part 11: Test the user
 [x] Part 12: Scorekeeping
 [x] Part 13: Prettify flashcards
+[x] Part 14: Wrap long questions¶
+[ ] Part 15: Add topics menu
+    
+    at the top of your file
 
-    throughout your file:
+      [x] Make a list assigned to the global variable TOPICS
 
-        [x] get rid of any debug print() statements
+    menu()
 
-    at the top of your file:
+      [ ] write a menu() function
 
-        [x] make a global variable WIDTH and set it to around 75
+      [ ] assign TOPICS to a list of Path objects in your flashcards directory
+          using the .iterdir() method
 
-    in play():
+      [ ] print an error message if no files are found in your flashcards
+          directory
 
-        [x] print a line to the beginning and end of each card
+      [ ] print the filename minus the .csv extension for each Path object in
+          the TOPICS list, next to a number
 
-        [x] add some extra newlines around various elements
+      [ ] print a special option "all" with a menu selection of 0
 
-        [x] center any string by calling the .center() method on it and pass the
-            argument WIDTH. For example, the card["front"] line.
+      [ ] make a list assigned to the variable selection
 
-        [x] right align any string by calling the .rjust() method on it and
-            passing the argument WIDTH. For example, the card x of y line.
+      [ ] get input from the user asking them to choose one or more topics and
+          assign it to a variable choices
 
-        [x] print "score of total" after the end of each card
-  
+      [ ] use the .split() method to split choices into multiple items on
+          whitespace
+
+      [ ] iterate over each response and assign to num:
+
+          [ ] if the response is "0", return TOPICS
+
+          [ ] convert num to an int and subtract 1
+
+          [ ] get the item from TOPICS at the num index and append it to
+              selection list
+
+          [ ] return the selection list
+
+    in main()
+
+        [ ] at the beginning of the function, make an empty cards list
+
+        [ ] call menu() and assign the returned value to the variable paths
+
+        [ ] remove the line where you previously defined the path to your .csv
+            file
+
+        [ ] iterate over paths and assign each element to the variable path:
+
+        [ ] call load_csv() with the path argument
+
+        [ ] append the returned value to cards using the .extend() method
+
+
 """
 # ### Imports ################################################################
 import random
@@ -50,7 +84,7 @@ WIDTH = 60
 MARGIN = 20
 MAXWIDTH = WIDTH - MARGIN
 DEBUG_MODE = True
-
+TOPICS = []
 # ## Functions ###############################################################
 
 def load_csv(path):
@@ -105,12 +139,12 @@ def play(cards):
         if DEBUG_MODE:
             i = 5
             while i > 0:
-                print("| " "Cheat-- the answer is:", card["back"])
+                print("| ", "Cheat-- the answer is:", card["back"])
                 print(box.ljust(WIDTH-59), box.rjust(WIDTH-2))
                 # print(".", end="")
                 time.sleep(1)
                 i = i - 5
-        answer = input("| " + "Your answer: ")
+        answer = input("| Your answer: ")
         if answer == card["back"]:
             score = score + 1
             print("*" * WIDTH)
@@ -125,12 +159,25 @@ def play(cards):
     print("score of ", score)
         
 
+def menu():
+    datadir = Path("data/flashcards")
+    # breakpoint()
+    if not datadir.is_dir():
+        print(f"This path {datadir} does not exist.")
+    TOPICS = list(datadir.iterdir())
+    # datadir is: a Path object
+    # datadir.iterdir(): generator object that lists files in the directory
+    print(TOPICS)    
+
+    
     
 
 # The main() function should be at the last function defined
 #
 
 def main():
+    menu()
+    return
     path = Path("data/flashcards/flashcards.csv")
     cards = load_csv(path)
     if not cards:
