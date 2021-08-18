@@ -24,37 +24,37 @@ https://alissa-huskey.github.io/python-class/exercises/flashcards.html
 
     menu()
 
-      [ ] write a menu() function
+      [x] write a menu() function
 
-      [ ] assign TOPICS to a list of Path objects in your flashcards directory
+      [x] assign TOPICS to a list of Path objects in your flashcards directory
           using the .iterdir() method
 
-      [ ] print an error message if no files are found in your flashcards
+      [x] print an error message if no files are found in your flashcards
           directory
 
-      [ ] print the filename minus the .csv extension for each Path object in
+      [x] print the filename minus the .csv extension for each Path object in
           the TOPICS list, next to a number
 
-      [ ] print a special option "all" with a menu selection of 0
+      [x] print a special option "all" with a menu selection of 0
 
-      [ ] make a list assigned to the variable selection
+      [x] make a list assigned to the variable selection
 
-      [ ] get input from the user asking them to choose one or more topics and
+      [x] get input from the user asking them to choose one or more topics and
           assign it to a variable choices
 
-      [ ] use the .split() method to split choices into multiple items on
+      [x] use the .split() method to split choices into multiple items on
           whitespace
 
-      [ ] iterate over each response and assign to num:
+      [x] iterate over each response and assign to num:
 
-          [ ] if the response is "0", return TOPICS
+          [x] if the response is "0", return TOPICS
 
-          [ ] convert num to an int and subtract 1
+          [x] convert num to an int and subtract 1
 
-          [ ] get the item from TOPICS at the num index and append it to
+          [x] get the item from TOPICS at the num index and append it to
               selection list
 
-          [ ] return the selection list
+     [x] return the selection list
 
     in main()
 
@@ -166,11 +166,20 @@ def menu():
         print(f"This path {datadir} does not exist.")
     TOPICS = list(datadir.iterdir())
     # datadir is: a Path object
-    # datadir.iterdir(): generator object that lists files in the directory
-    print(TOPICS)    
-
-    
-    
+    # datadir.iterdir(): generator object that lists files in the directory 
+    print(0, "all")
+    for i, path in enumerate(TOPICS, 1):
+        #print the filename minus the .csv extension
+        print(i, path.stem)
+    selection = []
+    choices = input("Choose one or more topics: ")
+    for num in choices.split():
+        if num == 0:
+            return(TOPICS)
+        num = int(num) - 1
+        selection.append(TOPICS[num])
+    print(selection)
+    return(selection)    
 
 # The main() function should be at the last function defined
 #
