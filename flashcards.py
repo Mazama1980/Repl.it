@@ -1,6 +1,6 @@
 """
 Flashcards
-https://alissa-huskey.github.io/python-class/exercises/flashcards.html
+# https://alissa-huskey.github.io/python-class/exercises/flashcards.html
 
 [x] Part 1: Make a csv file
 [x] Part 2: Start flashcards.py
@@ -16,60 +16,29 @@ https://alissa-huskey.github.io/python-class/exercises/flashcards.html
 [x] Part 12: Scorekeeping
 [x] Part 13: Prettify flashcards
 [x] Part 14: Wrap long questions¶
-[ ] Part 15: Add topics menu
-    
+[x] Part 15: Add topics menu
+[x] Part 16: Allow answers with commas
+
     at the top of your file
 
-      [x] Make a list assigned to the global variable TOPICS
+      [x] import the csv module
 
-    menu()
+    in load_csv() after opening your file
 
-      [x] write a menu() function
+      [x] Create a new csv reader like so:
 
-      [x] assign TOPICS to a list of Path objects in your flashcards directory
-          using the .iterdir() method
+          reader = csv.reader(
+          fh,
+          quotechar="'",
+          skipinitialspace=True,
+          escapechar="\\"
+          )
+      [x] Instead of iterating over fh.readlines(), 
+          iterate over the reader object, which will yields a list of values in each row.
 
-      [x] print an error message if no files are found in your flashcards
-          directory
 
-      [x] print the filename minus the .csv extension for each Path object in
-          the TOPICS list, next to a number
 
-      [x] print a special option "all" with a menu selection of 0
 
-      [x] make a list assigned to the variable selection
-
-      [x] get input from the user asking them to choose one or more topics and
-          assign it to a variable choices
-
-      [x] use the .split() method to split choices into multiple items on
-          whitespace
-
-      [x] iterate over each response and assign to num:
-
-          [x] if the response is "0", return TOPICS
-
-          [x] convert num to an int and subtract 1
-
-          [x] get the item from TOPICS at the num index and append it to
-              selection list
-
-     [x] return the selection list
-
-    in main()
-
-        [ ] at the beginning of the function, make an empty cards list
-
-        [ ] call menu() and assign the returned value to the variable paths
-
-        [ ] remove the line where you previously defined the path to your .csv
-            file
-
-        [ ] iterate over paths and assign each element to the variable path:
-
-        [ ] call load_csv() with the path argument
-
-        [ ] append the returned value to cards using the .extend() method
 
 
 """
@@ -78,7 +47,7 @@ import random
 from pathlib import Path
 import textwrap
 import time
-
+import csv
 # ## Global Variables ########################################################
 WIDTH = 60
 MARGIN = 20
@@ -95,16 +64,16 @@ def load_csv(path):
         print(f"Unable to read {path}.")
         return
     # print(f"Loading file: {path}.")
-    fp = open("data/flashcards/flashcards.csv")
+    fp = open(path)
+    reader = csv.reader(fp, quotechar="'", skipinitialspace=True, escapechar="\\")
     cards = list()
-    for line in fp.readlines():
-        if line == '\n':
+    for row in reader:
+        if not row:
             continue
         card = dict()
-        row = line.split(",")
         items = len(row)
         if items != 2:
-            print("There is something wrong with this line. It doesn't equal 2 items.")
+            print("There is something wrong with this line. It doesn't equal 2 items.", path, row)
             return
         card["front"] = row[0] 
         card["back"] = row[1]
@@ -185,10 +154,12 @@ def menu():
 #
 
 def main():
-    menu()
-    return
-    path = Path("data/flashcards/flashcards.csv")
-    cards = load_csv(path)
+    cards = []
+    paths = menu()
+    for path in paths:
+        filecards = load_csv(path)
+        if filecards:
+           cards.extend(filecards)
     if not cards:
         print("This file is empty.")
         return
