@@ -35,7 +35,22 @@ Flashcards
           )
       [x] Instead of iterating over fh.readlines(), 
           iterate over the reader object, which will yields a list of values in each row.
+[x] Use an command line argument to decide if the program is in DEBUG_MODE. 
+    So, if at the command line you type:
+        $ python flashcards.py 10
+    Then at most 10 flashcards will be shown.
 
+    Or if you type:
+        $ python flashcards.py
+    Then then you'll go through all of the flashcards for the selected topic(s).
+
+    In the main() function, before calling play():
+    [x] Check if sys.argv has more than 1 item. If so:
+        [x] assign the second value in the sys.argv list to the variable limit
+        [x] use random.choices with the arguments cards and k=limit to get only
+            part of the cards list and assign it back to the variable cards
+    
+!!!Choices input of 0 (zero) is not loading all the cards. Need to fix!!!
 
 
 
@@ -48,11 +63,13 @@ from pathlib import Path
 import textwrap
 import time
 import csv
+import sys
+import random
 # ## Global Variables ########################################################
 WIDTH = 60
 MARGIN = 20
 MAXWIDTH = WIDTH - MARGIN
-DEBUG_MODE = True
+DEBUG_MODE = False
 TOPICS = []
 # ## Functions ###############################################################
 
@@ -147,7 +164,7 @@ def menu():
             return(TOPICS)
         num = int(num) - 1
         selection.append(TOPICS[num])
-    print(selection)
+    # print(selection)
     return(selection)    
 
 # The main() function should be at the last function defined
@@ -163,6 +180,9 @@ def main():
     if not cards:
         print("This file is empty.")
         return
+    if len(sys.argv) > 1:
+        limit = sys.argv[1]
+        cards = random.choices(cards, k=limit)
     play(cards)
     
 
