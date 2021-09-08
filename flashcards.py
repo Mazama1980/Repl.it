@@ -69,7 +69,7 @@ import random
 WIDTH = 60
 MARGIN = 20
 MAXWIDTH = WIDTH - MARGIN
-DEBUG_MODE = False
+DEBUG_MODE = True
 TOPICS = []
 # ## Functions ###############################################################
 
@@ -125,10 +125,10 @@ def play(cards):
         if DEBUG_MODE:
             i = 5
             while i > 0:
+                time.sleep(8)
                 print("| ", "Cheat-- the answer is:", card["back"])
                 print(box.ljust(WIDTH-59), box.rjust(WIDTH-2))
                 # print(".", end="")
-                time.sleep(1)
                 i = i - 5
         answer = input("| Your answer: ")
         if answer == card["back"]:
@@ -160,7 +160,7 @@ def menu():
     selection = []
     choices = input("Choose one or more topics: ")
     for num in choices.split():
-        if num == 0:
+        if num == "0":
             return(TOPICS)
         num = int(num) - 1
         selection.append(TOPICS[num])
@@ -181,7 +181,7 @@ def main():
         print("This file is empty.")
         return
     if len(sys.argv) > 1:
-        limit = sys.argv[1]
+        limit = int(sys.argv[1])
         cards = random.choices(cards, k=limit)
     play(cards)
     
