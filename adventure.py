@@ -22,8 +22,7 @@ def main():
         print(
             format(item["name"], "<14s"),
             format(item["desc"], "<33s"),
-            format(item["price"], ">2d"),
-            "gems",
+            f'{item["price"]:>2d} gems',
         )
         
 
