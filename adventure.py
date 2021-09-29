@@ -1,4 +1,6 @@
-"""Textbased adventure game."""
+"""Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
+
+"""
 
 from pprint import pprint
 
@@ -11,20 +13,28 @@ ITEMS = [
     },
     {
         "name": "short dagger",
-        "desc": "antler handle with double edges",
+        "desc": "antler handle with double edged blade",
         "price": 22,
     },
 ]
+def do_quit():
+    print("Goodbye!")
+    quit()
 
 def main():
-    # pprint(ITEMS)
-    for item in ITEMS:
-        print(
-            format(item["name"], "<14s"),
-            format(item["desc"], "<33s"),
-            f'{item["price"]:>2d} gems',
-        )
+    print("Welcome!")
+    while True:
+        reply = input(">")
+        if reply == "quit":
+            do_quit()
+        else:
+            print("No such command.")
+            continue
+
+
+    
         
 
 if __name__ == "__main__":
     main()
+    
