@@ -1,6 +1,6 @@
 """
 Flashcards
-# https://alissa-huskey.github.io/python-class/exercises/flashcards.html
+# https://alissa-huskey.github.io/python-class/exercises/flashcards.html; https://alissa-huskey.github.io/python-class/lessons/functions.html#table-of-contents
 
 [x] Part 1: Make a csv file
 [x] Part 2: Start flashcards.py
@@ -19,36 +19,20 @@ Flashcards
 [x] Part 15: Add topics menu
 [x] Part 16: Allow answers with commas
 
-    at the top of your file
-
-      [x] import the csv module
-
-    in load_csv() after opening your file
-
-      [x] Create a new csv reader like so:
-
-          reader = csv.reader(
-          fh,
-          quotechar="'",
-          skipinitialspace=True,
-          escapechar="\\"
-          )
-      [x] Instead of iterating over fh.readlines(), 
-          iterate over the reader object, which will yields a list of values in each row.
-[x] Use an command line argument to decide if the program is in DEBUG_MODE. 
-    So, if at the command line you type:
-        $ python flashcards.py 10
-    Then at most 10 flashcards will be shown.
-
-    Or if you type:
-        $ python flashcards.py
-    Then then you'll go through all of the flashcards for the selected topic(s).
-
-    In the main() function, before calling play():
-    [x] Check if sys.argv has more than 1 item. If so:
-        [x] assign the second value in the sys.argv list to the variable limit
-        [x] use random.choices with the arguments cards and k=limit to get only
-            part of the cards list and assign it back to the variable cards
+[ ] Bonus: (from funcitons param live share)
+    [x] If you don't already have one, make a global variable DEBUG
+    [x] Write a function named: debug with one parameter: message
+    [x] In the function, check if DEBUG is True (or truthy)
+        [x] If so, then print message
+        [x] Bonus: Print someting before it like "DEBUG: ", or "# ", so you can more
+            easily tell that it is a debug message
+    [x] Throughout your code, anywhere where you are printing something that is not
+        directly related to the flashcards program (ie. "loading {path}..."), call
+        your new debug function instead of printing it.
+    [x] Also look for any comment out print statements, change print to debug, and uncomment them.
+    [ ] Perhaps add a few extra debug messages. For example, you might want to print
+        the function name at the beginning of each function.
+    [ ] Test with DEBUG set to True as well as with DEBUG set to False
     
 !!!Choices input of 0 (zero) is not loading all the cards. Need to fix!!!
 
@@ -69,9 +53,13 @@ import random
 WIDTH = 60
 MARGIN = 20
 MAXWIDTH = WIDTH - MARGIN
-DEBUG_MODE = True
+CHEAT_MODE = True
+DEBUG = True
 TOPICS = []
 # ## Functions ###############################################################
+def debug(message):
+    if DEBUG == True:
+        print(f"DEBUG: {message}")
 
 def load_csv(path):
     if not path.exists():
@@ -80,7 +68,7 @@ def load_csv(path):
     if not path.is_file():
         print(f"Unable to read {path}.")
         return
-    # print(f"Loading file: {path}.")
+    debug(f"Loading file: {path}.")
     fp = open(path)
     reader = csv.reader(fp, quotechar="'", skipinitialspace=True, escapechar="\\")
     cards = list()
@@ -122,7 +110,7 @@ def play(cards):
         for line in query:
             print("|" + line.center(WIDTH-2) + "|")
             print(box.ljust(WIDTH-59), box.rjust(WIDTH-2))
-        if DEBUG_MODE:
+        if CHEAT_MODE:
             i = 5
             while i > 0:
                 time.sleep(8)
@@ -164,13 +152,14 @@ def menu():
             return(TOPICS)
         num = int(num) - 1
         selection.append(TOPICS[num])
-    # print(selection)
+    debug(f"You selected: ", selection)
     return(selection)    
 
 # The main() function should be at the last function defined
 #
 
 def main():
+    debug("hello")
     cards = []
     paths = menu()
     for path in paths:
