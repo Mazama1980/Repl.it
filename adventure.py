@@ -1,11 +1,18 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 2.1 B.2
+continue with 2.3 D
 
 """
 
 from pprint import pprint
+from sys import stderr
+
+# from console import fg, bg, fx
 
 DEBUG = True
+PLAYER = {
+    "place": "home"
+}
+
 ITEMS = {
     "crystal ball": {
         "key": "crystal ball",
@@ -21,9 +28,27 @@ ITEMS = {
     },
 }
 
+PLACES = {
+    "home": {
+        "key": "home",
+        "name": "Sweet Cabin ",
+        "east": "town-square",
+        "description": "a cozy cabin nestled in the tall fir and pine trees",
+    },
+    "town-square": {
+        "key": "town-square",
+        "name": "Old Towne Square",
+        "west": "home",
+        "description": "A square with shops on all sides. The square has brick pavers with trees in front of the shops."
+    },
+}
+
 def debug(message):
     if DEBUG == True:
         print("Debug: ", message)
+
+def error(message):
+    print("Error: ", message)
 
 def do_shop():
     print("Items for sale")
@@ -42,10 +67,18 @@ def main():
     print("Welcome!")
     while True:
         reply = input(">").strip()
-        if reply == "quit":
+        args = reply.split()
+        if not args:
+            continue
+        command = args.pop(0) 
+        debug(f"command: {command}")
+        if command == "quit":
             do_quit()
-        elif reply == "shop":
-                do_shop()
+        elif command == "shop":
+            do_shop()
+        elif command == "g" or command == "go":
+        # elif command in ("g", "go"):
+            do_go(args)
         else:
             print("No such command.")
             continue
