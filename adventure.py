@@ -1,14 +1,14 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 2.3 D
+continue with 2.4 D
 
 """
 
 from pprint import pprint
 from sys import stderr
 
-# from console import fg, bg, fx
+from console import fg, bg, fx
 
-DEBUG = True
+DEBUG = False
 PLAYER = {
     "place": "home"
 }
@@ -16,8 +16,8 @@ PLAYER = {
 ITEMS = {
     "crystal ball": {
         "key": "crystal ball",
-        "name": "it glows faintly",
-        "description": "all it does is glow faintly; could be used in dark places",
+        "name": "it glows faintly -",
+        "description": "all it does is glow faintly; could be used in dark places.",
         "price": -5,
     },
     "short dagger": {
@@ -26,6 +26,12 @@ ITEMS = {
         "description": "hardened steel, the blade is sharp on both sides, polished antler bone handle, about 10 inches in length, comes with a sheath",
         "price": -22,
     },
+    "green potion": {
+        "key": "green potion;",
+        "name": "a health potion; ",
+        "description": "it will return half your life",
+        "price": -30,
+    }
 }
 
 PLACES = {
@@ -41,6 +47,18 @@ PLACES = {
         "west": "home",
         "description": "A square with shops on all sides. The square has brick pavers with trees in front of the shops."
     },
+    "woods": {
+        "key": "woods",
+        "name": "Deep, dark woods",
+        "north": "lake",
+        "description": "A deep forest of Redwood trees. Ferns and bushs growing on the forest floor. A path running through it. It's quiet and peaceful." 
+    },
+    "lake": {
+        "key": "lake",
+        "name": "Lake Pukaki",
+        "south": "woods",
+        "description": "Deep blue in color but will change to a purple hue when its mood is unsettled. There are mysteries to be found in it's dark waters."
+    },
 }
 
 def debug(message):
@@ -48,7 +66,8 @@ def debug(message):
         print("Debug: ", message)
 
 def error(message):
-    print("Error: ", message)
+    style = fg.white + bg.red
+    print(style("Error:"), message)
 
 def do_shop():
     print("Items for sale")
@@ -56,7 +75,22 @@ def do_shop():
         print(k, item["name"], item["description"])
     
 def do_go(args):
-    print("Trying to go: ", args)
+    debug(f"Trying to go: {args}")
+    if not args:
+        error("Which way do you want to go?")
+        return
+    direction = args[0].lower()
+    compass = ["north", "south", "east", "west"]
+    if direction not in compass:
+        error(f"sorry, I don't know how to go : {direction}")
+        return
+    old_name = PLAYER["place"]
+    old_place = PLACES[old_name]
+    new_name = old_place.get(direction)
+    if not new_name:
+        error(f"Sorry, you can't go in that {direction} from here.")
+        return
+
 
 def do_quit():
     print("Goodbye!")
@@ -66,21 +100,23 @@ def main():
     debug("Hello")
     print("Welcome!")
     while True:
+        debug(f"You are at: {PLAYER['place']}")
         reply = input(">").strip()
         args = reply.split()
         if not args:
             continue
-        command = args.pop(0) 
+        command = args.pop(0)
+        # .pop(0) removes the first element from the list
         debug(f"command: {command}")
-        if command == "quit":
+        debug(f"command: {args}")
+        if command in ("q", "quit"):
             do_quit()
         elif command == "shop":
             do_shop()
-        elif command == "g" or command == "go":
-        # elif command in ("g", "go"):
+        elif command in ("g", "go"):
             do_go(args)
         else:
-            print("No such command.")
+            error("No such command.")
             continue
       
 
