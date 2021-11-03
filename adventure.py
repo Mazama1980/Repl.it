@@ -36,12 +36,12 @@ ITEMS = {
 
 #############################################
 # Map
-#--------------------------------------------
-#
-#
-#  home <-> town-square
-#
-#
+# -------------------------------------------
+#               lake
+#                \
+#              home <-> town-square
+#                /
+#              woods
 #
 #
 #############################################
@@ -51,6 +51,8 @@ PLACES = {
         "key": "home",
         "name": "Sweet Cabin ",
         "east": "town-square",
+        "south": "woods",
+        "north": "lake",
         "description": "a cozy cabin nestled in the tall trees",
     },
     "town-square": {
@@ -62,13 +64,13 @@ PLACES = {
     "woods": {
         "key": "woods",
         "name": "Deep, dark woods",
-        "north": "lake",
+        "north": "home",
         "description": "A deep forest of Redwood trees. Ferns and bushs growing on the forest floor. A path running through it. It's quiet and peaceful." 
     },
     "lake": {
         "key": "lake",
         "name": "Lake Pukaki",
-        "south": "woods",
+        "south": "home",
         "description": "Deep blue in color but will change to a purple hue when its mood is unsettled. There are mysteries to be found in it's dark waters."
     },
 }
