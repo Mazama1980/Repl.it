@@ -8,7 +8,7 @@ from sys import stderr
 
 from console import fg, bg, fx
 
-DEBUG = False
+DEBUG = True
 PLAYER = {
     "place": "home"
 }
@@ -34,12 +34,24 @@ ITEMS = {
     }
 }
 
+#############################################
+# Map
+#--------------------------------------------
+#
+#
+#  home <-> town-square
+#
+#
+#
+#
+#############################################
+
 PLACES = {
     "home": {
         "key": "home",
         "name": "Sweet Cabin ",
         "east": "town-square",
-        "description": "a cozy cabin nestled in the tall fir and pine trees",
+        "description": "a cozy cabin nestled in the tall trees",
     },
     "town-square": {
         "key": "town-square",
@@ -88,8 +100,15 @@ def do_go(args):
     old_place = PLACES[old_name]
     new_name = old_place.get(direction)
     if not new_name:
-        error(f"Sorry, you can't go in that {direction} from here.")
+        error(f"Sorry, you can't go {direction} from here.")
         return
+    new_place = PLACES.get(new_name)
+    if not new_place:
+        error(f"Woops! The information about {new_name} seems to be missing.")
+        return
+    PLAYER["place"] = new_name
+    print(new_place["name"])
+    print(new_place["description"])
 
 
 def do_quit():
