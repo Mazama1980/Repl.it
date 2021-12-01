@@ -73,3 +73,14 @@ def days(day_number):
     return day
     
 print(days(5))
+
+schedule = {
+    "Monday": {
+        "09:00": "Yoga",
+        "17:00": "QCC Class",
+        },
+    "Tuesday": {
+        "7:00": "Eliptical",
+        "17:00": "QCC Class",
+    }
+}

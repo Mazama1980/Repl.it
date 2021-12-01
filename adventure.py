@@ -1,13 +1,15 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 2.4 D
+continue with 3.2: colors
 
 """
 
 from pprint import pprint
 from sys import stderr
-
+import textwrap
 from console import fg, bg, fx
 
+WIDTH = 60
+MARGIN = 2
 DEBUG = True
 PLAYER = {
     "place": "home"
@@ -88,6 +90,15 @@ def do_shop():
     for k, item in ITEMS.items():
         print(k, item["name"], item["description"])
     
+def wrap(text):
+    paragraph = textwrap.fill(
+        text,
+        WIDTH,
+        initial_indent = MARGIN * " ",
+        subsequent_indent = MARGIN * " "
+    )
+    print(paragraph)
+    
 def do_go(args):
     debug(f"Trying to go: {args}")
     if not args:
@@ -110,12 +121,13 @@ def do_go(args):
         return
     PLAYER["place"] = new_name
     print(new_place["name"])
-    print(new_place["description"])
+    wrap(new_place["description"])
 
 
 def do_quit():
     print("Goodbye!")
     quit()
+
 
 def main():
     debug("Hello")
