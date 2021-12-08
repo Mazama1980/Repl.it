@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 3.2: colors
+continue with 4.1: Exmine Items
 
 """
 
@@ -79,16 +79,17 @@ PLACES = {
 
 def debug(message):
     if DEBUG == True:
-        print("Debug: ", message)
+        debug_color = fg.blue + bg.green
+        print(debug_color("Debug:"), message)
 
 def error(message):
     style = fg.white + bg.red
     print(style("Error:"), message)
 
 def do_shop():
-    print("Items for sale")
+    header("Items for sale")
     for k, item in ITEMS.items():
-        print(k, item["name"], item["description"])
+        write(f'{k}--> {item["name"]}')
     
 def wrap(text):
     paragraph = textwrap.fill(
@@ -98,6 +99,15 @@ def wrap(text):
         subsequent_indent = MARGIN * " "
     )
     print(paragraph)
+
+def write(text):
+    print(f"{MARGIN * ' '} {text}")
+
+def header(title):
+    print()
+    header_title = fx.bold(title)
+    write(header_title)
+    print()
     
 def do_go(args):
     debug(f"Trying to go: {args}")
@@ -120,18 +130,18 @@ def do_go(args):
         error(f"Woops! The information about {new_name} seems to be missing.")
         return
     PLAYER["place"] = new_name
-    print(new_place["name"])
+    header(new_place["name"])
     wrap(new_place["description"])
 
 
 def do_quit():
-    print("Goodbye!")
+    write(fg.lightyellow("Goodbye!"))
     quit()
 
 
 def main():
     debug("Hello")
-    print("Welcome!")
+    header(fg.lightyellow("Welcome!"))
     while True:
         debug(f"You are at: {PLAYER['place']}")
         reply = input(">").strip()
