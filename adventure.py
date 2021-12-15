@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 4.1: Exmine Items
+continue with 4.3B: Exmine Items
 
 """
 
@@ -33,7 +33,17 @@ ITEMS = {
         "name": "a health potion; ",
         "description": "it will return half your life",
         "price": -30,
-    }
+    },
+    "book": {
+        "key": "book",
+        "name": "Diary of a flying squirrel",
+        "description": "A soft leather bound book laying on the desk at home. There may be useful information in it.",
+    },
+    "desk": {
+        "key": "desk",
+        "name": "writing desk",
+        "description": "A smallish wooden desk with 5 drawers. There is a large book laying on the top.",
+    },
 }
 
 #############################################
@@ -89,7 +99,15 @@ def error(message):
 def do_shop():
     header("Items for sale")
     for k, item in ITEMS.items():
+        if "price" not in item:
+            continue
         write(f'{k}--> {item["name"]}')
+
+def do_examine(args):
+    debug(f'Trying to examine {args}')
+    if not args:
+        error("What do you want to exam?")
+        return
     
 def wrap(text):
     paragraph = textwrap.fill(
@@ -158,6 +176,8 @@ def main():
             do_shop()
         elif command in ("g", "go"):
             do_go(args)
+        elif command in ("x", "exam", "examine"):
+            do_examine(args)
         else:
             error("No such command.")
             continue

@@ -2,7 +2,7 @@
 
 Create a dictionary assigned to the variable shapes that uses shape names (like "square" or "triangle") for keys and the number of sides (like 4 and 3) for values.
 
-Print the dictionary."""
+Print the dictionary. https://alissa-huskey.github.io/python-class/lessons/data-types/dictionaries.html#conditions"""
 
 def objects():
     shapes= {
