@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 4.3B: Exmine Items
+continue with 4.3C3: Exmine Items
 
 """
 
@@ -66,6 +66,7 @@ PLACES = {
         "south": "woods",
         "north": "lake",
         "description": "a cozy cabin nestled in the tall trees",
+        "items": ["book", "desk"],
     },
     "town-square": {
         "key": "town-square",
@@ -108,6 +109,15 @@ def do_examine(args):
     if not args:
         error("What do you want to exam?")
         return
+    place_name = PLAYER["place"]
+    place = PLACES[place_name]
+    name = args[0].lower()
+    items = place.get("items", [])
+    if name not in items:
+        error(f"Sorry, I don't know what this is:{name}")
+        return
+    print("hello")
+    
     
 def wrap(text):
     paragraph = textwrap.fill(
