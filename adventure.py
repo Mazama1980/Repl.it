@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 4.3C3: Exmine Items
+continue with 5.3A1: Exmine Items
 
 """
 
@@ -114,10 +114,19 @@ def do_examine(args):
     name = args[0].lower()
     items = place.get("items", [])
     if name not in items:
-        error(f"Sorry, I don't know what this is:{name}")
-        return
-    print("hello")
+       error(f"Sorry, I don't know what this is:{name}")
+       return
+    item = ITEMS[name]
+    header(item["name"])
+    wrap(item["description"])
     
+def do_look():
+    debug(f"Trying to look around.")
+    place_name = PLAYER["place"]
+    place = PLACES[place_name]
+    header(place["name"])
+    wrap(place["description"])
+    items = place.get("items", [])
     
 def wrap(text):
     paragraph = textwrap.fill(
@@ -188,6 +197,8 @@ def main():
             do_go(args)
         elif command in ("x", "exam", "examine"):
             do_examine(args)
+        elif command in ("l", "look"):
+            do_look()
         else:
             error("No such command.")
             continue
