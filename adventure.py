@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 5.3A1: Exmine Items
+continue with 5.4: Print the nearby places
 
 """
 
@@ -127,6 +127,20 @@ def do_look():
     header(place["name"])
     wrap(place["description"])
     items = place.get("items", [])
+    if items:
+        names = []
+        for key in items:
+            item = ITEMS[key]
+            names.append(item["name"])
+        last = names.pop()
+        text = ", ".join(names)
+        if text:
+            text = text + " and " + last
+        print()
+        write(f"You see {text}. \n")
+             
+
+
     
 def wrap(text):
     paragraph = textwrap.fill(
