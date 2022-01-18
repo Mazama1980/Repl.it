@@ -139,8 +139,6 @@ def do_look():
         print()
         write(f"You see {text}. \n")
              
-
-
     
 def wrap(text):
     paragraph = textwrap.fill(
