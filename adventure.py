@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 5.4: Print the nearby places
+continue with 6.2,C: make sure the item is takable
 
 """
 
@@ -21,18 +21,21 @@ ITEMS = {
         "name": "it glows faintly -",
         "description": "all it does is glow faintly; could be used in dark places.",
         "price": -5,
+        "can_take": True,
     },
     "short dagger": {
         "key": "short dagger",
         "name": "antler handle with double edged blade",
         "description": "hardened steel, the blade is sharp on both sides, polished antler bone handle, about 10 inches in length, comes with a sheath",
         "price": -22,
+        "can_take": True,
     },
     "green potion": {
         "key": "green potion;",
         "name": "a health potion; ",
         "description": "it will return half your life",
         "price": -30,
+        "can_take": True,
     },
     "book": {
         "key": "book",
@@ -119,6 +122,20 @@ def do_examine(args):
     item = ITEMS[name]
     header(item["name"])
     wrap(item["description"])
+
+def do_take(args):
+    debug(f"Trying to take {args}.")
+    if not args:
+        error("What do you want to take?")
+        return
+    place_name = PLAYER["place"]
+    place = PLACES[place_name]
+    name = args[0].lower()
+    items = place.get("items", [])
+    if not name in items:
+        error(f"Sorry, I don't see a {name} here.")
+        return
+
     
 def do_look():
     debug(f"Trying to look around.")
@@ -138,8 +155,16 @@ def do_look():
             text = text + " and " + last
         print()
         write(f"You see {text}. \n")
+    print()
+    directions = ["north", "east", "south", "west"]
+    for direction in directions:
+        name = place.get(direction)
+        if not name:
+            continue
+        destination = PLACES[name]
+        write(f"To the {direction} is {destination['name']}.")
+        
              
-    
 def wrap(text):
     paragraph = textwrap.fill(
         text,
@@ -211,6 +236,8 @@ def main():
             do_examine(args)
         elif command in ("l", "look"):
             do_look()
+        elif command in ("t", "take", "grab"):
+            do_take(args)
         else:
             error("No such command.")
             continue
