@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 6.2,C: make sure the item is takable
+continue with 6.2,C-6.3,B Having errors need to fix!: make sure the item is takable
 
 """
 
@@ -12,7 +12,8 @@ WIDTH = 60
 MARGIN = 2
 DEBUG = True
 PLAYER = {
-    "place": "home"
+    "place": "home",
+    "inventory": {},
 }
 
 ITEMS = {
@@ -21,21 +22,18 @@ ITEMS = {
         "name": "it glows faintly -",
         "description": "all it does is glow faintly; could be used in dark places.",
         "price": -5,
-        "can_take": True,
     },
     "short dagger": {
         "key": "short dagger",
         "name": "antler handle with double edged blade",
         "description": "hardened steel, the blade is sharp on both sides, polished antler bone handle, about 10 inches in length, comes with a sheath",
         "price": -22,
-        "can_take": True,
     },
     "green potion": {
         "key": "green potion;",
         "name": "a health potion; ",
         "description": "it will return half your life",
         "price": -30,
-        "can_take": True,
     },
     "book": {
         "key": "book",
@@ -47,6 +45,18 @@ ITEMS = {
         "name": "writing desk",
         "description": "A smallish wooden desk with 5 drawers. There is a large book laying on the top.",
     },
+    "walking stick": {
+        "key": "walking stick",
+        "name": "wooden stick ",
+        "description": "a staff made from osage orange. It's about 4 feet tall. It has curious carvings on it.",
+        "can_take": True
+    },
+    "bag": {
+        "key": "a bag",
+        "name": "bag",
+        "description": "A bag made of rough cloth that appears to be strong. It is about 12 inches long and 8 inches wide.",
+        "can_take": True
+    }
 }
 
 #############################################
@@ -69,7 +79,7 @@ PLACES = {
         "south": "woods",
         "north": "lake",
         "description": "a cozy cabin nestled in the tall trees",
-        "items": ["book", "desk"],
+        "items": ["book", "desk", "walking stick", "bag"],
     },
     "town-square": {
         "key": "town-square",
@@ -132,9 +142,20 @@ def do_take(args):
     place = PLACES[place_name]
     name = args[0].lower()
     items = place.get("items", [])
-    if not name in items:
+    if name not in items:
         error(f"Sorry, I don't see a {name} here.")
         return
+    item = ITEMS.get("name", [])
+    if not item:
+        error(f"Woops! The information about {name!r} seems to be missing.")
+        return
+    if not item.get("can_take"):
+        wrap(f"You try to pick up {item['name']}, but you find you aren't able to lift it.")
+        return
+    PLAYER["inventory"].setdefault(name,0)
+    PLAYER["inventory"][name].append(1)
+    place["items"].remove(name)
+    wrap(f"You pick up {name} and put it in your pack.")
 
     
 def do_look():
