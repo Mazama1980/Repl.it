@@ -34,7 +34,7 @@ print('We\'re \'up\' in the air?')
 
 print("Hack\\whack are two other words for backslash.")
 
-print(r"my birthday is 7\12\1961")
+print(r"my birthday is 7\22\1961")
 
 print("The two previous print statements are using the backslash symbol \'\\' incorrectly.")
 

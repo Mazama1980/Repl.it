@@ -73,3 +73,109 @@ total_solar = now - solar_eclipse
 count_years = int(total_solar / year)
 count_months = int((total_solar - (year * count_years)) / month)
 print(f"The last solar eclipse in the USA was {count_years} years and {count_months} ago.")
+
+"""
+2022-01-31
+
+Agenda
+------
+
+* Expression exercise
+* Problem solving exercise
+
+
+"""
+
+from workshops import section, div, stop, exercise
+
+section("A", "Expression Exercises")
+
+# order of operation rules
+#
+# - replace variables with values
+# - */ before +-
+# - inside to out
+# - left to right
+# - and before or
+#
+
+from pathlib import Path
+
+DEFAULT_CONFIG_DIR = Path.home() / "python_class_config"
+
+options = {
+    "url": "https://github.com/alissa-huskey/python-class"
+}
+
+options.get("config_dir", DEFAULT_CONFIG_DIR).name.replace("_", " ").title()
+# options.get("config_dir", Path.home() / "python_class_config").name.replace("_", " ").title()
+# options.get("config_dir", Path("/Users/alissa") / "python_class_config").name.replace("_", " ").title()
+# options.get("config_dir", Path("/Users/alissa/python_class_config")).name.replace("_", " ").title()
+# Path("/Users/alissa/python_class_config").name.replace("_", " ").title()
+# "python_class_config".replace("_", " ").title()
+# "python class config".title()
+"Python Class Config"
+
+# ----------------------------------------------------------
+
+section("B", "Review datetimes")
+
+div("B.1", "get the current date and time")
+
+from datetime import datetime
+present = datetime.today()
+print(present)
+
+div("B.2", "add or subtract a timedelta to/from that datetime object")
+
+from datetime import timedelta
+hour = timedelta(hours=1)
+future = present + hour
+print(future)
+
+
+div("B.3", "get a property from a datetime object")
+
+print(future.day)
+
+section("3", "Exercise")
+
+div("3.1", "Print the schedule for today")
+
+# Print every hour of the day in 12 hour format with AM/PM
+# If there is an activity for that hour on your schedule,
+#     print it after the hour
+# 
+# For example:
+#
+#  8 AM  Breakfast
+# 12 PM  Lunch
+#  6 PM  Dinner
+# 
+# Use datetime and time delta objects, and iterate using a for loop.
+#
+
+schedule = {
+    12: "Lunch",
+    17: "Coding Class",
+    20: "Date night",
+}
+
+
+"""8>>> today
+datetime.datetime(2022, 1, 31, 19, 6, 5, 148849)
+
+9>>> today.replace(hours=12)
+---------------------------------------------------------------------------
+
+10>>> today.replace(hour=12)
+datetime.datetime(2022, 1, 31, 12, 6, 5, 148849)
+
+11>>> today.replace(hour=12, minute=0, second=0, microsecond=0)
+datetime.datetime(2022, 1, 31, 12, 0)
+
+12>>> today.replace(hour=13, minute=0, second=0, microsecond=0)
+datetime.datetime(2022, 1, 31, 13, 0)
+
+13>>> 20 - 12
+8"""
