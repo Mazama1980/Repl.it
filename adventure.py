@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 6.2,C-6.3,B Having errors need to fix!: make sure the item is takable
+continue with 6.4 Examine inventory
 
 """
 
@@ -46,8 +46,8 @@ ITEMS = {
         "description": "A smallish wooden desk with 5 drawers. There is a large book laying on the top.",
     },
     "walking stick": {
-        "key": "walking stick",
-        "name": "wooden stick ",
+        "key": "stick",
+        "name": "stick ",
         "description": "a staff made from osage orange. It's about 4 feet tall. It has curious carvings on it.",
         "can_take": True
     },
@@ -79,7 +79,7 @@ PLACES = {
         "south": "woods",
         "north": "lake",
         "description": "a cozy cabin nestled in the tall trees",
-        "items": ["book", "desk", "walking stick", "bag"],
+        "items": ["book", "desk", "stick", "bag"],
     },
     "town-square": {
         "key": "town-square",
@@ -145,7 +145,7 @@ def do_take(args):
     if name not in items:
         error(f"Sorry, I don't see a {name} here.")
         return
-    item = ITEMS.get("name", [])
+    item = ITEMS.get(name, [])
     if not item:
         error(f"Woops! The information about {name!r} seems to be missing.")
         return
@@ -153,7 +153,7 @@ def do_take(args):
         wrap(f"You try to pick up {item['name']}, but you find you aren't able to lift it.")
         return
     PLAYER["inventory"].setdefault(name,0)
-    PLAYER["inventory"][name].append(1)
+    PLAYER["inventory"][name] += 1
     place["items"].remove(name)
     wrap(f"You pick up {name} and put it in your pack.")
 

@@ -72,7 +72,7 @@ print(f"The last solar eclipse in the USA was {now - solar_eclipse}.")
 total_solar = now - solar_eclipse
 count_years = int(total_solar / year)
 count_months = int((total_solar - (year * count_years)) / month)
-print(f"The last solar eclipse in the USA was {count_years} years and {count_months} ago.")
+print(f"The last solar eclipse in the USA was {count_years} years and {count_months} days ago.")
 
 """
 2022-01-31
@@ -86,9 +86,9 @@ Agenda
 
 """
 
-from workshops import section, div, stop, exercise
+"""from workshops import section, div, stop, exercise
 
-section("A", "Expression Exercises")
+    section("A", "Expression Exercises")"""
 
 # order of operation rules
 #
@@ -118,15 +118,15 @@ options.get("config_dir", DEFAULT_CONFIG_DIR).name.replace("_", " ").title()
 
 # ----------------------------------------------------------
 
-section("B", "Review datetimes")
+"""section("B", "Review datetimes")
 
-div("B.1", "get the current date and time")
+    div("B.1", "get the current date and time")"""
 
 from datetime import datetime
 present = datetime.today()
 print(present)
 
-div("B.2", "add or subtract a timedelta to/from that datetime object")
+"""div("B.2", "add or subtract a timedelta to/from that datetime object")"""
 
 from datetime import timedelta
 hour = timedelta(hours=1)
@@ -134,11 +134,11 @@ future = present + hour
 print(future)
 
 
-div("B.3", "get a property from a datetime object")
+"""div("B.3", "get a property from a datetime object")"""
 
 print(future.day)
 
-section("3", "Exercise")
+"""section("3", "Exercise")
 
 div("3.1", "Print the schedule for today")
 
@@ -152,14 +152,33 @@ div("3.1", "Print the schedule for today")
 # 12 PM  Lunch
 #  6 PM  Dinner
 # 
-# Use datetime and time delta objects, and iterate using a for loop.
+# Use datetime and time delta objects, and iterate using a for loop."""
 #
 
 schedule = {
-    12: "Lunch",
+    8: "Pilates",
+    9: "yoga",
+    11: "Brunch",
+    16: "Dinner",
     17: "Coding Class",
-    20: "Date night",
+    21: "Date night",
 }
+
+
+day = datetime.today()
+hours = timedelta(hours=1)
+
+# 18
+    
+    
+
+
+
+
+
+
+
+
 
 
 """8>>> today
