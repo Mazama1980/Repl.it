@@ -168,9 +168,34 @@ schedule = {
 day = datetime.today()
 hours = timedelta(hours=1)
 
-# 18
+# 2022-2-7
     
-    
+   # step 1: print a list of the hours in 24 hour format
+#           make a list of each 24 hour
+#         - hour = timedelta(hour=24)
+#           iterate over the 24 hour list
+#           for x in hour:
+#           replace each 24 hour in the list with a corresponding 12 hour
+#               twelve_hour = 
+#           
+start_time = today.replace(hour=0, minute=0, second=0, microsecond=0)
+hour = timedelta(hours=1)
+for _ in range(25):
+    print(start_time + hour)
+
+# step 2: convert to 12 hour format
+# step 3: fill in the any scheduled activities
+first_of_month = today.replace(day=1)
+print("first of the month:", first_of_month)
+
+# get 8am today using .replace()
+morning = today.replace(hour=8, minute=0, second=0, microsecond=0)
+# breakpoint()
+print("morning:", repr(morning), morning)
+from datetime import timedelta
+minutes = timedelta(minutes=13)
+new_time = morning + minutes
+print("The new time is: ", new_time) 
 
 
 
