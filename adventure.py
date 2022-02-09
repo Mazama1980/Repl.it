@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 6.4 Examine inventory
+continue with 8 Drop things
 
 """
 
@@ -110,6 +110,16 @@ def error(message):
     style = fg.white + bg.red
     print(style("Error:"), message)
 
+def do_inventory():
+    debug("Trying to show inventory.")
+    header("Inventory")
+    if not PLAYER["inventory"]:
+        write("Empty")
+    for name, qty in PLAYER["inventory"].items():
+        item = ITEMS[name]
+        write(f'{qty}, {item["name"]}')
+    print()
+
 def do_shop():
     header("Items for sale")
     for k, item in ITEMS.items():
@@ -126,7 +136,7 @@ def do_examine(args):
     place = PLACES[place_name]
     name = args[0].lower()
     items = place.get("items", [])
-    if name not in items:
+    if name not in items and name not in PLAYER["inventory"]:
        error(f"Sorry, I don't know what this is:{name}")
        return
     item = ITEMS[name]
@@ -194,6 +204,7 @@ def wrap(text):
         subsequent_indent = MARGIN * " "
     )
     print(paragraph)
+    print()
 
 def write(text):
     print(f"{MARGIN * ' '} {text}")
@@ -259,6 +270,8 @@ def main():
             do_look()
         elif command in ("t", "take", "grab"):
             do_take(args)
+        elif command in ( "i", "inventory"):
+            do_inventory()
         else:
             error("No such command.")
             continue
