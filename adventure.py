@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 8 Drop things
+continue with 8.3A Drop things (Remove from inventory)
 
 """
 
@@ -45,15 +45,15 @@ ITEMS = {
         "name": "writing desk",
         "description": "A smallish wooden desk with 5 drawers. There is a large book laying on the top.",
     },
-    "walking stick": {
+    "stick": {
         "key": "stick",
-        "name": "stick ",
+        "name": "walking stick",
         "description": "a staff made from osage orange. It's about 4 feet tall. It has curious carvings on it.",
         "can_take": True
     },
     "bag": {
-        "key": "a bag",
-        "name": "bag",
+        "key": "bag",
+        "name": "a bag",
         "description": "A bag made of rough cloth that appears to be strong. It is about 12 inches long and 8 inches wide.",
         "can_take": True
     }
@@ -178,12 +178,22 @@ def do_look():
     if items:
         names = []
         for key in items:
-            item = ITEMS[key]
+            item = ITEMS.get(key)
             names.append(item["name"])
+        
+        # remove the last item from names and save it for later
         last = names.pop()
+
+        # make text a comma seperated list of all names except the last
         text = ", ".join(names)
+
+        # if text has any items, add the word " and "
         if text:
-            text = text + " and " + last
+            text = text + " and " 
+        
+        # add the last item
+        text = text + last
+
         print()
         write(f"You see {text}. \n")
     print()
@@ -194,7 +204,22 @@ def do_look():
             continue
         destination = PLACES[name]
         write(f"To the {direction} is {destination['name']}.")
-        
+
+def do_drop(args):
+    debug(f'Trying to drop {args}')
+    if not args:
+        error("What do you want to drop?")
+        return
+    name = args[0].lower()
+    if name not in PLAYER["inventory"]:
+        error(f"You don't have any {name}.")
+        return
+    place_name = PLAYER["place"]
+    place = PLACES[place_name]
+    place.setdefault("items", [])  
+    place["items"].append(name)
+    wrap(f'You set down the {name}')
+    ...
              
 def wrap(text):
     paragraph = textwrap.fill(
@@ -272,6 +297,8 @@ def main():
             do_take(args)
         elif command in ( "i", "inventory"):
             do_inventory()
+        elif command == "drop":
+            do_drop(args)
         else:
             error("No such command.")
             continue
