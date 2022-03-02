@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 8.3A Drop things (Remove from inventory)
+continue with 9.1C
 
 """
 
@@ -39,6 +39,7 @@ ITEMS = {
         "key": "book",
         "name": "Diary of a flying squirrel",
         "description": "A soft leather bound book laying on the desk at home. There may be useful information in it.",
+        "can_take": True,
     },
     "desk": {
         "key": "desk",
@@ -49,13 +50,13 @@ ITEMS = {
         "key": "stick",
         "name": "walking stick",
         "description": "a staff made from osage orange. It's about 4 feet tall. It has curious carvings on it.",
-        "can_take": True
+        "can_take": True,
     },
     "bag": {
         "key": "bag",
         "name": "a bag",
         "description": "A bag made of rough cloth that appears to be strong. It is about 12 inches long and 8 inches wide.",
-        "can_take": True
+        "can_take": True,
     }
 }
 
@@ -146,7 +147,7 @@ def do_examine(args):
 def do_take(args):
     debug(f"Trying to take {args}.")
     if not args:
-        error("What do you want to take?")
+        error("What are you trying to take?")
         return
     place_name = PLAYER["place"]
     place = PLACES[place_name]
@@ -157,8 +158,7 @@ def do_take(args):
         return
     item = ITEMS.get(name, [])
     if not item:
-        error(f"Woops! The information about {name!r} seems to be missing.")
-        return
+        abort(f"Woops! The information about {name!r} seems to be missing.")
     if not item.get("can_take"):
         wrap(f"You try to pick up {item['name']}, but you find you aren't able to lift it.")
         return
@@ -214,6 +214,11 @@ def do_drop(args):
     if name not in PLAYER["inventory"]:
         error(f"You don't have any {name}.")
         return
+    # NOTE -= is shorthand for:
+    # PLAYER["inventory"][name] = PLAYER["inventory"][name] - 1
+    PLAYER["inventory"][name] -= 1
+    if not PLAYER["inventory"][name]:
+        PLAYER["inventory"].pop(name)
     place_name = PLAYER["place"]
     place = PLACES[place_name]
     place.setdefault("items", [])  
@@ -268,6 +273,10 @@ def do_go(args):
 def do_quit():
     write(fg.lightyellow("Goodbye!"))
     quit()
+
+def abort(message):
+    error(message)
+    exit(1)
 
 
 def main():
