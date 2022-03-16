@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 9.1C
+continue with 9.2C
 
 """
 
@@ -82,7 +82,7 @@ PLACES = {
         "description": "a cozy cabin nestled in the tall trees",
         "items": ["book", "desk", "stick", "bag"],
     },
-    "town-square": {
+    "own-square": {
         "key": "town-square",
         "name": "Old Towne Square",
         "west": "home",
@@ -111,6 +111,16 @@ def error(message):
     style = fg.white + bg.red
     print(style("Error:"), message)
 
+def get_place(key=None):
+    if not key:
+        key = PLAYER["place"]
+    place = PLACES.get(key)
+    if not place:
+        abort(f"Woops! The information about the place {key} seems to be missing.")
+    return place
+
+
+
 def do_inventory():
     debug("Trying to show inventory.")
     header("Inventory")
@@ -138,8 +148,7 @@ def do_examine(args):
     name = args[0].lower()
     items = place.get("items", [])
     if name not in items and name not in PLAYER["inventory"]:
-       error(f"Sorry, I don't know what this is:{name}")
-       return
+       abort(f"Sorry, I don't know what this is:{name}")
     item = ITEMS[name]
     header(item["name"])
     wrap(item["description"])
@@ -255,16 +264,12 @@ def do_go(args):
     if direction not in compass:
         error(f"sorry, I don't know how to go : {direction}")
         return
-    old_name = PLAYER["place"]
-    old_place = PLACES[old_name]
+    old_place = get_place()
     new_name = old_place.get(direction)
     if not new_name:
         error(f"Sorry, you can't go {direction} from here.")
         return
-    new_place = PLACES.get(new_name)
-    if not new_place:
-        error(f"Woops! The information about {new_name} seems to be missing.")
-        return
+    new_place = get_place(new_name)
     PLAYER["place"] = new_name
     header(new_place["name"])
     wrap(new_place["description"])
@@ -314,5 +319,8 @@ def main():
       
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except SystemExit:
+        ...
     
