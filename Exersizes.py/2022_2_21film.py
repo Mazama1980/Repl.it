@@ -1,35 +1,4 @@
-"""https://github.com/siporter43/mainpypet.py/blob/master/MovieList.py; https://github.com/siporter43/mainpypet.py/blob/master/MovieList.py
-"""
-films = [
-    "Pinocchio",
-    "Dumbo",
-    "Bambi",
-    "Alice in Wonderland",
-    "Robin Hood",
-]
-for i, item in enumerate(films, 1):
-    print(i, item)
-
-# Ask the user what item they want to move
-
-user = input("Type the number of your favorite movie.")
-
-# Make sure it is a movie in the list
-
-number_of_films = len(films)
-if int(user) <= number_of_films:
-    print(user)
-else:
-    print("That movie isn't there friends.")
-
-# Move the movie to the new position
-answer = int(user)
-print(films[answer])
-
-new_list = films[answer]
-
-
-"""
+"""  https://github.com/siporter43/mainpypet.py/blob/master/MovieList.py
 Example of how it should work:
 
 1 Pinocchio
@@ -56,53 +25,23 @@ films = [
     "Alice in Wonderland",
     "Robin Hood",
 ]
-for i, item in enumerate(films, 1):
-    print(i, item)
+
+# move the part of the film_review() function that actually changes the films list
+# to a new function called move_film(). It should take two arguments:
+# - film_id (what the user types in to the first question)
+# - new_position (what the user types in to the second question)
+
+
 
 # [x] A. Ask the user what item the want to move
 
-user = input("Type the number of your favorite movie.")
-
-# [x] B. Make sure it is a movie in the list
-
-number_of_films = len(films)
-if int(user) <= number_of_films:
-    print(user)
-else:
-    print("That movie isn't there friends.")
-
-# [x] C. Print the name of the movie that they picked
-
-answer = int(user) -1
-print(f'You picked the movie {films[answer]}.')
-
-
-# [x] D. Move the movie to the new position
-
-films.insert(0, films[answer])
-del films[int(user)]
-
-
-# alternate, but worse, way
-# # remove the selected film from the films list
-# fav_film = films.pop(answer)
-
-# # create an empty list with the favorite as the first
-# fav_films = [fav_film]
-
-# # go through the rest of the films and add them to the
-# # to the fav_films list
-# for film in films:
-#     fav_films.append(film)
-
-
-# [x] E. Print the list again in order with numbers next to each movie
-
-for i, item in enumerate(films, 1):
-    print(i, item)
-
-
-
+def move_film(film_id, new_position):
+    # [x] D. Move the movie to the new position
+    new_place = int(new_position) - 1
+    films.insert(new_place, f"+ {films[film_id]}")
+    # films.insert(new_place, films[answer])
+    del films[film_id]
+        
 def film_review():
     # list the movies
     for i, item in enumerate(films, 1):
@@ -110,7 +49,7 @@ def film_review():
     
     # ask the user
     # user = index number of movie (i) and the place number
-    user = input("Type the number of your favorite movie.")
+    user = input("Type the number of your favorite movie. ")
     number_of_films = len(films)
     
     # [x] B. Make sure it is a movie in the list
@@ -124,16 +63,13 @@ def film_review():
         # [x] C. Print the name of the movie that they picked
         print(f'You picked the movie {films[answer]}.')
     
-    place = input("What place in your favorites list would you like to put it?")
+    place = input("What place in your favorites list would you like to put it? ")
     # [x] D. Move the movie to the new position
-    new_place = int(place)
-    films.insert(new_place, films[answer])
-    del films[int(user)]
+    move_film(answer, place)
     
     # [x] E. Print the list again in order with numbers next to each movie
     for i, item in enumerate(films, 1):
         print(i, item)
-
 
 
 """""""""We need to ask:
@@ -143,6 +79,46 @@ def film_review():
 
 
 
+# alternate, but worse, way
+# # remove the selected film from the films list
+# fav_film = films.pop(answer)
 
+# # go through the rest of the films and add them to the
+# # to the fav_films list
+# for film in films:
+#     fav_films.append(film)
 
+# Runner
+
+FILMS = films.copy()
+
+def test_move_film_0_3():
+    films = FILMS.copy()
+    move_film(0, 3)
+
+    wanted = ["Dumbo", "Bambi", "Alice in Wonderland", "+ Pinocchio", "Robin Hood"]
+
+    assert films == wanted, \
+        f"After moving 0 to 3 the film order should be: \n{wanted} but instead it's: \n{films}"
+
+def test_move_film_3_0():
+    films = FILMS.copy()
+    assert films == FILMS, "copy failure"
+
+    move_film(3, 0)
+
+    wanted = ["+ Alice in Wonderland", "Pinocchio", "Dumbo", "Bambi", "Robin Hood"]
+
+    assert films == wanted, \
+        f"After moving 3 to 0 the film order should be: \n{wanted} but instead it's: \n{films}"
+
+# test_move_film_0_3()
+# test_move_film_3_0()
+
+def silly_test():
+    films = FILMS.copy()
+    assert films[0] == "Pinocchio", "Not correct"
+
+# film_review()
+silly_test()
 
