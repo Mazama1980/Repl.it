@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 9.2C
+continue with 9.4B
 
 """
 
@@ -82,7 +82,7 @@ PLACES = {
         "description": "a cozy cabin nestled in the tall trees",
         "items": ["book", "desk", "stick", "bag"],
     },
-    "own-square": {
+    "town-square": {
         "key": "town-square",
         "name": "Old Towne Square",
         "west": "home",
@@ -119,7 +119,18 @@ def get_place(key=None):
         abort(f"Woops! The information about the place {key} seems to be missing.")
     return place
 
+def get_item(key):
+    item = ITEMS.get(key)
+    if not item:
+        abort(f"Woops! The information about the item {key} seems to be missing.")
+    return item
 
+def player_has(key=None,qty=1):
+    if key in PLAYER["inventory"] and PLAYER["inventory"][key] >= qty:
+        return True
+    else:
+        return False
+    
 
 def do_inventory():
     debug("Trying to show inventory.")
@@ -127,7 +138,7 @@ def do_inventory():
     if not PLAYER["inventory"]:
         write("Empty")
     for name, qty in PLAYER["inventory"].items():
-        item = ITEMS[name]
+        item = get_item(name)
         write(f'{qty}, {item["name"]}')
     print()
 
@@ -143,13 +154,12 @@ def do_examine(args):
     if not args:
         error("What do you want to exam?")
         return
-    place_name = PLAYER["place"]
-    place = PLACES[place_name]
+    place = get_place()
     name = args[0].lower()
     items = place.get("items", [])
-    if name not in items and name not in PLAYER["inventory"]:
+    if name not in items:
        abort(f"Sorry, I don't know what this is:{name}")
-    item = ITEMS[name]
+    item = get_item(name)
     header(item["name"])
     wrap(item["description"])
 
@@ -158,16 +168,13 @@ def do_take(args):
     if not args:
         error("What are you trying to take?")
         return
-    place_name = PLAYER["place"]
-    place = PLACES[place_name]
+    place = get_place()
     name = args[0].lower()
     items = place.get("items", [])
     if name not in items:
         error(f"Sorry, I don't see a {name} here.")
         return
-    item = ITEMS.get(name, [])
-    if not item:
-        abort(f"Woops! The information about {name!r} seems to be missing.")
+    item = get_item(name)
     if not item.get("can_take"):
         wrap(f"You try to pick up {item['name']}, but you find you aren't able to lift it.")
         return
@@ -176,18 +183,17 @@ def do_take(args):
     place["items"].remove(name)
     wrap(f"You pick up {name} and put it in your pack.")
 
-    
+
 def do_look():
     debug(f"Trying to look around.")
-    place_name = PLAYER["place"]
-    place = PLACES[place_name]
+    place = get_place()
     header(place["name"])
     wrap(place["description"])
     items = place.get("items", [])
     if items:
         names = []
         for key in items:
-            item = ITEMS.get(key)
+            item = get_item(key)
             names.append(item["name"])
         
         # remove the last item from names and save it for later
@@ -211,7 +217,7 @@ def do_look():
         name = place.get(direction)
         if not name:
             continue
-        destination = PLACES[name]
+        destination = get_place(name)
         write(f"To the {direction} is {destination['name']}.")
 
 def do_drop(args):
@@ -228,8 +234,7 @@ def do_drop(args):
     PLAYER["inventory"][name] -= 1
     if not PLAYER["inventory"][name]:
         PLAYER["inventory"].pop(name)
-    place_name = PLAYER["place"]
-    place = PLACES[place_name]
+    place = get_place()
     place.setdefault("items", [])  
     place["items"].append(name)
     wrap(f'You set down the {name}')
