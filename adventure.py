@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 9.4B
+continue with 9.4C
 
 """
 
@@ -157,7 +157,7 @@ def do_examine(args):
     place = get_place()
     name = args[0].lower()
     items = place.get("items", [])
-    if name not in items:
+    if not player_has(name) in items:
        abort(f"Sorry, I don't know what this is:{name}")
     item = get_item(name)
     header(item["name"])
@@ -226,7 +226,7 @@ def do_drop(args):
         error("What do you want to drop?")
         return
     name = args[0].lower()
-    if name not in PLAYER["inventory"]:
+    if not player_has(name):
         error(f"You don't have any {name}.")
         return
     # NOTE -= is shorthand for:
