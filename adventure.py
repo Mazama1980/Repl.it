@@ -1,5 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 9.4C
+continue with 9.4E
 
 """
 
@@ -130,7 +130,14 @@ def player_has(key=None,qty=1):
         return True
     else:
         return False
-    
+
+def place_has(item):
+    place = get_place()
+    if item in place.get("items", []):
+        return True
+    else:
+        return False
+
 
 def do_inventory():
     debug("Trying to show inventory.")
@@ -157,7 +164,7 @@ def do_examine(args):
     place = get_place()
     name = args[0].lower()
     items = place.get("items", [])
-    if not player_has(name) in items:
+    if not place_has(name) or player_has(name):
        abort(f"Sorry, I don't know what this is:{name}")
     item = get_item(name)
     header(item["name"])
