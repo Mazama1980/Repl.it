@@ -1,4 +1,5 @@
 from testing_lesson import endgame, add, greeting, subtract, multiply
+import pdbr
 
 def test_add():
     result = add(1,2)

@@ -1,5 +1,33 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 9.4E
+continue with 9.5A, 11.6D
+
+1. In test_game.py
+
+[ ] Write a new test inventory_change_with_quantity()
+[ ] In it, add a fake item to player inventory the same way you do in test_inventory_change()
+[ ] Then call inventory_change with your fake item key and a quantity argument (something other than 1)
+[ ] Save and run your tests. This will fail, because you don't have a quantity param yet
+
+2. In adventure.py
+
+[ ] add the quantity param with a default value of 1
+[ ] save your game and run your tests. Your tests should now pass
+
+3. In test_game.py
+
+[ ] In test_inventory_change_with_quantity() add an assert statement that the inventory for your fake item
+    is more than it was before (by however many you put for quantity)
+    This will be just like you did in test_inventory_chaange(), except that the difference between
+    the old value and the new value will be something other than 1
+[ ] Save and run your tests. This will fail because your function doesn't do anything with quantity yet.
+
+4. In adventure.py
+
+[ ] Modify the inventory_change() function to add quantity instead of 1
+[ ] Save your game.
+[ ] Run your tests. They should pass now.
+
+
 
 """
 
@@ -131,6 +159,10 @@ def player_has(key=None,qty=1):
     else:
         return False
 
+def inventory_change(key):
+    PLAYER["inventory"].setdefault(key,0)
+    PLAYER["inventory"][key] += 1
+
 def place_has(item):
     place = get_place()
     if item in place.get("items", []):
@@ -152,9 +184,15 @@ def do_inventory():
 def do_shop():
     header("Items for sale")
     for k, item in ITEMS.items():
-        if "price" not in item:
+        if not is_for_sale(item):
             continue
         write(f'{k}--> {item["name"]}')
+
+def is_for_sale(item):
+    if "price" in item:
+        return True
+    else:
+        return False
 
 def do_examine(args):
     debug(f'Trying to examine {args}')
@@ -177,8 +215,7 @@ def do_take(args):
         return
     place = get_place()
     name = args[0].lower()
-    items = place.get("items", [])
-    if name not in items:
+    if not place_has(name):
         error(f"Sorry, I don't see a {name} here.")
         return
     item = get_item(name)

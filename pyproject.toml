@@ -1,0 +1,12 @@
+[tool.pytest.ini_options]
+addopts = [
+	"-s",           # needed if using pdbr
+	"-v",           # verbose mode
+#   "-x",           # exit on first failure
+#   "--pdb",        # start the debugger on exception (or failure?)
+    "--tb=short",   # shorter traceback
+]
+filterwarnings = [
+    "ignore",                 # ignore warnings
+    "default:::adventure"     # except triggered by this package
+]
