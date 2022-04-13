@@ -1,33 +1,22 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
 continue with 9.5A, 11.6D
 
-1. In test_game.py
+1. In test_game.py: write your test __before__ changing do_take()
 
-[ ] Write a new test inventory_change_with_quantity()
-[ ] In it, add a fake item to player inventory the same way you do in test_inventory_change()
-[ ] Then call inventory_change with your fake item key and a quantity argument (something other than 1)
-[ ] Save and run your tests. This will fail, because you don't have a quantity param yet
+[ ] Write a new test test_do_take()
+[ ] Setup a fake place and a fake item
+[ ] add the fake item to the fake place
+[ ] set the player's place to your fake place
+[ ] Call do_take() with a list containing your fake item key
+[ ] assert that the fake item is no longer in the fake place
+[ ] assert that the fake item is in the player's inventory
+[ ] assert that whatever message is supposed to be in the output is ("You took the thing.")
+[ ] run your test. it should PASS
 
 2. In adventure.py
 
-[ ] add the quantity param with a default value of 1
-[ ] save your game and run your tests. Your tests should now pass
-
-3. In test_game.py
-
-[ ] In test_inventory_change_with_quantity() add an assert statement that the inventory for your fake item
-    is more than it was before (by however many you put for quantity)
-    This will be just like you did in test_inventory_chaange(), except that the difference between
-    the old value and the new value will be something other than 1
-[ ] Save and run your tests. This will fail because your function doesn't do anything with quantity yet.
-
-4. In adventure.py
-
-[ ] Modify the inventory_change() function to add quantity instead of 1
-[ ] Save your game.
-[ ] Run your tests. They should pass now.
-
-
+[x] change do_take() to call inventory_change()
+[x] run your test again. it should still PASS
 
 """
 
@@ -159,9 +148,11 @@ def player_has(key=None,qty=1):
     else:
         return False
 
-def inventory_change(key):
+def inventory_change(key,quantity=1):
     PLAYER["inventory"].setdefault(key,0)
-    PLAYER["inventory"][key] += 1
+    PLAYER["inventory"][key] += quantity
+    if not key in PLAYER["inventory"] or quantity <= 0:
+        PLAYER["inventory"].pop(key)
 
 def place_has(item):
     place = get_place()
@@ -225,6 +216,9 @@ def do_take(args):
     PLAYER["inventory"].setdefault(name,0)
     PLAYER["inventory"][name] += 1
     place["items"].remove(name)
+
+    # PLAYER["inventory"] = inventory_change(name)
+
     wrap(f"You pick up {name} and put it in your pack.")
 
 

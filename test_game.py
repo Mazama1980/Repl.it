@@ -1,6 +1,7 @@
 from adventure import (
     is_for_sale,
     inventory_change,
+    do_take
 )
 import pdbr
 from copy import deepcopy
@@ -42,7 +43,24 @@ def test_is_for_sale():
 def test_inventory_change():
     adventure.PLAYER["inventory"]["lembas"] = 99
     inventory_change("lembas")
-    assert adventure.PLAYER["inventory"]["lembas"] == 100, f'inventory_change() with not quantity argument shoud add 1.'
+    assert adventure.PLAYER["inventory"]["lembas"] == 100, f'inventory_change() with no quantity argument shoud add 1.'
+
+def test_inventory_change_with_quantity():
+    adventure.PLAYER["inventory"]["lembas"] = 99
+    inventory_change("lembas", 2)
+    assert adventure.PLAYER["inventory"]["lembas"] == 101
+
+def test_inventory_change_missing_key():
+    adventure.PLAYER["inventory"] = {}
+    inventory_change("lembas")
+    # breakpoint()
+    assert "lembas" in adventure.PLAYER["inventory"], f"inventory_change() should add missing keys to the inventory."
+    assert adventure.PLAYER["inventory"]["lembas"] == 1, f"inventory_change() with no quantity argument should add 1."
+    
+def test_inventory_change_remove():
+    adventure.PLAYER["inventory"]["lembas"] = 5
+    inventory_change("lembas", -6)
+    assert "lembas" not in adventure.PLAYER["inventory"], f"inventory_change() subtracting quantity <= 0 will remove key or item."
 
 def test_teardown():
     assert "lembas" not in adventure.PLAYER["inventory"], \
