@@ -1,7 +1,7 @@
 from adventure import (
     is_for_sale,
     inventory_change,
-    do_take
+    do_take,
 )
 import pdbr
 from copy import deepcopy
@@ -61,6 +61,15 @@ def test_inventory_change_remove():
     adventure.PLAYER["inventory"]["lembas"] = 5
     inventory_change("lembas", -6)
     assert "lembas" not in adventure.PLAYER["inventory"], f"inventory_change() subtracting quantity <= 0 will remove key or item."
+
+def test_do_take():
+    # breakpoint()
+    adventure.PLAYER["inventory"]["sword"] = 1
+    adventure.ITEMS["sword"] = {"name":"short sword", "can_take": True}
+    adventure.PLACES["home"]["items"] = ["sword"]
+    do_take(["sword"])
+    assert adventure.PLAYER ["inventory"]["sword"] == 2, f"Player inventory should have a sword added to total 2 sword"
+    assert adventure.PLACES ["home"]["items"] == [], "The items list should be empty when the sword is taken"
 
 def test_teardown():
     assert "lembas" not in adventure.PLAYER["inventory"], \

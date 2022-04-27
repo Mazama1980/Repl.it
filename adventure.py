@@ -3,15 +3,16 @@ continue with 9.5A, 11.6D
 
 1. In test_game.py: write your test __before__ changing do_take()
 
-[ ] Write a new test test_do_take()
-[ ] Setup a fake place and a fake item
-[ ] add the fake item to the fake place
-[ ] set the player's place to your fake place
-[ ] Call do_take() with a list containing your fake item key
-[ ] assert that the fake item is no longer in the fake place
-[ ] assert that the fake item is in the player's inventory
-[ ] assert that whatever message is supposed to be in the output is ("You took the thing.")
-[ ] run your test. it should PASS
+[x] Write a new test test_do_take()
+[x] Setup a fake place and a fake item
+[x] add the fake item to the fake place
+[x] set the player's place to your fake place
+[x] Call do_take() with a list containing your fake item key
+[x] assert that the fake item is no longer in the fake place
+[x] assert that the fake item is in the player's inventory
+[x] run your test. it should PASS
+[ ] LATER: assert that whatever message is supposed to be in the output is ("You took the thing.")
+    (note to Alissa: depends on capsys)
 
 2. In adventure.py
 
@@ -213,11 +214,8 @@ def do_take(args):
     if not item.get("can_take"):
         wrap(f"You try to pick up {item['name']}, but you find you aren't able to lift it.")
         return
-    PLAYER["inventory"].setdefault(name,0)
-    PLAYER["inventory"][name] += 1
     place["items"].remove(name)
-
-    # PLAYER["inventory"] = inventory_change(name)
+    inventory_change(name)
 
     wrap(f"You pick up {name} and put it in your pack.")
 
