@@ -92,7 +92,7 @@ def test_inventory_change_remove():
     # Then: Should remove quantity of item from Player's inventory
     assert "lembas" not in adventure.PLAYER["inventory"], f"inventory_change() subtracting quantity <= 0 will remove key or item."
 
-def test_do_take():
+def test_do_take(capsys):
     # Given: Item and quantity in Player's inventory
     adventure.PLAYER["inventory"]["sword"] = 1
 
@@ -105,11 +105,16 @@ def test_do_take():
     # When: call do_take item
     do_take(["sword"])
 
+    output = capsys.readouterr().out
+
     # Then: Should have two of item in Player's inventory
     assert adventure.PLAYER ["inventory"]["sword"] == 2, f"Player inventory should have a sword added to total 2 sword"
 
     # And: The item in that place should not be in that place anymore
     assert adventure.PLACES ["home"]["items"] == [], "The items list should be empty when the sword is taken"
+
+    # And: Print for player should say item was picked up
+    assert "pick up sword" in output, "A message should be printed telling the Player that they took the item."
 
 def test_do_drop():
     # Given: Item in Player's inventory
@@ -117,6 +122,27 @@ def test_do_drop():
     # Then: item should be gone from Player's inventory
     # And: item should be added to the place where the Player is currently
     ...
+
+    
+def fake_function(text):
+    print("Fake function says:", text)
+
+
+# To test printed output:
+# 1. Pass capsys to your test function as a parameter
+# 2. After the code that should print something, get the output with:
+#    output = capsys.readouterr().out
+# 3. Write an assertion like you normally would
+
+def test_fake_thing(capsys):
+    # WHEN: You call the fake_function() with a string
+    fake_function("hello")
+
+    # this gets the text that would have been printed to the screen
+    output = capsys.readouterr().out
+
+    # THEN: A message containing that string is printed
+    assert "hello" in output, "the message is printed"
 
 
 def test_teardown():
