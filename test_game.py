@@ -2,8 +2,9 @@ from adventure import (
     is_for_sale,
     inventory_change,
     do_take,
+    do_drop,
 )
-import pdbr
+# import pdbr
 from copy import deepcopy
 
 import pytest
@@ -116,12 +117,25 @@ def test_do_take(capsys):
     # And: Print for player should say item was picked up
     assert "pick up sword" in output, "A message should be printed telling the Player that they took the item."
 
-def test_do_drop():
+@pytest.mark.skip(reason="test not done yet")
+def test_do_drop(capsys):
     # Given: Item in Player's inventory
+    adventure.PLAYER["inventory"]["sword"] = 1
+
     # When: call do_drop with item
+    do_drop(["sword"])
+
+    output = capsys.readouterr().out
+    #breakpoint()
     # Then: item should be gone from Player's inventory
+    assert "sword" not in adventure.PLAYER ["inventory"], "Player inventory should not have a sword."
+
+    # TODO: fix the rest of this test
     # And: item should be added to the place where the Player is currently
-    ...
+    assert adventure.place ["items"].append("sword") == 1, "Place inventory should have a sword."
+
+    # And: printed message for player should say item was dropped
+    assert "You set down" in output, "A message should say that an item has been set down."
 
     
 def fake_function(text):
