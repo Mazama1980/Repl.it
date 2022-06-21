@@ -3,6 +3,8 @@ from adventure import (
     inventory_change,
     do_take,
     do_drop,
+    place_has,
+    get_place,
 )
 # import pdbr
 from copy import deepcopy
@@ -100,8 +102,14 @@ def test_do_take(capsys):
     # And: item is possible to take
     adventure.ITEMS["sword"] = {"name":"short sword", "can_take": True}
 
+    # And: you have a place dictionary
+    adventure.PLACES["somewhere"] = {"name": "Somewhere out there"}
+
+    # And: the player is in that place
+    adventure.PLAYER["place"] = "somewhere"
+
     # And: item is in the correct place
-    adventure.PLACES["home"]["items"] = ["sword"]
+    adventure.PLACES["somewhere"]["items"] = ["sword"]
 
     # When: call do_take item
     do_take(["sword"])
@@ -112,12 +120,12 @@ def test_do_take(capsys):
     assert adventure.PLAYER ["inventory"]["sword"] == 2, f"Player inventory should have a sword added to total 2 sword"
 
     # And: The item in that place should not be in that place anymore
-    assert adventure.PLACES ["home"]["items"] == [], "The items list should be empty when the sword is taken"
+    assert adventure.PLACES ["somewhere"]["items"] == [], "The items list should be empty when the sword is taken"
 
     # And: Print for player should say item was picked up
     assert "pick up sword" in output, "A message should be printed telling the Player that they took the item."
 
-@pytest.mark.skip(reason="test not done yet")
+
 def test_do_drop(capsys):
     # Given: Item in Player's inventory
     adventure.PLAYER["inventory"]["sword"] = 1
@@ -126,17 +134,30 @@ def test_do_drop(capsys):
     do_drop(["sword"])
 
     output = capsys.readouterr().out
-    #breakpoint()
-    # Then: item should be gone from Player's inventory
-    assert "sword" not in adventure.PLAYER ["inventory"], "Player inventory should not have a sword."
 
-    # TODO: fix the rest of this test
+    # Then: item should be gone from Player's inventory
+    assert "sword" not in adventure.PLAYER["inventory"], "Player inventory should not have a sword."
+
     # And: item should be added to the place where the Player is currently
-    assert adventure.place ["items"].append("sword") == 1, "Place inventory should have a sword."
+    assert place_has("sword"), "A sword should be added to the home items."
 
     # And: printed message for player should say item was dropped
     assert "You set down" in output, "A message should say that an item has been set down."
 
+def test_place_add():
+    # Given: That the Player is in a particular place
+    current_place = get_place()
+
+    # And: That item is not in the place items list
+    current_place["items"] = []
+
+    # When: Call place_add() with an item key
+    place_add("sword")
+
+    # Then: Item has been added to the place item list
+    assert place_has("sword"), "A sword should be added to the place items list."
+
+    
     
 def fake_function(text):
     print("Fake function says:", text)

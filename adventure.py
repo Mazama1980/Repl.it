@@ -1,24 +1,11 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
-continue with 9.5A, 11.6D
 
-1. In test_game.py: write your test __before__ changing do_take()
+[x] Write a test for the place_add() function
+[ ] continue with 9.6A...
 
-[x] Write a new test test_do_take()
-[x] Setup a fake place and a fake item
-[x] add the fake item to the fake place
-[x] set the player's place to your fake place
-[x] Call do_take() with a list containing your fake item key
-[x] assert that the fake item is no longer in the fake place
-[x] assert that the fake item is in the player's inventory
-[x] run your test. it should PASS
-[ ] LATER: assert that whatever message is supposed to be in the output is ("You took the thing.")
-    (note to Alissa: depends on capsys)
-
-2. In adventure.py
-
-[x] change do_take() to call inventory_change()
-[x] run your test again. it should still PASS
-
+future potential topics to learn / do
+[ ] add annotations to all functions
+[ ] write docstrings for all functions
 """
 
 from pprint import pprint
@@ -155,9 +142,18 @@ def inventory_change(key,quantity=1):
     if not key in PLAYER["inventory"] or quantity <= 0:
         PLAYER["inventory"].pop(key)
 
-def place_has(item):
+def place_has(item_key: str) -> bool:
+    """"Return True if the place dictionary for the players current place
+        contains item_key in its "items" list, otherwise return False.
+
+        Args:
+        * item_key (str): Key from the ITEMS dictionary to look for in the place
+          "items" list
+
+        """
+
     place = get_place()
-    if item in place.get("items", []):
+    if item_key in place.get("items", []):
         return True
     else:
         return False
