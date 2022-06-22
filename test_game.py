@@ -5,6 +5,7 @@ from adventure import (
     do_drop,
     place_has,
     get_place,
+    place_add,
 )
 # import pdbr
 from copy import deepcopy

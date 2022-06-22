@@ -116,29 +116,36 @@ def error(message):
     style = fg.white + bg.red
     print(style("Error:"), message)
 
-def get_place(key=None):
+def get_place(key: str =None) -> dict:
+    """Getting (returns the current place) where the Player is at currently at in the game"""
+    # Getting the current Player place if there is no key 
     if not key:
         key = PLAYER["place"]
+    # Making sure that the key is in the PLACES dictionary
     place = PLACES.get(key)
     if not place:
         abort(f"Woops! The information about the place {key} seems to be missing.")
     return place
 
-def get_item(key):
+def get_item(key: str) -> dict:
+    """Getting (or returning) an item from the ITEMS dictionary"""
     item = ITEMS.get(key)
     if not item:
         abort(f"Woops! The information about the item {key} seems to be missing.")
     return item
 
-def player_has(key=None,qty=1):
+def player_has(key: str, qty: int=1) -> bool:
+    """Determining (return True/False) if there is an item in the PLAYER inventory"""
     if key in PLAYER["inventory"] and PLAYER["inventory"][key] >= qty:
         return True
     else:
         return False
 
-def inventory_change(key,quantity=1):
+def inventory_change(key: str, quantity: int=1):
+    """Add item to player inventory"""
     PLAYER["inventory"].setdefault(key,0)
     PLAYER["inventory"][key] += quantity
+    # Remove from inventory dictionary if quantity is zero
     if not key in PLAYER["inventory"] or quantity <= 0:
         PLAYER["inventory"].pop(key)
 
@@ -149,34 +156,49 @@ def place_has(item_key: str) -> bool:
         Args:
         * item_key (str): Key from the ITEMS dictionary to look for in the place
           "items" list
-
         """
-
     place = get_place()
     if item_key in place.get("items", []):
         return True
     else:
         return False
 
+def place_add(key):
+    """Add an item to a current place"""
+    # Get the current place
+    place = get_place()
+
+    # Add the item key to the current place items list
+    place.setdefault("items", [])
+    if key not in place["items"]:
+        place["items"].append(key)
+
 
 def do_inventory():
+    """Listing the Player's current inventory. Called when the player types the
+    "inventory" or "i" command. """
     debug("Trying to show inventory.")
     header("Inventory")
+    # If the Player's inventory is empty then print the message "Empty"
     if not PLAYER["inventory"]:
         write("Empty")
+    # Listing the Player's item name with the quantity of each item
     for name, qty in PLAYER["inventory"].items():
         item = get_item(name)
         write(f'{qty}, {item["name"]}')
     print()
 
 def do_shop():
+    """Listing items that are for sale by using the "shop" command."""
     header("Items for sale")
     for k, item in ITEMS.items():
+    # Checking to see if an item can be purchased with the is_for_sale() function
         if not is_for_sale(item):
             continue
         write(f'{k}--> {item["name"]}')
 
-def is_for_sale(item):
+def is_for_sale(item: dict) -> bool:
+    """Checking (returning True or False) to see if an item has a price attached to it"""
     if "price" in item:
         return True
     else:
