@@ -5,9 +5,8 @@
 [x] write annotations and docstrings for two functions
 [x] continue with 9.6B
 
-[x] Write a test for the place_remove() function
-[x] continue with 9.6A...
-
+[ ] Write a test for the place_remove() function
+[ ] continue with 9.7A...
 
 future to learn / do
 [ ] add annotations to all functions

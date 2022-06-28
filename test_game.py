@@ -158,7 +158,16 @@ def test_place_add():
     # Then: Item has been added to the place item list
     assert place_has("sword"), "A sword should be added to the place items list."
 
-    
+def test_place_remove():
+    # Given: That the Player is in a particular place
+    current_place = get_place()
+
+    # And: The item is in the current place
+
+    # When: Call place_remove() with an item key
+
+    # Then: The item will be removed from the current place
+
     
 def fake_function(text):
     print("Fake function says:", text)
