@@ -1,9 +1,15 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
 
 [x] Write a test for the place_add() function
-[ ] continue with 9.6A...
+[x] continue with 9.6A...
+[x] write annotations and docstrings for two functions
+[x] continue with 9.6B
 
-future potential topics to learn / do
+[x] Write a test for the place_remove() function
+[x] continue with 9.6A...
+
+
+future to learn / do
 [ ] add annotations to all functions
 [ ] write docstrings for all functions
 """
@@ -163,7 +169,7 @@ def place_has(item_key: str) -> bool:
     else:
         return False
 
-def place_add(key):
+def place_add(key: str):
     """Add an item to a current place"""
     # Get the current place
     place = get_place()
@@ -204,35 +210,44 @@ def is_for_sale(item: dict) -> bool:
     else:
         return False
 
-def do_examine(args):
+def do_examine(args: list):
+    """Player can examine an item using the 'x', 'exam' or 'examine' command"""
     debug(f'Trying to examine {args}')
     if not args:
         error("What do you want to exam?")
         return
+    #Checking if the current place of the player has the item or the player has the item.
     place = get_place()
     name = args[0].lower()
     items = place.get("items", [])
     if not place_has(name) or player_has(name):
        abort(f"Sorry, I don't know what this is:{name}")
+    #Listing the item and description for the player.
     item = get_item(name)
     header(item["name"])
     wrap(item["description"])
 
 def do_take(args):
+    """Player can take an item and add it to their inventory using the 't',
+    'take' or 'grab' command"""
     debug(f"Trying to take {args}.")
     if not args:
         error("What are you trying to take?")
         return
+    #Checking if the current place of the player has the item
     place = get_place()
     name = args[0].lower()
     if not place_has(name):
         error(f"Sorry, I don't see a {name} here.")
         return
+    #Checking if the item is available to take by the player
     item = get_item(name)
     if not item.get("can_take"):
         wrap(f"You try to pick up {item['name']}, but you find you aren't able to lift it.")
         return
+    #Removing the item from the current place
     place["items"].remove(name)
+    #Adding the item to the player's inventory
     inventory_change(name)
 
     wrap(f"You pick up {name} and put it in your pack.")
@@ -288,9 +303,7 @@ def do_drop(args):
     PLAYER["inventory"][name] -= 1
     if not PLAYER["inventory"][name]:
         PLAYER["inventory"].pop(name)
-    place = get_place()
-    place.setdefault("items", [])  
-    place["items"].append(name)
+    place_add(name)
     wrap(f'You set down the {name}')
     ...
              
