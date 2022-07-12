@@ -5,12 +5,15 @@
 [x] write annotations and docstrings for two functions
 [x] continue with 9.6B
 
-[ ] Write a test for the place_remove() function
-[ ] continue with 9.7A...
+[x] Write a test for the place_remove() function
+[x] continue with 9.7A...
 
 future to learn / do
-[ ] add annotations to all functions
-[ ] write docstrings for all functions
+[ ] add annotations and docstrings to 1-2 functions until they are all done
+
+[ ] do part 10.1 A
+[ ] write a test for do_shop()
+[ ] do part 10.1 B
 """
 
 from pprint import pprint
@@ -112,12 +115,16 @@ PLACES = {
     },
 }
 
-def debug(message):
+def debug(message: str):
+    """If the Global Variable DEBUG is True then the message will print in colors for the Player"""
     if DEBUG == True:
+        # fg = foreground; bg = background
         debug_color = fg.blue + bg.green
         print(debug_color("Debug:"), message)
 
-def error(message):
+def error(message: str):
+    """Print the error message in colors for the Player"""
+    # fg = foreground; bg = background
     style = fg.white + bg.red
     print(style("Error:"), message)
 
@@ -178,6 +185,17 @@ def place_add(key: str):
     if key not in place["items"]:
         place["items"].append(key)
 
+def place_remove(key: str):
+    """Remove an item from a current place"""
+    # Get the current place
+    place = get_place()
+
+    # Making sure that the item key is in the current place items list
+    if not place_has(key):
+        return
+
+    # Remove the item from current place if the item is in that current place
+    place["items"].remove(key)
 
 def do_inventory():
     """Listing the Player's current inventory. Called when the player types the
@@ -234,7 +252,6 @@ def do_take(args):
         error("What are you trying to take?")
         return
     #Checking if the current place of the player has the item
-    place = get_place()
     name = args[0].lower()
     if not place_has(name):
         error(f"Sorry, I don't see a {name} here.")
@@ -245,7 +262,7 @@ def do_take(args):
         wrap(f"You try to pick up {item['name']}, but you find you aren't able to lift it.")
         return
     #Removing the item from the current place
-    place["items"].remove(name)
+    place_remove(name)
     #Adding the item to the player's inventory
     inventory_change(name)
 

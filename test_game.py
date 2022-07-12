@@ -6,6 +6,7 @@ from adventure import (
     place_has,
     get_place,
     place_add,
+    place_remove,
 )
 # import pdbr
 from copy import deepcopy
@@ -163,12 +164,27 @@ def test_place_remove():
     current_place = get_place()
 
     # And: The item is in the current place
+    current_place["items"] = ["sword"]
 
     # When: Call place_remove() with an item key
+    place_remove("sword")
 
     # Then: The item will be removed from the current place
+    assert not place_has("sword"), "A sword should be removed from the current place."
 
-    
+def test_place_remove_missing_item():
+    # Given: that the Player is in a particular place
+    current_place = get_place()
+
+    # And: The item is not in the current place
+    current_place["items"] = []
+
+    # When: Call place_remove() with an item key
+    place_remove("sword")
+
+    # Then: The item will be removed from the current place
+    assert not place_has("sword"), "The item will not be in the current place items list."
+
 def fake_function(text):
     print("Fake function says:", text)
 
