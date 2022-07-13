@@ -11,9 +11,10 @@
 future to learn / do
 [ ] add annotations and docstrings to 1-2 functions until they are all done
 
-[ ] do part 10.1 A
-[ ] write a test for do_shop()
-[ ] do part 10.1 B
+[x] do part 10.1 A
+[x] write a test for do_shop()
+[ ] change the test so that it looks at the items in the current place (should fail)
+[ ] do part 10.1 B (test should pass)
 """
 
 from pprint import pprint
@@ -48,6 +49,18 @@ ITEMS = {
         "description": "it will return half your life",
         "price": -30,
     },
+    "waybread": {
+        "key": "waybread;",
+        "name": "waybread;",
+        "description": "A bread like food that nourishes. It doesn't spoil so it works well for traveling.",
+        "price": -5,
+    },
+    "fishing tackle": {
+        "key": "fishing tackle",
+        "name": "fishing tackle",
+        "description": "Gear needed for catching fish from streams and lakes. Hooks, lines, folding pole, bobbers, weights. It is all contained in its own bag.",
+        "price": -10,
+    },
     "book": {
         "key": "book",
         "name": "Diary of a flying squirrel",
@@ -78,7 +91,7 @@ ITEMS = {
 # -------------------------------------------
 #               lake
 #                \
-#              home <-> town-square
+#              home <-> town-square <-> market
 #                /
 #              woods
 #
@@ -99,7 +112,8 @@ PLACES = {
         "key": "town-square",
         "name": "Old Towne Square",
         "west": "home",
-        "description": "A square with shops on all sides. The square has brick pavers with trees in front of the shops."
+        "east": "market",
+        "description": "An obelisk sits on a platform in the center of the square. The obelisk is about three feet tall and made of a shiny, black material much like obsidian."
     },
     "woods": {
         "key": "woods",
@@ -112,6 +126,13 @@ PLACES = {
         "name": "Lake Pukaki",
         "south": "home",
         "description": "Deep blue in color but will change to a purple hue when its mood is unsettled. There are mysteries to be found in it's dark waters."
+    },
+    "market": {
+        "key": "market",
+        "name": "Town Square Market",
+        "west": "town-square",
+        "description": "A square with shops on three sides. There are brick pavers and trees interspersed around the square. There is room for open air/traveling vendors.",
+        "items": ["crystal ball", "short dagger", "green potion", "waybread", "fishing tackle",],
     },
 }
 

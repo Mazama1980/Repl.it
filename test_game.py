@@ -7,6 +7,7 @@ from adventure import (
     get_place,
     place_add,
     place_remove,
+    do_shop,
 )
 # import pdbr
 from copy import deepcopy
@@ -184,6 +185,27 @@ def test_place_remove_missing_item():
 
     # Then: The item will be removed from the current place
     assert not place_has("sword"), "The item will not be in the current place items list."
+
+def test_do_shop(capsys):
+    # Given: items are for sale
+    adventure.ITEMS = {}
+
+    adventure.ITEMS["sword"] = {"name": "short sword", "price": -50}
+
+    # And: items are not for sale
+    adventure.ITEMS["quill"] = {"name": "quill",}
+
+    # When: Call do_shop()
+    do_shop()
+
+    output = capsys.readouterr().out
+
+    # Then: If the item is for sale it will be listed
+    assert "sword" in output, "For sale items will be listed."
+
+    # And: Items not for sale will not be listed
+    assert "quill" not in output, "Not For sale items will not be listed."
+
 
 def fake_function(text):
     print("Fake function says:", text)
