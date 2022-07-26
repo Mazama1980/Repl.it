@@ -1,12 +1,5 @@
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
 
-[x] Write a test for the place_add() function
-[x] continue with 9.6A...
-[x] write annotations and docstrings for two functions
-[x] continue with 9.6B
-
-[x] Write a test for the place_remove() function
-[x] continue with 9.7A...
 
 future to learn / do
 [ ] add annotations and docstrings to 1-2 functions until they are all done
@@ -15,6 +8,13 @@ future to learn / do
 [x] write a test for do_shop()
 [x] change the test so that it looks at the items in the current place (should fail)
 [ ] do part 10.1 B (test should pass)
+[ ] use get_place() to get the current place and save it to a variable.
+[ ] change the for loop to iterate over a list of keys using the variable from
+    the get_place() function using the "items" key
+    NOTE: instead of a dictionary of ITEMS the for loop will be iterating over a
+          list, so there will be only the key variable, not k, item
+[ ] use the get_item() with a key to get the item dictionary (information from ITEMS)
+
 """
 
 from pprint import pprint
@@ -236,7 +236,7 @@ def do_shop():
     """Listing items that are for sale by using the "shop" command."""
     header("Items for sale")
     for k, item in ITEMS.items():
-    # Checking to see if an item can be purchased with the is_for_sale() function
+        # Checking to see if an item can be purchased with the is_for_sale() function
         if not is_for_sale(item):
             continue
         write(f'{k}--> {item["name"]}')

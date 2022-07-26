@@ -186,6 +186,7 @@ def test_place_remove_missing_item():
     # Then: The item will be removed from the current place
     assert not place_has("sword"), "The item will not be in the current place items list."
 
+@pytest.mark.skip(reason="to be implemented")
 def test_do_shop(capsys):
     adventure.ITEMS = {}
 
