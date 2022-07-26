@@ -187,24 +187,39 @@ def test_place_remove_missing_item():
     assert not place_has("sword"), "The item will not be in the current place items list."
 
 def test_do_shop(capsys):
-    # Given: items are for sale
     adventure.ITEMS = {}
 
+    # Given: items are for sale
     adventure.ITEMS["sword"] = {"name": "short sword", "price": -50}
+    adventure.ITEMS["neurolizer"] = {"name": "neurolizer", "price": -100}
 
     # And: items are not for sale
     adventure.ITEMS["quill"] = {"name": "quill",}
+
+    # And: items for sale in your current place
+    adventure.PLACES["somewhere"] = {"name": "Somewhere out there"}
+    adventure.PLACES["somewhere"]["items"] = ["sword", "quill"]
+
+    # And: the player is in that place
+    adventure.PLAYER["place"] = "somewhere"
+
+    # And: items for sale but not in current place
+    adventure.PLACES["nowhere"] = {"name": "Anywhere but here"}
+    adventure.PLACES["nowhere"]["items"] = ["neurolizer"]
 
     # When: Call do_shop()
     do_shop()
 
     output = capsys.readouterr().out
 
-    # Then: If the item is for sale it will be listed
-    assert "sword" in output, "For sale items will be listed."
+    # Then: If the item is in the current place and is for sale it will be listed
+    assert "sword" in output, "For sale items that are in the current place will be listed."
 
-    # And: Items not for sale will not be listed
-    assert "quill" not in output, "Not For sale items will not be listed."
+    # And: If the item is in the current place and is not for sale will not be listed
+    assert "quill" not in output, "Not For sale items that are in the current place will not be listed."
+
+    # And: the item is for sale but not in the current place will not be listed
+    assert "neurolizer" not in output, "The item is for sale but not in the current place will not be listed."
 
 
 def fake_function(text):

@@ -13,7 +13,7 @@ future to learn / do
 
 [x] do part 10.1 A
 [x] write a test for do_shop()
-[ ] change the test so that it looks at the items in the current place (should fail)
+[x] change the test so that it looks at the items in the current place (should fail)
 [ ] do part 10.1 B (test should pass)
 """
 
