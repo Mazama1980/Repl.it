@@ -8,13 +8,14 @@ future to learn / do
 [x] write a test for do_shop()
 [x] change the test so that it looks at the items in the current place (should fail)
 [ ] do part 10.1 B (test should pass)
-[ ] use get_place() to get the current place and save it to a variable.
-[ ] change the for loop to iterate over a list of keys using the variable from
+[x] use get_place() to get the current place and save it to a variable.
+[x] change the for loop to iterate over a list of keys using the variable from
     the get_place() function using the "items" key
     NOTE: instead of a dictionary of ITEMS the for loop will be iterating over a
           list, so there will be only the key variable, not k, item
-[ ] use the get_item() with a key to get the item dictionary (information from ITEMS)
+[x] use the get_item() with a key to get the item dictionary (information from ITEMS)
 
+[ ] write another test for do_shop() that tests if a place has no "items" key
 """
 
 from pprint import pprint
@@ -234,12 +235,14 @@ def do_inventory():
 
 def do_shop():
     """Listing items that are for sale by using the "shop" command."""
+    place = get_place()
     header("Items for sale")
-    for k, item in ITEMS.items():
+    for key in place['items']:
+        item = get_item(key)
         # Checking to see if an item can be purchased with the is_for_sale() function
         if not is_for_sale(item):
             continue
-        write(f'{k}--> {item["name"]}')
+        write(f'{key}--> {item["name"]}')
 
 def is_for_sale(item: dict) -> bool:
     """Checking (returning True or False) to see if an item has a price attached to it"""
@@ -265,7 +268,7 @@ def do_examine(args: list):
     header(item["name"])
     wrap(item["description"])
 
-def do_take(args):
+def do_take(args: list):
     """Player can take an item and add it to their inventory using the 't',
     'take' or 'grab' command"""
     debug(f"Trying to take {args}.")
@@ -291,10 +294,17 @@ def do_take(args):
 
 
 def do_look():
+    """Player can look around in their current place using the 'l' or 'look' command. Player can also look in a direction"""
     debug(f"Trying to look around.")
+
+    # Getting the current place of the Player
     place = get_place()
+
+    # Printing the name and description of the current place
     header(place["name"])
     wrap(place["description"])
+
+    # Listing the items of the current place
     items = place.get("items", [])
     if items:
         names = []
@@ -318,6 +328,9 @@ def do_look():
         print()
         write(f"You see {text}. \n")
     print()
+
+    # Printing what can be seen in a north, south, east, or west direction
+    # from the current place
     directions = ["north", "east", "south", "west"]
     for direction in directions:
         name = place.get(direction)

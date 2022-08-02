@@ -186,15 +186,16 @@ def test_place_remove_missing_item():
     # Then: The item will be removed from the current place
     assert not place_has("sword"), "The item will not be in the current place items list."
 
-@pytest.mark.skip(reason="to be implemented")
+# @pytest.mark.skip(reason="to be implemented")
 def test_do_shop(capsys):
+    # Given: There are no items initially
     adventure.ITEMS = {}
 
-    # Given: items are for sale
+    # And: we add some items are for sale
     adventure.ITEMS["sword"] = {"name": "short sword", "price": -50}
     adventure.ITEMS["neurolizer"] = {"name": "neurolizer", "price": -100}
 
-    # And: items are not for sale
+    # And: we add items are not for sale
     adventure.ITEMS["quill"] = {"name": "quill",}
 
     # And: items for sale in your current place
@@ -208,9 +209,8 @@ def test_do_shop(capsys):
     adventure.PLACES["nowhere"] = {"name": "Anywhere but here"}
     adventure.PLACES["nowhere"]["items"] = ["neurolizer"]
 
-    # When: Call do_shop()
+    # When: Call do_shop() and capture the output
     do_shop()
-
     output = capsys.readouterr().out
 
     # Then: If the item is in the current place and is for sale it will be listed
