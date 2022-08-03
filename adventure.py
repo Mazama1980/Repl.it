@@ -114,7 +114,8 @@ PLACES = {
         "name": "Old Towne Square",
         "west": "home",
         "east": "market",
-        "description": "An obelisk sits on a platform in the center of the square. The obelisk is about three feet tall and made of a shiny, black material much like obsidian."
+        "description": "An obelisk sits on a platform in the center of the square. The obelisk is about three feet tall and made of a shiny, black material much like obsidian.",
+        "items": []
     },
     "woods": {
         "key": "woods",
@@ -237,7 +238,9 @@ def do_shop():
     """Listing items that are for sale by using the "shop" command."""
     place = get_place()
     header("Items for sale")
-    for key in place['items']:
+    # breakpoint()
+    # for key in place.get('items'):
+    for key in place.get('items', []):
         item = get_item(key)
         # Checking to see if an item can be purchased with the is_for_sale() function
         if not is_for_sale(item):

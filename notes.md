@@ -69,3 +69,19 @@ for name, species, age in pets:
 	# like saying name, species, age = pets[_] ; where _ is each index number
 	... # name="Gizmo", species="dog", age=8 the first time
 ```
+
+## Key Error
+
+ When you get the KeyError use the `.get()` method so that the program can return something or `NONE`. The program is trying to find the key and value for the key; if the key does not exist then an error will occur but using `.get()` method says 'Oh well, I don't see the missing key so I will return NONE'. Be sure to use `()` instead of `[]` as it is a method.
+
+ ## Type Error
+
+ When you get a TypeError: 'NoneType' it is not able to do anything with the Type `NONE`.
+
+ ```python
+ for key in place.get('items'):
+    # this line of code will not work. It is trying to access 'items' in a dicionary that doesn't have any items. 
+    # It is returning NONE and the 'for loop' is unable to iterate over NONE
+for key in place.get('items', []):
+    # Using the square brackets `[]` after 'items', creates an empty list that can be iterated over.
+```

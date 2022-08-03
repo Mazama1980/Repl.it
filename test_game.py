@@ -222,6 +222,24 @@ def test_do_shop(capsys):
     # And: the item is for sale but not in the current place will not be listed
     assert "neurolizer" not in output, "The item is for sale but not in the current place will not be listed."
 
+@pytest.mark.skip(reason="to be implemented")
+def test_do_shop_place_with_no_items_key(capsys):
+    # Given: Player is in a particular place
+    adventure.PLAYER["place"] = "somewhere"
+
+    # And: That the current place does not have an 'items' key
+    adventure.PLACES["somewhere"] = {"name":"Somewhere out there"}
+
+    # When: call do_shop() and capture the output
+    do_shop()
+    output = capsys.readouterr().out
+
+    # Then: heading title should print for the particulur place
+    assert "Items for sale" in output, "The header for the current place should print"
+
+    # And: a statement should say there are no 'items' for the current place
+    assert "No items in this place" in output, "The statement should print under the header"
+
 
 def fake_function(text):
     print("Fake function says:", text)
