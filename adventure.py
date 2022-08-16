@@ -3,19 +3,20 @@
 
 future to learn / do
 [ ] add annotations and docstrings to 1-2 functions until they are all done
+[ ] add tests for
+    [ ] place_has()
+    [ ] 
+.
+Part 10.2 (tests)
 
-[x] do part 10.1 A
-[x] write a test for do_shop()
-[x] change the test so that it looks at the items in the current place (should fail)
-[ ] do part 10.1 B (test should pass)
-[x] use get_place() to get the current place and save it to a variable.
-[x] change the for loop to iterate over a list of keys using the variable from
-    the get_place() function using the "items" key
-    NOTE: instead of a dictionary of ITEMS the for loop will be iterating over a
-          list, so there will be only the key variable, not k, item
-[x] use the get_item() with a key to get the item dictionary (information from ITEMS)
+[x] write a test_place_can_true() test
+[x] in it, make a fake place that has a "can" key that contains a fake command string
+[x] call it with that string
+[x] assert that it is true
 
-[ ] write another test for do_shop() that tests if a place has no "items" key
+[ ] write a test_place_can_false() test
+[ ] figure out how to write this test
+
 """
 
 from pprint import pprint
