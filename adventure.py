@@ -238,14 +238,16 @@ def do_shop():
     """Listing items that are for sale by using the "shop" command."""
     place = get_place()
     header("Items for sale")
-    # breakpoint()
-    # for key in place.get('items'):
+    count_items = 0 
     for key in place.get('items', []):
         item = get_item(key)
         # Checking to see if an item can be purchased with the is_for_sale() function
         if not is_for_sale(item):
             continue
         write(f'{key}--> {item["name"]}')
+        count_items += 1
+    if count_items == 0:
+        write("No items in this place.")
 
 def is_for_sale(item: dict) -> bool:
     """Checking (returning True or False) to see if an item has a price attached to it"""
@@ -370,7 +372,8 @@ def wrap(text):
     print(paragraph)
     print()
 
-def write(text):
+def write(text: str):
+    """Prints a single line of text indented."""
     print(f"{MARGIN * ' '} {text}")
 
 def header(title):

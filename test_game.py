@@ -222,7 +222,6 @@ def test_do_shop(capsys):
     # And: the item is for sale but not in the current place will not be listed
     assert "neurolizer" not in output, "The item is for sale but not in the current place will not be listed."
 
-@pytest.mark.skip(reason="to be implemented")
 def test_do_shop_place_with_no_items_key(capsys):
     # Given: Player is in a particular place
     adventure.PLAYER["place"] = "somewhere"
