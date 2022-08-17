@@ -1,5 +1,10 @@
 # Notes
 
+# Links
+https://alissa-huskey.github.io/python-class/lessons/in-depth/functions.html#part-4-annotations
+
+https://www.datacamp.com/tutorial/docstrings-python
+
 This file is in [markdown](https://commonmark.org/help/).
 
 ## Iterating
@@ -84,4 +89,16 @@ for name, species, age in pets:
     # It is returning NONE and the 'for loop' is unable to iterate over NONE
 for key in place.get('items', []):
     # Using the square brackets `[]` after 'items', creates an empty list that can be iterated over.
+```
+# True and False bools
+```python
+assert result 
+	# this statement (assert result is assumed to be True) is the same as this:
+assert result is True
+	# and:
+assert result == True
+	# however, for False you have to make the value equal False:
+assert result == False
+	# or:
+assert result is False
 ```

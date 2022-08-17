@@ -8,7 +8,7 @@ from adventure import (
     place_add,
     place_remove,
     do_shop,
-    # place_can,
+    place_can,
 )
 # import pdbr
 from copy import deepcopy
@@ -239,7 +239,7 @@ def test_do_shop_place_with_no_items_key(capsys):
     # And: a statement should say there are no 'items' for the current place
     assert "No items in this place" in output, "The statement should print under the header"
 
-@pytest.mark.skip(reason="to be implemented")
+# @pytest.mark.skip(reason="to be implemented")
 def test_place_can_when_true():
     # Given: Player is in a particular place
     adventure.PLAYER["place"] = "somewhere"
@@ -254,7 +254,22 @@ def test_place_can_when_true():
     result = place_can("fly")
 
     # Then: The result will be True
-    assert result, "place_can() should return True if there is a special command key where the Player is. "
+    assert result is True, "place_can() should return True if there is a special command key where the Player is. "
+
+def test_place_can_when_false():
+    # Given: Player is in a particular place
+    adventure.PLAYER["place"] = "somewhere"
+
+    # And: Place does not have a special  key
+    adventure.PLACES["somewhere"] = {
+        "name": "Somewhere out there",
+    }
+
+    # When: call place_can() with that key
+    result = place_can("fly")
+
+    # Then: The result will be False
+    assert result is False, "place_can() should return False if there is no special command key where the Player is."
 
 def fake_function(text):
     print("Fake function says:", text)

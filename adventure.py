@@ -14,8 +14,12 @@ Part 10.2 (tests)
 [x] call it with that string
 [x] assert that it is true
 
-[ ] write a test_place_can_false() test
-[ ] figure out how to write this test
+[x] write a test_place_can_false() test
+[x] figure out how to write this test
+
+[ ] do 10.2 A
+[ ] write test for do_buy() command
+[ ] do 10.3
 
 """
 
@@ -136,6 +140,7 @@ PLACES = {
         "west": "town-square",
         "description": "A square with shops on three sides. There are brick pavers and trees interspersed around the square. There is room for open air/traveling vendors.",
         "items": ["crystal ball", "short dagger", "green potion", "waybread", "fishing tackle",],
+        "can": ["shop",],
     },
 }
 
@@ -184,6 +189,21 @@ def inventory_change(key: str, quantity: int=1):
     # Remove from inventory dictionary if quantity is zero
     if not key in PLAYER["inventory"] or quantity <= 0:
         PLAYER["inventory"].pop(key)
+
+def place_can(spc_key: str) -> bool:
+    """Return True if the place dictionary for the players current place contains
+     a special command key 'can', otherwise return False.
+
+        Args:
+        * item_key (str): Key from the ITEMS dictionary to look for in the place
+          "items" list
+    """
+    place = get_place()
+    if spc_key in place.get("can", []):
+        return True
+    else:
+        return False
+
 
 def place_has(item_key: str) -> bool:
     """"Return True if the place dictionary for the players current place
@@ -345,7 +365,8 @@ def do_look():
         destination = get_place(name)
         write(f"To the {direction} is {destination['name']}.")
 
-def do_drop(args):
+def do_drop(args: str):
+    """Player can drop an item from their inventory using the 'drop' command"""
     debug(f'Trying to drop {args}')
     if not args:
         error("What do you want to drop?")
