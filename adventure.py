@@ -17,7 +17,8 @@ Part 10.2 (tests)
 [x] write a test_place_can_false() test
 [x] figure out how to write this test
 
-[ ] do 10.2 A
+[x] do 10.2 A
+[x] do 10.2 C
 [ ] write test for do_buy() command
 [ ] do 10.3
 
@@ -257,6 +258,9 @@ def do_inventory():
 
 def do_shop():
     """Listing items that are for sale by using the "shop" command."""
+    if not place_can("shop"):
+        error("Sorry, you can't shop here.")
+        return
     place = get_place()
     header("Items for sale")
     count_items = 0 

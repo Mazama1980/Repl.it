@@ -198,9 +198,12 @@ def test_do_shop(capsys):
     # And: we add items are not for sale
     adventure.ITEMS["quill"] = {"name": "quill",}
 
-    # And: items for sale in your current place
-    adventure.PLACES["somewhere"] = {"name": "Somewhere out there"}
-    adventure.PLACES["somewhere"]["items"] = ["sword", "quill"]
+    # And: items for sale and able to be purchased with the 'can':'shop' key in the current place
+    adventure.PLACES["somewhere"] = {
+        "name": "Somewhere out there",
+        "can": ["shop"],
+        "items": ["sword", "quill"],
+    }
 
     # And: the player is in that place
     adventure.PLAYER["place"] = "somewhere"
@@ -222,12 +225,35 @@ def test_do_shop(capsys):
     # And: the item is for sale but not in the current place will not be listed
     assert "neurolizer" not in output, "The item is for sale but not in the current place will not be listed."
 
+def test_do_shop_with_no_shop_key(capsys):
+    # Given: the Player is in a current place
+    adventure.PLAYER["place"] = "somewhere"
+
+    # And: the current place does not have the 'can':'shop' key
+    adventure.PLACES["somewhere"] = {"name":"Somewhere out there"}
+
+    # TODO: this test should still pass with the following
+    #       need to write another test to make sure it works
+    # And: if items are able to be purchased with the 'can':'shop' key
+    # adventure.PLACES["somewhere"]["can"] = []
+
+    # When: call do_shop() and capture the output
+    do_shop()
+    output = capsys.readouterr().out
+
+    # And: an error message saying there are no items to shop for in the current place should print under the header
+    assert "Sorry, you can't shop here." in output, "The statement should print"
+
+
 def test_do_shop_place_with_no_items_key(capsys):
     # Given: Player is in a particular place
     adventure.PLAYER["place"] = "somewhere"
 
     # And: That the current place does not have an 'items' key
     adventure.PLACES["somewhere"] = {"name":"Somewhere out there"}
+
+    # And: if items are able to be purchased with the 'can':'shop' key
+    adventure.PLACES["somewhere"]["can"] = ["shop"]
 
     # When: call do_shop() and capture the output
     do_shop()
