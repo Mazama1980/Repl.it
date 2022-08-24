@@ -9,6 +9,7 @@ from adventure import (
     place_remove,
     do_shop,
     place_can,
+    do_buy,
 )
 # import pdbr
 from copy import deepcopy
@@ -232,10 +233,11 @@ def test_do_shop_with_no_shop_key(capsys):
     # And: the current place does not have the 'can':'shop' key
     adventure.PLACES["somewhere"] = {"name":"Somewhere out there"}
 
-    # TODO: this test should still pass with the following
-    #       need to write another test to make sure it works
-    # And: if items are able to be purchased with the 'can':'shop' key
-    # adventure.PLACES["somewhere"]["can"] = []
+    # TODO: we may want to add another test at some point that tests both if the
+    # "can" key is missing AND if the "shop" key is missing from the "can" list
+    # (like below). But we've tested it both ways manually for now, so that's
+    # good for now.
+    adventure.PLACES["somewhere"]["can"] = []
 
     # When: call do_shop() and capture the output
     do_shop()
@@ -296,6 +298,24 @@ def test_place_can_when_false():
 
     # Then: The result will be False
     assert result is False, "place_can() should return False if there is no special command key where the Player is."
+
+@pytest.mark.skip(reason="to be implemented")
+def test_do_buy_when_place_cannot_buy(capsys):
+    # Given: the player is in a current place
+    adventure.PLAYER["place"] = "somewhere"
+
+    # And: the current place does not have the 'can':'buy' key
+    adventure.PLACES["somewhere"] = {
+        "name": "Somewhere out there",
+        "can": [],
+    }
+
+    # When: call do_buy and capture the output
+    do_buy([])
+    output = capsys.readouterr().out
+
+    # Then: an error message saying you can't buy anything in the current place should print
+    assert "Sorry you can't buy anything here" in output, "The statement should print"
 
 def fake_function(text):
     print("Fake function says:", text)

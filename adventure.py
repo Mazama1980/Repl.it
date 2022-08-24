@@ -34,7 +34,8 @@ MARGIN = 2
 DEBUG = True
 PLAYER = {
     "place": "home",
-    "inventory": {},
+    "inventory": {"gems": 50},
+
 }
 
 ITEMS = {
@@ -90,7 +91,12 @@ ITEMS = {
         "name": "a bag",
         "description": "A bag made of rough cloth that appears to be strong. It is about 12 inches long and 8 inches wide.",
         "can_take": True,
-    }
+    },
+    "gems": {
+        "key": "gems",
+        "name": "gems",
+        "description": "A pile of sparkling gems.",
+    },
 }
 
 #############################################
@@ -139,9 +145,9 @@ PLACES = {
         "key": "market",
         "name": "Town Square Market",
         "west": "town-square",
-        "description": "A square with shops on three sides. There are brick pavers and trees interspersed around the square. There is room for open air/traveling vendors.",
+        "description": "A store with a flower boxed window and brick pavers leading to the front door. Inside there are many things to buy.",
         "items": ["crystal ball", "short dagger", "green potion", "waybread", "fishing tackle",],
-        "can": ["shop",],
+        "can": ["shop", "buy"],
     },
 }
 
@@ -255,6 +261,15 @@ def do_inventory():
         item = get_item(name)
         write(f'{qty}, {item["name"]}')
     print()
+
+def do_buy(args: list):
+    """Player can buy an item, if any, in the current place using the 'buy' command.
+    
+    Args:
+    * args (list[str]): input from player will be turned into a list
+    """
+
+    ...
 
 def do_shop():
     """Listing items that are for sale by using the "shop" command."""
