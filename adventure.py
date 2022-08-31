@@ -268,6 +268,25 @@ def do_buy(args: list):
     Args:
     * args (list[str]): input from player will be turned into a list
     """
+    debug(f'Trying to buy {args}.')
+    # Check if you can buy things in the current place
+    if not place_can("buy"):
+        error("Sorry, you can't buy things here.")
+        return
+    # Check if args is falsy...if the Player typed an item
+    if not args:
+        error("What do you want to buy?")
+        return
+    # Does the current place have the item
+    name = args[0].lower()
+    if not place_has(name):
+        error(f"Sorry I don't see a {name} here.")
+        return
+    item = get_item(name)
+    if not is_for_sale(item):
+        error(f'Sorry, {name} is not for sale.')
+        return
+
 
     ...
 
@@ -482,6 +501,8 @@ def main():
             do_inventory()
         elif command == "drop":
             do_drop(args)
+        elif command == "buy":
+            do_buy(args)
         else:
             error("No such command.")
             continue

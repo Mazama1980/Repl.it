@@ -299,7 +299,6 @@ def test_place_can_when_false():
     # Then: The result will be False
     assert result is False, "place_can() should return False if there is no special command key where the Player is."
 
-@pytest.mark.skip(reason="to be implemented")
 def test_do_buy_when_place_cannot_buy(capsys):
     # Given: the player is in a current place
     adventure.PLAYER["place"] = "somewhere"
@@ -315,7 +314,45 @@ def test_do_buy_when_place_cannot_buy(capsys):
     output = capsys.readouterr().out
 
     # Then: an error message saying you can't buy anything in the current place should print
-    assert "Sorry you can't buy anything here" in output, "The statement should print"
+    assert "Sorry, you can't buy things here." in output, "The statement should print"
+
+def test_do_buy_when_args_is_falsy(capsys):
+    adventure.PLAYER["place"] = "somewhere"
+    adventure.PLACES["somewhere"] = {
+        "name": "Somewhere out there",
+        "can": ["buy"]
+    }
+    # When: Player doesn't type an item and calls do_buy()
+    do_buy([])
+    output = capsys.readouterr().out
+
+    # Then: Print "What do you want to buy?"
+    assert "What do you want to buy?" in output, "The statement should print"
+
+@pytest.mark.skip(reason="to be implemented")
+def test_do_buy_if_no_item_in_place(capsys):
+    # Given: Player is in a current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: making the can buy command is available
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere out there",
+        "can" : ["buy"],
+    }
+    # And: adding an item that is for sale but not available in the current place
+    adventure.PLACES["nowhere"] = {
+        "name": "Anywhere but here",
+        "items": ["neurolizer"],
+    }
+    adventure.ITEMS["neulizer"] = {
+        "name": "neurolizer",
+        "price": -100
+    }
+    # When: Player types an item but it's not there by calling do_buy("neurolizer")
+    name = do_buy("neulizer")
+    output = capsys.readouterr().out
+
+    # Then: Print "Sorry I don't see a {name} here."
+    assert (f"Sorry, I don't see a neulizer here.") in output, "The statement should print"
 
 def fake_function(text):
     print("Fake function says:", text)
