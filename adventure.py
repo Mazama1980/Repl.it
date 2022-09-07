@@ -19,8 +19,12 @@ Part 10.2 (tests)
 
 [x] do 10.2 A
 [x] do 10.2 C
-[ ] write test for do_buy() command
-[ ] do 10.3
+[x] write test for do_buy() command
+[-] do 10.3
+[ ] finish do_buy() (to add the message about how many gems the player has and
+    the price of the item)
+[ ] write a test_do_buy_actually_buy() for when the user really buys it
+[ ] finish do_buy() to actually buy the item
 
 """
 
@@ -269,6 +273,7 @@ def do_buy(args: list):
     * args (list[str]): input from player will be turned into a list
     """
     debug(f'Trying to buy {args}.')
+    # breakpoint()
     # Check if you can buy things in the current place
     if not place_can("buy"):
         error("Sorry, you can't buy things here.")
@@ -280,15 +285,17 @@ def do_buy(args: list):
     # Does the current place have the item
     name = args[0].lower()
     if not place_has(name):
-        error(f"Sorry I don't see a {name} here.")
+        error(f"Sorry, I don't see a {name} here.")
         return
     item = get_item(name)
     if not is_for_sale(item):
         error(f'Sorry, {name} is not for sale.')
         return
+    price = abs(item["price"])
+    if not player_has("gems", price):
+        error(f'Sorry, you can not afford that {name}.')
+        return
 
-
-    ...
 
 def do_shop():
     """Listing items that are for sale by using the "shop" command."""

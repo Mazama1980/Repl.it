@@ -196,7 +196,7 @@ def test_do_shop(capsys):
     adventure.ITEMS["sword"] = {"name": "short sword", "price": -50}
     adventure.ITEMS["neurolizer"] = {"name": "neurolizer", "price": -100}
 
-    # And: we add items are not for sale
+    # And: we add an item not for sale
     adventure.ITEMS["quill"] = {"name": "quill",}
 
     # And: items for sale and able to be purchased with the 'can':'shop' key in the current place
@@ -329,11 +329,11 @@ def test_do_buy_when_args_is_falsy(capsys):
     # Then: Print "What do you want to buy?"
     assert "What do you want to buy?" in output, "The statement should print"
 
-@pytest.mark.skip(reason="to be implemented")
+# @pytest.mark.skip(reason="to be implemented")
 def test_do_buy_if_no_item_in_place(capsys):
     # Given: Player is in a current place
     adventure.PLAYER["place"] = "somewhere"
-    # And: making the can buy command is available
+    # And: making sure the can buy command is available
     adventure.PLACES["somewhere"] = {
         "name": "somewhere out there",
         "can" : ["buy"],
@@ -343,16 +343,59 @@ def test_do_buy_if_no_item_in_place(capsys):
         "name": "Anywhere but here",
         "items": ["neurolizer"],
     }
-    adventure.ITEMS["neulizer"] = {
+    adventure.ITEMS["neurolizer"] = {
         "name": "neurolizer",
         "price": -100
     }
     # When: Player types an item but it's not there by calling do_buy("neurolizer")
-    name = do_buy("neulizer")
+    do_buy(["neurolizer"])
     output = capsys.readouterr().out
 
-    # Then: Print "Sorry I don't see a {name} here."
-    assert (f"Sorry, I don't see a neulizer here.") in output, "The statement should print"
+    # Then: Print "Sorry, I don't see a neurolizer here."
+    assert ("Sorry, I don't see a neurolizer here.") in output, "The statement should print"
+
+def test_do_buy_if_item_is_not_for_sale(capsys):
+    # Given: Player is in a current place
+    adventure.PLAYER["place"] = "somewhere"
+
+    # And: making sure the 'buy' command is available
+    adventure.PLACES["somewhere"] = {
+        "name": "Somewhere out there",
+        "can": ["buy"],
+        "items": ["quill"],
+    }
+
+    # And: adding an item that is in the current place but not for sale
+    adventure.ITEMS["quill"] = {"name": "quill"}
+
+    # When: Player types an item but it's not available to purchase 
+    #       by calling do_buy("quill") and capture the output
+    do_buy(["quill"])
+    output = capsys.readouterr().out
+
+    # Then: Print "Sorry, that item is not for sale."
+    assert "Sorry, quill is not for sale." in output, "The statement should print"
+
+def test_do_buy_player_does_not_have_enough_gems(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere" 
+
+    # And: add an item that is for sale in the current place with a price and 'buy' command
+    adventure.ITEMS["sword"] = {"name": "short sword", "price": -60}
+    adventure.PLACES["somewhere"] = {
+        "name": "Somewhere out there",
+        "can": ["buy"],
+        "items": ["sword"],
+    }
+
+    # When: call do_buy("sword") to see if Player can afford the item and capture output
+    do_buy(["sword"])
+    output = capsys.readouterr().out
+
+    # Then: Print "Sorry, you can not afford that sword."
+    assert "Sorry, you can not afford that sword." in output, "The statement should print out"
+
+
 
 def fake_function(text):
     print("Fake function says:", text)
