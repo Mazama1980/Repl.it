@@ -393,7 +393,7 @@ def test_do_buy_player_does_not_have_enough_gems(capsys):
     output = capsys.readouterr().out
 
     # Then: Print "Sorry, you can not afford that sword."
-    assert "Sorry, you can not afford that sword." in output, "The statement should print out"
+    assert "Sorry, you can not afford sword because it costs 60 gems and you only have 50 gems." in output, "The statement should print out"
 
 
 
