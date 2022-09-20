@@ -376,6 +376,7 @@ def test_do_buy_if_item_is_not_for_sale(capsys):
     # Then: Print "Sorry, that item is not for sale."
     assert "Sorry, quill is not for sale." in output, "The statement should print"
 
+# TODO: add a given And: The player does not have enough gems
 def test_do_buy_player_does_not_have_enough_gems(capsys):
     # Given: Player is in current place
     adventure.PLAYER["place"] = "somewhere" 
@@ -395,7 +396,35 @@ def test_do_buy_player_does_not_have_enough_gems(capsys):
     # Then: Print "Sorry, you can not afford that sword."
     assert "Sorry, you can not afford sword because it costs 60 gems and you only have 50 gems." in output, "The statement should print out"
 
+def test_do_buy(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
 
+    # And: add an item that is for sale in the current place with a price and 'buy' command
+    adventure.ITEMS["sword"] = {"name": "short sword", "price": -30}
+    adventure.PLACES["somewhere"] = {
+        "name": "Somewhere out there",
+        "can": ["buy"],
+        "items": ["sword"],
+    }
+    # And: Player has enough gems
+    adventure.PLAYER["inventory"]["gems"] = 60
+
+    # When: call do_buy("sword") to buy the item and capture output
+    do_buy(["sword"])
+    output = capsys.readouterr().out
+
+    # Then: print "You bought a sword"
+    assert "You bought a sword" in output, "The statement should print"
+
+    # And: item is in Player inventory
+    assert adventure.PLAYER["inventory"]["sword"] == 1, "Player should have 1 sword in their inventory."
+    
+    # And: gems are subtracted from Player previous total
+    assert adventure.PLAYER["inventory"]["gems"] == 20, "Player inventory should have 20 gems after buying a sword."
+
+    # And: item is no longer in current place
+    assert adventure.PLACES["somewhere"]["items"] == [], "The items list should be empty when the sword in bought."
 
 def fake_function(text):
     print("Fake function says:", text)

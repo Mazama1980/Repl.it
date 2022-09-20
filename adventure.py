@@ -261,16 +261,19 @@ def do_buy(args: list):
     if not place_has(name):
         error(f"Sorry, I don't see a {name} here.")
         return
+    # Is the item for sale
     item = get_item(name)
     if not is_for_sale(item):
         error(f'Sorry, {name} is not for sale.')
         return
-    # breakpoint()
+    # Can the Player afford the item
     price = abs(item["price"])
     if not player_has("gems", price):
         gems = PLAYER["inventory"]["gems"]
         error(f'Sorry, you can not afford {name} because it costs {price} gems and you only have {gems} gems.')
         return
+    # Player buys the item - subtract gems from inventory and add item to inventory
+    
 
 
 def do_shop():
