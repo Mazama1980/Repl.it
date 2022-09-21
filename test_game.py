@@ -77,6 +77,16 @@ def test_inventory_change_with_quantity():
     # Then: should add the specific quantity to the Player's inventory of that item
     assert adventure.PLAYER["inventory"]["lembas"] == 101
 
+def test_inventory_change_with_negative_quantity():
+    # Given: Item and quantity to Player's inventory
+    adventure.PLAYER["inventory"]["lembas"] = 99
+
+    # When: call inventory_change with item and specific quantity
+    inventory_change("lembas", -2)
+
+    # Then: should add the specific quantity to the Player's inventory of that item
+    assert adventure.PLAYER["inventory"]["lembas"] == 97
+
 def test_inventory_change_missing_key():
     # Given: The Player inventory does not contain an item
     adventure.PLAYER["inventory"] = {}
@@ -217,8 +227,8 @@ def test_do_shop(capsys):
     do_shop()
     output = capsys.readouterr().out
 
-    # Then: If the item is in the current place and is for sale it will be listed
-    assert "sword" in output, "For sale items that are in the current place will be listed."
+    # Then: If the item is in the current place and is for sale it will be listed with price
+    assert "sword: 50" in output, "For sale items that are in the current place will be listed."
 
     # And: If the item is in the current place and is not for sale will not be listed
     assert "quill" not in output, "Not For sale items that are in the current place will not be listed."
@@ -376,7 +386,6 @@ def test_do_buy_if_item_is_not_for_sale(capsys):
     # Then: Print "Sorry, that item is not for sale."
     assert "Sorry, quill is not for sale." in output, "The statement should print"
 
-# TODO: add a given And: The player does not have enough gems
 def test_do_buy_player_does_not_have_enough_gems(capsys):
     # Given: Player is in current place
     adventure.PLAYER["place"] = "somewhere" 
@@ -388,6 +397,9 @@ def test_do_buy_player_does_not_have_enough_gems(capsys):
         "can": ["buy"],
         "items": ["sword"],
     }
+
+    # And: Player does not have enough gems
+    adventure.PLAYER["inventory"]["gems"] = 50
 
     # When: call do_buy("sword") to see if Player can afford the item and capture output
     do_buy(["sword"])
@@ -408,7 +420,7 @@ def test_do_buy(capsys):
         "items": ["sword"],
     }
     # And: Player has enough gems
-    adventure.PLAYER["inventory"]["gems"] = 60
+    adventure.PLAYER["inventory"]["gems"] = 50
 
     # When: call do_buy("sword") to buy the item and capture output
     do_buy(["sword"])

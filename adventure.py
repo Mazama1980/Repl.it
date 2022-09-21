@@ -19,7 +19,7 @@ PLAYER = {
 ITEMS = {
     "crystal ball": {
         "key": "crystal ball",
-        "name": "it glows faintly -",
+        "name": "it glows faintly ",
         "description": "all it does is glow faintly; could be used in dark places.",
         "price": -5,
     },
@@ -31,13 +31,13 @@ ITEMS = {
     },
     "green potion": {
         "key": "green potion;",
-        "name": "a health potion; ",
+        "name": "a health potion ",
         "description": "it will return half your life",
         "price": -30,
     },
     "waybread": {
         "key": "waybread;",
-        "name": "waybread;",
+        "name": "waybread",
         "description": "A bread like food that nourishes. It doesn't spoil so it works well for traveling.",
         "price": -5,
     },
@@ -172,7 +172,7 @@ def inventory_change(key: str, quantity: int=1):
     PLAYER["inventory"].setdefault(key,0)
     PLAYER["inventory"][key] += quantity
     # Remove from inventory dictionary if quantity is zero
-    if not key in PLAYER["inventory"] or quantity <= 0:
+    if PLAYER["inventory"][key] <= 0:
         PLAYER["inventory"].pop(key)
 
 def place_can(spc_key: str) -> bool:
@@ -247,7 +247,6 @@ def do_buy(args: list):
     * args (list[str]): input from player will be turned into a list
     """
     debug(f'Trying to buy {args}.')
-    # breakpoint()
     # Check if you can buy things in the current place
     if not place_can("buy"):
         error("Sorry, you can't buy things here.")
@@ -273,7 +272,12 @@ def do_buy(args: list):
         error(f'Sorry, you can not afford {name} because it costs {price} gems and you only have {gems} gems.')
         return
     # Player buys the item - subtract gems from inventory and add item to inventory
-    
+    # breakpoint()
+    inventory_change("gems", -price)
+    inventory_change(name)
+    place_remove(name)
+    wrap(f"You bought a {name}.")
+
 
 
 def do_shop():
@@ -289,7 +293,7 @@ def do_shop():
         # Checking to see if an item can be purchased with the is_for_sale() function
         if not is_for_sale(item):
             continue
-        write(f'{key}--> {item["name"]}')
+        write(f'{key}--> {item["name"]}: {abs(item["price"])}')
         count_items += 1
     if count_items == 0:
         write("No items in this place.")

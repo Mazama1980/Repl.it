@@ -23,5 +23,7 @@
 [-] do 10.3
 [x] finish do_buy() (to add the message about how many gems the player has and
     the price of the item)
-[ ] write a test_do_buy_actually_buy() for when the user really buys it
-[ ] finish do_buy() to actually buy the item
+[x] Fix inventory_change() as per failing test: test_inventory_change_with_negative_quantity
+[x] write a test_do_buy_actually_buy() for when the user really buys it
+[x] finish do_buy() to actually buy the item
+[ ] 10.4 do the string formatting for the do_shop function list that prints out
