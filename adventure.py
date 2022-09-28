@@ -293,7 +293,7 @@ def do_shop():
         # Checking to see if an item can be purchased with the is_for_sale() function
         if not is_for_sale(item):
             continue
-        write(f'{key}--> {item["name"]}: {abs(item["price"])}')
+        write(f'Item is:   {key :<10} {item["name"]:^30s} {abs(item["price"]) :>2}')
         count_items += 1
     if count_items == 0:
         write("No items in this place.")
