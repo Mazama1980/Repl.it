@@ -6,6 +6,7 @@ from pprint import pprint
 from sys import stderr
 import textwrap
 from console import fg, bg, fx
+from shlex import split
 
 WIDTH = 60
 MARGIN = 2
@@ -17,27 +18,34 @@ PLAYER = {
 }
 
 ITEMS = {
+# Crystal Ball      faintly glowing ball       5
     "crystal ball": {
         "key": "crystal ball",
-        "name": "it glows faintly ",
+        "name": "a faintly glowing ball",
+        "description": "all it does is glow faintly; could be used in dark places.",
+        "price": -5,
+    },
+    "new crystal ball": {
+        "key": "crystal ball",
+        "summary": "a faintly glowing ball",
         "description": "all it does is glow faintly; could be used in dark places.",
         "price": -5,
     },
     "short dagger": {
         "key": "short dagger",
-        "name": "antler handle with double edged blade",
+        "summary": "double edged blade",
         "description": "hardened steel, the blade is sharp on both sides, polished antler bone handle, about 10 inches in length, comes with a sheath",
         "price": -22,
     },
     "green potion": {
-        "key": "green potion;",
+        "key": "green potion",
         "name": "a health potion ",
         "description": "it will return half your life",
         "price": -30,
     },
     "waybread": {
-        "key": "waybread;",
-        "name": "waybread",
+        "key": "waybread",
+        "name": "food for travel",
         "description": "A bread like food that nourishes. It doesn't spoil so it works well for traveling.",
         "price": -5,
     },
@@ -76,6 +84,10 @@ ITEMS = {
         "description": "A pile of sparkling gems.",
     },
 }
+
+# post-process your ITEMS to add a redundant "name" key to every item dictionary
+for key, item in ITEMS.values():
+    item["name"] = item["key"]
 
 #############################################
 # Map
@@ -289,14 +301,16 @@ def do_shop():
     header("Items for sale")
     count_items = 0 
     for key in place.get('items', []):
+        # breakpoint()
         item = get_item(key)
         # Checking to see if an item can be purchased with the is_for_sale() function
         if not is_for_sale(item):
             continue
-        write(f'Item is:   {key :<10} {item["name"]:^30s} {abs(item["price"]) :>2}')
+        write(f'{key:<15} {item["name"]:^25s} {abs(item["price"]):>4}')
         count_items += 1
     if count_items == 0:
         write("No items in this place.")
+    print()
 
 def is_for_sale(item: dict) -> bool:
     """Checking (returning True or False) to see if an item has a price attached to it"""
@@ -468,7 +482,7 @@ def main():
     while True:
         debug(f"You are at: {PLAYER['place']}")
         reply = input(">").strip()
-        args = reply.split()
+        args = split(reply)
         if not args:
             continue
         command = args.pop(0)
