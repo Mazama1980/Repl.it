@@ -21,73 +21,80 @@ ITEMS = {
 # Crystal Ball      faintly glowing ball       5
     "crystal ball": {
         "key": "crystal ball",
-        "name": "a faintly glowing ball",
+        "name": "Crystal ball",
+        "summary": "a faintly glowing ball",
         "description": "all it does is glow faintly; could be used in dark places.",
         "price": -5,
     },
     "new crystal ball": {
         "key": "crystal ball",
+        "name": "Crystal ball",
         "summary": "a faintly glowing ball",
         "description": "all it does is glow faintly; could be used in dark places.",
         "price": -5,
     },
     "short dagger": {
         "key": "short dagger",
+        "name": "Short dagger",
         "summary": "double edged blade",
         "description": "hardened steel, the blade is sharp on both sides, polished antler bone handle, about 10 inches in length, comes with a sheath",
         "price": -22,
     },
     "green potion": {
-        "key": "green potion",
-        "name": "a health potion ",
+        "key": "potion",
+        "name": "Green potion",
+        "summary": "a health potion ",
         "description": "it will return half your life",
         "price": -30,
     },
     "waybread": {
         "key": "waybread",
-        "name": "food for travel",
+        "name": "Waybread",
+        "summary": "food for travel",
         "description": "A bread like food that nourishes. It doesn't spoil so it works well for traveling.",
         "price": -5,
     },
     "fishing tackle": {
-        "key": "fishing tackle",
-        "name": "fishing tackle",
+        "key": "tackle",
+        "name": "Fishing tackle",
+        "summary": "gear for catching fish",
         "description": "Gear needed for catching fish from streams and lakes. Hooks, lines, folding pole, bobbers, weights. It is all contained in its own bag.",
         "price": -10,
     },
     "book": {
         "key": "book",
-        "name": "Diary of a flying squirrel",
+        "name": "Book",
+        "summary": "Diary of a wimpy dragon",
         "description": "A soft leather bound book laying on the desk at home. There may be useful information in it.",
         "can_take": True,
     },
     "desk": {
         "key": "desk",
-        "name": "writing desk",
+        "name": "Desk",
+        "summary": "writing desk",
         "description": "A smallish wooden desk with 5 drawers. There is a large book laying on the top.",
     },
     "stick": {
         "key": "stick",
-        "name": "walking stick",
+        "name": "Stick",
+        "summary": "walking stick",
         "description": "a staff made from osage orange. It's about 4 feet tall. It has curious carvings on it.",
         "can_take": True,
     },
     "bag": {
         "key": "bag",
-        "name": "a bag",
+        "name": "Bag",
+        "summary": "a bag",
         "description": "A bag made of rough cloth that appears to be strong. It is about 12 inches long and 8 inches wide.",
         "can_take": True,
     },
     "gems": {
         "key": "gems",
-        "name": "gems",
-        "description": "A pile of sparkling gems.",
+        "name": "Gems",
+        "summary": "various sized  gems",
+        "description": "A pile of sparkling gems of different sizes and colors.",
     },
 }
-
-# post-process your ITEMS to add a redundant "name" key to every item dictionary
-for key, item in ITEMS.values():
-    item["name"] = item["key"]
 
 #############################################
 # Map
@@ -145,8 +152,9 @@ def debug(message: str):
     """If the Global Variable DEBUG is True then the message will print in colors for the Player"""
     if DEBUG == True:
         # fg = foreground; bg = background
-        debug_color = fg.blue + bg.green
-        print(debug_color("Debug:"), message)
+        # breakpoint()
+        debug_color = fg.gray + bg.lightblack
+        print(MARGIN*" ", debug_color("Debug:"), message)
 
 def error(message: str):
     """Print the error message in colors for the Player"""
@@ -155,7 +163,7 @@ def error(message: str):
     print(style("Error:"), message)
 
 def get_place(key: str =None) -> dict:
-    """Getting (returns the current place) where the Player is at currently at in the game"""
+    """Getting (returns the current place) where the Player is at currently in the game"""
     # Getting the current Player place if there is no key 
     if not key:
         key = PLAYER["place"]
@@ -306,7 +314,7 @@ def do_shop():
         # Checking to see if an item can be purchased with the is_for_sale() function
         if not is_for_sale(item):
             continue
-        write(f'{key:<15} {item["name"]:^25s} {abs(item["price"]):>4}')
+        write(f'{item["name"]:<15} {item["summary"]:^25s} {abs(item["price"]):>4}')
         count_items += 1
     if count_items == 0:
         write("No items in this place.")

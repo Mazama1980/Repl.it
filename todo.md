@@ -29,5 +29,8 @@
 [x] 10.4 do the string formatting for the do_shop function list that prints out
 [ ] add tests for any do_*() functions that deal with items to include quotes in
     the key name, for example do_examine()
-[ ] change your all your "name" keys in your ITEMS dictionary to be "summary"
-[ ] go through all your do_*() functions to see where item["name"] is used, and see if you meant to use "name" or "summary"
+[x] change tests to reflect changes made to 'key' and 'name' in the game functions
+[x] change your all your "name" keys in your ITEMS dictionary to be "summary"
+[x] go through all your do_*() functions to see where item["name"] is used, and see if you meant to use "name" or "summary"
+[ ] do_examine is broken for keys that have spaces; also do_take, do_buy, do_drop, 
+[ ] change formatting on inventory

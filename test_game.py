@@ -203,11 +203,11 @@ def test_do_shop(capsys):
     adventure.ITEMS = {}
 
     # And: we add some items are for sale
-    adventure.ITEMS["sword"] = {"name": "short sword", "price": -50}
-    adventure.ITEMS["neurolizer"] = {"name": "neurolizer", "price": -100}
+    adventure.ITEMS["sword"] = {"name": "sword", "summary": "short sword", "price": -50}
+    adventure.ITEMS["neurolizer"] = {"name": "neurolizer", "summary": "memory eraser", "price": -100}
 
     # And: we add an item not for sale
-    adventure.ITEMS["quill"] = {"name": "quill",}
+    adventure.ITEMS["quill"] = {"name": "quill", "summary": "writing utensil",}
 
     # And: items for sale and able to be purchased with the 'can':'shop' key in the current place
     adventure.PLACES["somewhere"] = {
@@ -228,7 +228,7 @@ def test_do_shop(capsys):
     output = capsys.readouterr().out
 
     # Then: If the item is in the current place and is for sale it will be listed with price
-    assert "sword: 50" in output, "For sale items that are in the current place will be listed."
+    assert "short sword" in output, "For sale items that are in the current place will be listed."
 
     # And: If the item is in the current place and is not for sale will not be listed
     assert "quill" not in output, "Not For sale items that are in the current place will not be listed."
