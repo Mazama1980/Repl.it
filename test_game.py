@@ -10,6 +10,7 @@ from adventure import (
     do_shop,
     place_can,
     do_buy,
+    do_examine,
 )
 # import pdbr
 from copy import deepcopy
@@ -57,7 +58,7 @@ def test_is_for_sale():
     # THEN: it should return True
     assert result, "is_for_sale() should return True if the item has a price"
 
-def test_inventory_change():
+def test_inventory_change_with_no_quantity_arg():
     # Given: Item and quantity Player's inventory
     adventure.PLAYER["inventory"]["lembas"] = 99
 
@@ -67,25 +68,21 @@ def test_inventory_change():
     # Then: should add one to quantity to Player's inventory
     assert adventure.PLAYER["inventory"]["lembas"] == 100, f'inventory_change() with no quantity argument shoud add 1.'
 
-def test_inventory_change_with_quantity():
+@pytest.mark.parametrize(
+    ["current_qty", "add_qty", "result"], [
+        (99, 2, 101),
+        (99, -2, 97),
+    ]
+)
+def test_inventory_change_with_quantity(current_qty, add_qty, result):
     # Given: Item and quantity to Player's inventory
-    adventure.PLAYER["inventory"]["lembas"] = 99
+    adventure.PLAYER["inventory"]["lembas"] = current_qty
 
     # When: call inventory_change with item and specific quantity
-    inventory_change("lembas", 2)
+    inventory_change("lembas", add_qty)
 
     # Then: should add the specific quantity to the Player's inventory of that item
-    assert adventure.PLAYER["inventory"]["lembas"] == 101
-
-def test_inventory_change_with_negative_quantity():
-    # Given: Item and quantity to Player's inventory
-    adventure.PLAYER["inventory"]["lembas"] = 99
-
-    # When: call inventory_change with item and specific quantity
-    inventory_change("lembas", -2)
-
-    # Then: should add the specific quantity to the Player's inventory of that item
-    assert adventure.PLAYER["inventory"]["lembas"] == 97
+    assert adventure.PLAYER["inventory"]["lembas"] == result
 
 def test_inventory_change_missing_key():
     # Given: The Player inventory does not contain an item
@@ -438,26 +435,32 @@ def test_do_buy(capsys):
     # And: item is no longer in current place
     assert adventure.PLACES["somewhere"]["items"] == [], "The items list should be empty when the sword in bought."
 
-def fake_function(text):
-    print("Fake function says:", text)
+@pytest.mark.parametrize(
+    ["key", "description"], [
+        ("quill", "a writing untensil"),
+        ("belt buckle", "holds your belt together"),
+    ]
+)
+def test_do_examine(capsys, key, description):
+    # Given: Player is in a current place
+    adventure.PLAYER["place"] = "somewhere"
 
+    # And: adding an item to current place so Player can examine the item
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere out there",
+        "items": [key],
+    }
+    adventure.ITEMS[key] = {
+        "name": key,
+        "description": description
+    }
 
-# To test printed output:
-# 1. Pass capsys to your test function as a parameter
-# 2. After the code that should print something, get the output with:
-#    output = capsys.readouterr().out
-# 3. Write an assertion like you normally would
-
-def test_fake_thing(capsys):
-    # WHEN: You call the fake_function() with a string
-    fake_function("hello")
-
-    # this gets the text that would have been printed to the screen
+    # When: call do_examine with the key and capture the output
+    do_examine([key])
     output = capsys.readouterr().out
 
-    # THEN: A message containing that string is printed
-    assert "hello" in output, "the message is printed"
-
+    # Then: Print the description of the item
+    assert description in output, "The statement should print"
 
 def test_teardown():
     assert "lembas" not in adventure.PLAYER["inventory"], \

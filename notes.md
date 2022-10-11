@@ -102,3 +102,24 @@ assert result == False
 	# or:
 assert result is False
 ```
+Using parametrization to combine similiar tests: (example below)
+# def test_addition_one():
+#     assert 1 + 1 == 2
+
+# def test_addition_two():
+#     assert 2 + 2 == 4
+
+# def test_addition_three():
+#     assert -2 + 2 == 0
+
+@pytest.mark.parametrize(
+    ["number_one", "number_two", "result"], [
+        (1, 1, 2),
+        (2, 2, 4),
+        (-2, 2, 0),
+        (5, 5, 11),
+    ]
+)
+def test_addition(number_one, number_two, result):
+    assert number_one + number_two == result
+    

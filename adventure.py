@@ -257,7 +257,7 @@ def do_inventory():
     # Listing the Player's item name with the quantity of each item
     for name, qty in PLAYER["inventory"].items():
         item = get_item(name)
-        write(f'{qty}, {item["name"]}')
+        write(f'{item["name"]:<15} {qty:>4}')
     print()
 
 def do_buy(args: list):

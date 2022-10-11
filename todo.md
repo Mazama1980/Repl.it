@@ -32,5 +32,17 @@
 [x] change tests to reflect changes made to 'key' and 'name' in the game functions
 [x] change your all your "name" keys in your ITEMS dictionary to be "summary"
 [x] go through all your do_*() functions to see where item["name"] is used, and see if you meant to use "name" or "summary"
-[ ] do_examine is broken for keys that have spaces; also do_take, do_buy, do_drop, 
-[ ] change formatting on inventory
+[x] change formatting on inventory
+[ ] add tests for do_examine:
+    [x] when item is in the current place
+    [ ] when item is in inventory
+    [ ] when item not in inventory or the current place
+[ ] Look at the way items are printed in the following commands, and check that
+    you are using the item["name"], item["key"], item["summary"], and
+    item["description"] correctly
+    [ ] do_examine()
+    [ ] do_take()
+    [ ] do_buy()
+    [ ] do_drop
+[ ] Do 10.4 C
+[ ] Do 10.4 D
