@@ -33,10 +33,10 @@
 [x] change your all your "name" keys in your ITEMS dictionary to be "summary"
 [x] go through all your do_*() functions to see where item["name"] is used, and see if you meant to use "name" or "summary"
 [x] change formatting on inventory
-[ ] add tests for do_examine:
+[x] add tests for do_examine:
     [x] when item is in the current place
-    [ ] when item is in inventory
-    [ ] when item not in inventory or the current place
+    [x] when item is in inventory
+    [x] when item not in inventory or the current place
 [ ] Look at the way items are printed in the following commands, and check that
     you are using the item["name"], item["key"], item["summary"], and
     item["description"] correctly

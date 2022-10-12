@@ -164,13 +164,14 @@ def error(message: str):
 
 def get_place(key: str =None) -> dict:
     """Getting (returns the current place) where the Player is at currently in the game"""
+    # breakpoint()
     # Getting the current Player place if there is no key 
     if not key:
         key = PLAYER["place"]
     # Making sure that the key is in the PLACES dictionary
     place = PLACES.get(key)
     if not place:
-        abort(f"Woops! The information about the place {key} seems to be missing.")
+        error(f"Woops! The information about the place {key} seems to be missing.")
     return place
 
 def get_item(key: str) -> dict:
@@ -334,11 +335,10 @@ def do_examine(args: list):
         error("What do you want to exam?")
         return
     #Checking if the current place of the player has the item or the player has the item.
-    place = get_place()
     name = args[0].lower()
-    items = place.get("items", [])
-    if not place_has(name) or player_has(name):
-       abort(f"Sorry, I don't know what this is:{name}")
+    if not (place_has(name) or player_has(name)):
+       error(f"Sorry, I don't know what this is:{name}")
+       return
     #Listing the item and description for the player.
     item = get_item(name)
     header(item["name"])

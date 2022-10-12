@@ -462,6 +462,48 @@ def test_do_examine(capsys, key, description):
     # Then: Print the description of the item
     assert description in output, "The statement should print"
 
+def test_do_examine_item_in_inventory(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+
+    # And: add the item to Player's inventory
+    adventure.PLAYER["inventory"] = {"neurolizer": 1}
+
+    # And: add the item to the ITEMS dictionary with description 
+    adventure.ITEMS["neurolizer"] = {
+        "name": "neurolizer",
+        "description": "A gadget the size of a pen that erases memory in the set parameters"
+    }
+    # And: the item is not in the current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items": [],
+    }
+    # When: call item with do_examine("item") from Player's inventory to examine and capture output
+    do_examine(["neurolizer"])
+    output = capsys.readouterr().out
+
+    # Then: print item name and description
+    assert "A gadget " in output, "The statement should print"
+
+def test_do_examine_item_not_in_inventory_current_place(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # breakpoint()
+    # And: add an item not in current place
+    adventure.PLACES["somewhere"] = {
+        "name": "anywhere but here",
+    }
+    adventure.ITEMS["neurolizer"] = {"name": "neurolizer",}
+
+    # When: call do_examine("item") and capture output
+    do_examine(["neurolizer"])
+    output = capsys.readouterr().out
+
+    # Then: an error message should print that there it does not know what Player wants to examine
+    assert "Sorry, I don't know " in output, "The error statement should print"
+
+
 def test_teardown():
     assert "lembas" not in adventure.PLAYER["inventory"], \
         "Each test should start with a fresh data set."
