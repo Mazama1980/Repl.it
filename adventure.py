@@ -21,13 +21,7 @@ ITEMS = {
 # Crystal Ball      faintly glowing ball       5
     "crystal ball": {
         "key": "crystal ball",
-        "name": "Crystal ball",
-        "summary": "a faintly glowing ball",
-        "description": "all it does is glow faintly; could be used in dark places.",
-        "price": -5,
-    },
-    "new crystal ball": {
-        "key": "crystal ball",
+        "aliases": ["ball", "globe"],
         "name": "Crystal ball",
         "summary": "a faintly glowing ball",
         "description": "all it does is glow faintly; could be used in dark places.",
@@ -41,7 +35,7 @@ ITEMS = {
         "price": -22,
     },
     "green potion": {
-        "key": "potion",
+        "key": "green potion",
         "name": "Green potion",
         "summary": "a health potion ",
         "description": "it will return half your life",
@@ -55,7 +49,7 @@ ITEMS = {
         "price": -5,
     },
     "fishing tackle": {
-        "key": "tackle",
+        "key": "fishing tackle",
         "name": "Fishing tackle",
         "summary": "gear for catching fish",
         "description": "Gear needed for catching fish from streams and lakes. Hooks, lines, folding pole, bobbers, weights. It is all contained in its own bag.",
@@ -277,27 +271,27 @@ def do_buy(args: list):
         error("What do you want to buy?")
         return
     # Does the current place have the item
-    name = args[0].lower()
-    if not place_has(name):
-        error(f"Sorry, I don't see a {name} here.")
+    key = args[0].lower()
+    if not place_has(key):
+        error(f"Sorry, I don't see a {key} here.")
         return
     # Is the item for sale
-    item = get_item(name)
+    item = get_item(key)
     if not is_for_sale(item):
-        error(f'Sorry, {name} is not for sale.')
+        error(f'Sorry, {key} is not for sale.')
         return
     # Can the Player afford the item
     price = abs(item["price"])
     if not player_has("gems", price):
         gems = PLAYER["inventory"]["gems"]
-        error(f'Sorry, you can not afford {name} because it costs {price} gems and you only have {gems} gems.')
+        error(f'Sorry, you can not afford {key} because it costs {price} gems and you only have {gems} gems.')
         return
     # Player buys the item - subtract gems from inventory and add item to inventory
     # breakpoint()
     inventory_change("gems", -price)
-    inventory_change(name)
-    place_remove(name)
-    wrap(f"You bought a {name}.")
+    inventory_change(key)
+    place_remove(key)
+    wrap(f"You bought a {key}.")
 
 
 
@@ -342,6 +336,9 @@ def do_examine(args: list):
     #Listing the item and description for the player.
     item = get_item(name)
     header(item["name"])
+    if place_has("shop") and place_has(name) and is_for_sale(item):
+        write(f'{abs(item["price"])} gems')
+        print()
     wrap(item["description"])
 
 def do_take(args: list):
@@ -352,21 +349,21 @@ def do_take(args: list):
         error("What are you trying to take?")
         return
     #Checking if the current place of the player has the item
-    name = args[0].lower()
-    if not place_has(name):
-        error(f"Sorry, I don't see a {name} here.")
+    key = args[0].lower()
+    if not place_has(key):
+        error(f"Sorry, I don't see a {key} here.")
         return
     #Checking if the item is available to take by the player
-    item = get_item(name)
+    item = get_item(key)
     if not item.get("can_take"):
-        wrap(f"You try to pick up {item['name']}, but you find you aren't able to lift it.")
+        wrap(f"You try to pick up {key}, but you find you aren't able to lift it.")
         return
     #Removing the item from the current place
-    place_remove(name)
+    place_remove(key)
     #Adding the item to the player's inventory
-    inventory_change(name)
+    inventory_change(key)
 
-    wrap(f"You pick up {name} and put it in your pack.")
+    wrap(f"You pick up {key} and put it in your pack.")
 
 
 def do_look():
@@ -421,17 +418,17 @@ def do_drop(args: str):
     if not args:
         error("What do you want to drop?")
         return
-    name = args[0].lower()
-    if not player_has(name):
-        error(f"You don't have any {name}.")
+    key = args[0].lower()
+    if not player_has(key):
+        error(f"You don't have any {key}.")
         return
     # NOTE -= is shorthand for:
     # PLAYER["inventory"][name] = PLAYER["inventory"][name] - 1
-    PLAYER["inventory"][name] -= 1
-    if not PLAYER["inventory"][name]:
-        PLAYER["inventory"].pop(name)
-    place_add(name)
-    wrap(f'You set down the {name}')
+    PLAYER["inventory"][key] -= 1
+    if not PLAYER["inventory"][key]:
+        PLAYER["inventory"].pop(key)
+    place_add(key)
+    wrap(f'You set down the {key}')
     ...
              
 def wrap(text):
