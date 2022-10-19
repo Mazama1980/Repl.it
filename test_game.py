@@ -11,6 +11,7 @@ from adventure import (
     place_can,
     do_buy,
     do_examine,
+    setup_aliases,
 )
 # import pdbr
 from copy import deepcopy
@@ -503,6 +504,10 @@ def test_do_examine_item_not_in_inventory_current_place(capsys):
     # Then: an error message should print that there it does not know what Player wants to examine
     assert "Sorry, I don't know " in output, "The error statement should print"
 
+def test_setup_aliases():
+    # Given: there are aliases for each item in the ITEMS dictionary
+    # When:
+    # Then:
 
 def test_teardown():
     assert "lembas" not in adventure.PLAYER["inventory"], \

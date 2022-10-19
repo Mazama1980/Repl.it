@@ -3,7 +3,9 @@
 
 ## future to learn / do
 
-[ ] add annotations and docstrings to 1-2 functions until they are all done
+[x] add annotations and docstrings to 1-2 functions until they are all done
+[ ] respond to the TODO comments above some functions and fix the stuff
+[ ] for at least some, add an "Args:" section (to get practice)
 [ ] add tests for
     [ ] place_has()
 

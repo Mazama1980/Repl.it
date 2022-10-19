@@ -175,6 +175,9 @@ def get_item(key: str) -> dict:
         abort(f"Woops! The information about the item {key} seems to be missing.")
     return item
 
+# TODO: you should also mention the `qty` argument, what the function does with
+#       it, and that it defaults to 1
+#       This is a good place to use the extra "Args:" section in the docstring
 def player_has(key: str, qty: int=1) -> bool:
     """Determining (return True/False) if there is an item in the PLAYER inventory"""
     if key in PLAYER["inventory"] and PLAYER["inventory"][key] >= qty:
@@ -182,6 +185,7 @@ def player_has(key: str, qty: int=1) -> bool:
     else:
         return False
 
+# TODO: same notes as for player_has() regarding the `qty` argument
 def inventory_change(key: str, quantity: int=1):
     """Add item to player inventory"""
     PLAYER["inventory"].setdefault(key,0)
@@ -190,16 +194,15 @@ def inventory_change(key: str, quantity: int=1):
     if PLAYER["inventory"][key] <= 0:
         PLAYER["inventory"].pop(key)
 
-def place_can(spc_key: str) -> bool:
-    """Return True if the place dictionary for the players current place contains
-     a special command key 'can', otherwise return False.
+def place_can(action: str) -> bool:
+    """Return True if the action is in the 'can' list in the current place dictionary 
+      otherwise return False.
 
         Args:
-        * item_key (str): Key from the ITEMS dictionary to look for in the place
-          "items" list
+        * action (str): the name of a command
     """
     place = get_place()
-    if spc_key in place.get("can", []):
+    if action in place.get("can", []):
         return True
     else:
         return False
@@ -412,6 +415,7 @@ def do_look():
         destination = get_place(name)
         write(f"To the {direction} is {destination['name']}.")
 
+# TODO: the annotation here is incorrect
 def do_drop(args: str):
     """Player can drop an item from their inventory using the 'drop' command"""
     debug(f'Trying to drop {args}')
@@ -431,7 +435,10 @@ def do_drop(args: str):
     wrap(f'You set down the {key}')
     ...
              
-def wrap(text):
+# TODO: You should also say in the doc string that this prints the formatted
+#       text
+def wrap(text: str):
+    """Longer text will wrap and be readable to the Player by calling the wrap command"""
     paragraph = textwrap.fill(
         text,
         WIDTH,
@@ -445,13 +452,16 @@ def write(text: str):
     """Prints a single line of text indented."""
     print(f"{MARGIN * ' '} {text}")
 
-def header(title):
+def header(title: str):
+    """A title prints in bold text by calling the header command"""
     print()
     header_title = fx.bold(title)
     write(header_title)
     print()
     
-def do_go(args):
+# TODO: no docstring
+# TODO: the annotation is incorrect
+def do_go(args: str):
     debug(f"Trying to go: {args}")
     if not args:
         error("Which way do you want to go?")
@@ -473,15 +483,19 @@ def do_go(args):
 
 
 def do_quit():
+    """If Player types 'q' or 'quit' the game will end and the the word "Goodbye!" will print"""
     write(fg.lightyellow("Goodbye!"))
     quit()
 
-def abort(message):
+# TODO: also mention that the error message is printed first
+def abort(message: str):
+    """Game will end if it encounters an error and cannot continue"""
     error(message)
     exit(1)
 
 
 def main():
+    """Game User interface (UI). The game starts here."""
     debug("Hello")
     header(fg.lightyellow("Welcome!"))
     while True:
