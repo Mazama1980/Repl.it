@@ -504,6 +504,26 @@ def test_do_examine_item_not_in_inventory_current_place(capsys):
     # Then: an error message should print that there it does not know what Player wants to examine
     assert "Sorry, I don't know " in output, "The error statement should print"
 
+def test_do_examine_can_shop(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+
+    # And: Player can shop in the current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere out there",
+        "can": ["shop"],
+        "items": ["sword"],
+    }
+    # And: items are for sale in current place
+    adventure.ITEMS["sword"] = {"name": "short sword", "description": "leaf shaped double bladed", "price": -30}
+
+    # When: call do_examine ["sword"] and capture output
+    do_examine(["sword"])
+    output = capsys.readouterr().out
+
+    # Then: price of each item will show up
+    assert "30 gems" in output, "price -30 should print out"
+
 # def test_setup_aliases():
     # ...
     # Given: there are aliases for each item in the ITEMS dictionary
