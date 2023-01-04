@@ -337,7 +337,6 @@ def test_do_buy_when_args_is_falsy(capsys):
     # Then: Print "What do you want to buy?"
     assert "What do you want to buy?" in output, "The statement should print"
 
-# @pytest.mark.skip(reason="to be implemented")
 def test_do_buy_if_no_item_in_place(capsys):
     # Given: Player is in a current place
     adventure.PLAYER["place"] = "somewhere"
@@ -520,9 +519,61 @@ def test_do_examine_can_shop(capsys):
     # When: call do_examine ["sword"] and capture output
     do_examine(["sword"])
     output = capsys.readouterr().out
-
+    # breakpoint()
     # Then: price of each item will show up
     assert "30 gems" in output, "price -30 should print out"
+
+def test_do_examine_item_not_for_sale(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+
+    # And: there is an item that is in the current place but is not for sale
+    adventure.PLACES["somewhere"] = {
+        "name": "Somewhere out there",
+        "can": ["buy"],
+        "items": ["quill"],
+    }
+    adventure.ITEMS["quill"] = {"name": "quill", "description": "a writing utensil that uses ink",}
+
+    # When: call do_exanine ["quill"]
+    do_examine(["quill"])
+    output = capsys.readouterr().out
+
+    # Then: the description should print
+    assert "a writing utensil that uses ink" in output, "The description should print"
+
+    # And: no price should print
+    assert "gems" not in output, "No price should print"
+
+@pytest.mark.skip(reason="work in progress (10.4D)")
+def test_do_examine_player_inventory_item_quantity(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+
+    # And: an item is in Player's inventory
+    adventure.PLAYER["inventory"] = {"neurolizer": 99}
+
+    # And: the inventory item exists
+    adventure.ITEMS["neurolizer"] = {
+        "name": "neurolizer",
+        "description": "A gadget the size of a pen that erases memory in the set parameters"
+    }
+
+    # And: item is not in current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items": [],
+    }
+
+    # When: the Player examines the item
+    do_examine(["neurolizer"])
+    output = capsys.readouterr().out
+    # breakpoint()
+    # Then: item description should be printed 
+    assert "A gadget " in output, "The statement should print"
+
+    # And: quantity in inventory should be printed
+    assert "99" in output, "The quantity of the item should print"
 
 # def test_setup_aliases():
     # ...

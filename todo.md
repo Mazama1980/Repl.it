@@ -46,8 +46,8 @@
     [x] do_take()
     [x] do_buy()
     [x] do_drop
-[ ] Do 10.4 C
-[ ] Do 10.4 D
+[x] Do 10.4 C
+[ ] Do 10.4 D first test is done. Need to implement code in do_examine
 
 ### Aliases function
 

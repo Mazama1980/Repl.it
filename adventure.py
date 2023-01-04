@@ -339,7 +339,7 @@ def do_examine(args: list):
     #Listing the item and description for the player.
     item = get_item(name)
     header(item["name"])
-    if place_can("shop") and place_has(name) and is_for_sale(item):
+    if place_can("shop") and is_for_sale(item):
         write(f'{abs(item["price"])} gems')
         print()
     wrap(item["description"])
