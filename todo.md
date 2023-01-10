@@ -47,7 +47,16 @@
     [x] do_buy()
     [x] do_drop
 [x] Do 10.4 C
-[ ] Do 10.4 D first test is done. Need to implement code in do_examine
+[x] Do 10.4 D first test is done. Need to implement code in do_examine
+
+### Reorganize adventure.py
+
+Proposed order of file is:
+
+1. docstring
+2. imports
+3. global variables
+4. 
 
 ### Aliases function
 

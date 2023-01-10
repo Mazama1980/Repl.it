@@ -339,7 +339,10 @@ def do_examine(args: list):
     #Listing the item and description for the player.
     item = get_item(name)
     header(item["name"])
-    if place_can("shop") and is_for_sale(item):
+    if player_has(name):
+        write(f'x{PLAYER["inventory"][name]} in inventory')
+        print()
+    elif place_can("shop") and is_for_sale(item):
         write(f'{abs(item["price"])} gems')
         print()
     wrap(item["description"])
