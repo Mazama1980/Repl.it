@@ -142,6 +142,12 @@ PLACES = {
     },
 }
 
+# TODO: also mention that the error message is printed first
+def abort(message: str):
+    """Game will end if it encounters an error and cannot continue"""
+    error(message)
+    exit(1)
+
 def debug(message: str):
     """If the Global Variable DEBUG is True then the message will print in colors for the Player"""
     if DEBUG == True:
@@ -156,6 +162,13 @@ def error(message: str):
     style = fg.white + bg.red
     print(style("Error:"), message)
 
+def get_item(key: str) -> dict:
+    """Getting (or returning) an item from the ITEMS dictionary"""
+    item = ITEMS.get(key)
+    if not item:
+        abort(f"Woops! The information about the item {key} seems to be missing.")
+    return item
+
 def get_place(key: str =None) -> dict:
     """Getting (returns the current place) where the Player is at currently in the game"""
     # breakpoint()
@@ -168,23 +181,13 @@ def get_place(key: str =None) -> dict:
         error(f"Woops! The information about the place {key} seems to be missing.")
     return place
 
-def get_item(key: str) -> dict:
-    """Getting (or returning) an item from the ITEMS dictionary"""
-    item = ITEMS.get(key)
-    if not item:
-        abort(f"Woops! The information about the item {key} seems to be missing.")
-    return item
-
-# TODO: you should also mention the `qty` argument, what the function does with
-#       it, and that it defaults to 1
-#       This is a good place to use the extra "Args:" section in the docstring
-def player_has(key: str, qty: int=1) -> bool:
-    """Determining (return True/False) if there is an item in the PLAYER inventory"""
-    if key in PLAYER["inventory"] and PLAYER["inventory"][key] >= qty:
-        return True
-    else:
-        return False
-
+def header(title: str):
+    """A title prints in bold text by calling the header command"""
+    print()
+    header_title = fx.bold(title)
+    write(header_title)
+    print()
+    
 # TODO: same notes as for player_has() regarding the `qty` argument
 def inventory_change(key: str, quantity: int=1):
     """Add item to player inventory"""
@@ -193,6 +196,23 @@ def inventory_change(key: str, quantity: int=1):
     # Remove from inventory dictionary if quantity is zero
     if PLAYER["inventory"][key] <= 0:
         PLAYER["inventory"].pop(key)
+
+def is_for_sale(item: dict) -> bool:
+    """Checking (returning True or False) to see if an item has a price attached to it"""
+    if "price" in item:
+        return True
+    else:
+        return False
+
+def place_add(key: str):
+    """Add an item to a current place"""
+    # Get the current place
+    place = get_place()
+
+    # Add the item key to the current place items list
+    place.setdefault("items", [])
+    if key not in place["items"]:
+        place["items"].append(key)
 
 def place_can(action: str) -> bool:
     """Return True if the action is in the 'can' list in the current place dictionary 
@@ -206,7 +226,6 @@ def place_can(action: str) -> bool:
         return True
     else:
         return False
-
 
 def place_has(item_key: str) -> bool:
     """"Return True if the place dictionary for the players current place
@@ -222,16 +241,6 @@ def place_has(item_key: str) -> bool:
     else:
         return False
 
-def place_add(key: str):
-    """Add an item to a current place"""
-    # Get the current place
-    place = get_place()
-
-    # Add the item key to the current place items list
-    place.setdefault("items", [])
-    if key not in place["items"]:
-        place["items"].append(key)
-
 def place_remove(key: str):
     """Remove an item from a current place"""
     # Get the current place
@@ -244,19 +253,33 @@ def place_remove(key: str):
     # Remove the item from current place if the item is in that current place
     place["items"].remove(key)
 
-def do_inventory():
-    """Listing the Player's current inventory. Called when the player types the
-    "inventory" or "i" command. """
-    debug("Trying to show inventory.")
-    header("Inventory")
-    # If the Player's inventory is empty then print the message "Empty"
-    if not PLAYER["inventory"]:
-        write("Empty")
-    # Listing the Player's item name with the quantity of each item
-    for name, qty in PLAYER["inventory"].items():
-        item = get_item(name)
-        write(f'{item["name"]:<15} {qty:>4}')
+# TODO: you should also mention the `qty` argument, what the function does with
+#       it, and that it defaults to 1
+#       This is a good place to use the extra "Args:" section in the docstring
+def player_has(key: str, qty: int=1) -> bool:
+    """Determining (return True/False) if there is an item in the PLAYER inventory"""
+    if key in PLAYER["inventory"] and PLAYER["inventory"][key] >= qty:
+        return True
+    else:
+        return False
+
+             
+# TODO: You should also say in the doc string that this prints the formatted
+#       text
+def wrap(text: str):
+    """Longer text will wrap and be readable to the Player by calling the wrap command"""
+    paragraph = textwrap.fill(
+        text,
+        WIDTH,
+        initial_indent = MARGIN * " ",
+        subsequent_indent = MARGIN * " "
+    )
+    print(paragraph)
     print()
+
+def write(text: str):
+    """Prints a single line of text indented."""
+    print(f"{MARGIN * ' '} {text}")
 
 def do_buy(args: list):
     """Player can buy an item, if any, in the current place using the 'buy' command.
@@ -296,34 +319,25 @@ def do_buy(args: list):
     place_remove(key)
     wrap(f"You bought a {key}.")
 
-
-
-def do_shop():
-    """Listing items that are for sale by using the "shop" command."""
-    if not place_can("shop"):
-        error("Sorry, you can't shop here.")
+# TODO: the annotation here is incorrect
+def do_drop(args: str):
+    """Player can drop an item from their inventory using the 'drop' command"""
+    debug(f'Trying to drop {args}')
+    if not args:
+        error("What do you want to drop?")
         return
-    place = get_place()
-    header("Items for sale")
-    count_items = 0 
-    for key in place.get('items', []):
-        # breakpoint()
-        item = get_item(key)
-        # Checking to see if an item can be purchased with the is_for_sale() function
-        if not is_for_sale(item):
-            continue
-        write(f'{item["name"]:<15} {item["summary"]:^25s} {abs(item["price"]):>4}')
-        count_items += 1
-    if count_items == 0:
-        write("No items in this place.")
-    print()
-
-def is_for_sale(item: dict) -> bool:
-    """Checking (returning True or False) to see if an item has a price attached to it"""
-    if "price" in item:
-        return True
-    else:
-        return False
+    key = args[0].lower()
+    if not player_has(key):
+        error(f"You don't have any {key}.")
+        return
+    # NOTE -= is shorthand for:
+    # PLAYER["inventory"][name] = PLAYER["inventory"][name] - 1
+    PLAYER["inventory"][key] -= 1
+    if not PLAYER["inventory"][key]:
+        PLAYER["inventory"].pop(key)
+    place_add(key)
+    wrap(f'You set down the {key}')
+    ...
 
 def do_examine(args: list):
     """Player can examine an item using the 'x', 'exam' or 'examine' command"""
@@ -347,29 +361,50 @@ def do_examine(args: list):
         print()
     wrap(item["description"])
 
-def do_take(args: list):
-    """Player can take an item and add it to their inventory using the 't',
-    'take' or 'grab' command"""
-    debug(f"Trying to take {args}.")
+# TODO: no docstring
+# TODO: the annotation is incorrect
+def do_go(args: str):
+    debug(f"Trying to go: {args}")
     if not args:
-        error("What are you trying to take?")
+        error("Which way do you want to go?")
         return
-    #Checking if the current place of the player has the item
-    key = args[0].lower()
-    if not place_has(key):
-        error(f"Sorry, I don't see a {key} here.")
+    direction = args[0].lower()
+    compass = ["north", "south", "east", "west"]
+    if direction not in compass:
+        error(f"sorry, I don't know how to go : {direction}")
         return
-    #Checking if the item is available to take by the player
-    item = get_item(key)
-    if not item.get("can_take"):
-        wrap(f"You try to pick up {key}, but you find you aren't able to lift it.")
+    old_place = get_place()
+    new_name = old_place.get(direction)
+    if not new_name:
+        error(f"Sorry, you can't go {direction} from here.")
         return
-    #Removing the item from the current place
-    place_remove(key)
-    #Adding the item to the player's inventory
-    inventory_change(key)
+    new_place = get_place(new_name)
+    PLAYER["place"] = new_name
+    header(new_place["name"])
+    wrap(new_place["description"])
+    # from the current place
+    directions = ["north", "east", "south", "west"]
+    for direction in directions:
+        name = place.get(direction)
+        if not name:
+            continue
+        destination = get_place(name)
+        write(f"To the {direction} is {destination['name']}.")
 
-    wrap(f"You pick up {key} and put it in your pack.")
+
+def do_inventory():
+    """Listing the Player's current inventory. Called when the player types the
+    "inventory" or "i" command. """
+    debug("Trying to show inventory.")
+    header("Inventory")
+    # If the Player's inventory is empty then print the message "Empty"
+    if not PLAYER["inventory"]:
+        write("Empty")
+    # Listing the Player's item name with the quantity of each item
+    for name, qty in PLAYER["inventory"].items():
+        item = get_item(name)
+        write(f'{item["name"]:<15} {qty:>4}')
+    print()
 
 
 def do_look():
@@ -409,93 +444,56 @@ def do_look():
     print()
 
     # Printing what can be seen in a north, south, east, or west direction
-    # from the current place
-    directions = ["north", "east", "south", "west"]
-    for direction in directions:
-        name = place.get(direction)
-        if not name:
-            continue
-        destination = get_place(name)
-        write(f"To the {direction} is {destination['name']}.")
-
-# TODO: the annotation here is incorrect
-def do_drop(args: str):
-    """Player can drop an item from their inventory using the 'drop' command"""
-    debug(f'Trying to drop {args}')
-    if not args:
-        error("What do you want to drop?")
-        return
-    key = args[0].lower()
-    if not player_has(key):
-        error(f"You don't have any {key}.")
-        return
-    # NOTE -= is shorthand for:
-    # PLAYER["inventory"][name] = PLAYER["inventory"][name] - 1
-    PLAYER["inventory"][key] -= 1
-    if not PLAYER["inventory"][key]:
-        PLAYER["inventory"].pop(key)
-    place_add(key)
-    wrap(f'You set down the {key}')
-    ...
-             
-# TODO: You should also say in the doc string that this prints the formatted
-#       text
-def wrap(text: str):
-    """Longer text will wrap and be readable to the Player by calling the wrap command"""
-    paragraph = textwrap.fill(
-        text,
-        WIDTH,
-        initial_indent = MARGIN * " ",
-        subsequent_indent = MARGIN * " "
-    )
-    print(paragraph)
-    print()
-
-def write(text: str):
-    """Prints a single line of text indented."""
-    print(f"{MARGIN * ' '} {text}")
-
-def header(title: str):
-    """A title prints in bold text by calling the header command"""
-    print()
-    header_title = fx.bold(title)
-    write(header_title)
-    print()
-    
-# TODO: no docstring
-# TODO: the annotation is incorrect
-def do_go(args: str):
-    debug(f"Trying to go: {args}")
-    if not args:
-        error("Which way do you want to go?")
-        return
-    direction = args[0].lower()
-    compass = ["north", "south", "east", "west"]
-    if direction not in compass:
-        error(f"sorry, I don't know how to go : {direction}")
-        return
-    old_place = get_place()
-    new_name = old_place.get(direction)
-    if not new_name:
-        error(f"Sorry, you can't go {direction} from here.")
-        return
-    new_place = get_place(new_name)
-    PLAYER["place"] = new_name
-    header(new_place["name"])
-    wrap(new_place["description"])
-
 
 def do_quit():
     """If Player types 'q' or 'quit' the game will end and the the word "Goodbye!" will print"""
     write(fg.lightyellow("Goodbye!"))
     quit()
 
-# TODO: also mention that the error message is printed first
-def abort(message: str):
-    """Game will end if it encounters an error and cannot continue"""
-    error(message)
-    exit(1)
 
+def do_shop():
+    """Listing items that are for sale by using the "shop" command."""
+    if not place_can("shop"):
+        error("Sorry, you can't shop here.")
+        return
+    place = get_place()
+    header("Items for sale")
+    count_items = 0 
+    for key in place.get('items', []):
+        # breakpoint()
+        item = get_item(key)
+        # Checking to see if an item can be purchased with the is_for_sale() function
+        if not is_for_sale(item):
+            continue
+        write(f'{item["name"]:<15} {item["summary"]:^25s} {abs(item["price"]):>4}')
+        count_items += 1
+    if count_items == 0:
+        write("No items in this place.")
+    print()
+
+def do_take(args: list):
+    """Player can take an item and add it to their inventory using the 't',
+    'take' or 'grab' command"""
+    debug(f"Trying to take {args}.")
+    if not args:
+        error("What are you trying to take?")
+        return
+    #Checking if the current place of the player has the item
+    key = args[0].lower()
+    if not place_has(key):
+        error(f"Sorry, I don't see a {key} here.")
+        return
+    #Checking if the item is available to take by the player
+    item = get_item(key)
+    if not item.get("can_take"):
+        wrap(f"You try to pick up {key}, but you find you aren't able to lift it.")
+        return
+    #Removing the item from the current place
+    place_remove(key)
+    #Adding the item to the player's inventory
+    inventory_change(key)
+
+    wrap(f"You pick up {key} and put it in your pack.")
 
 def main():
     """Game User interface (UI). The game starts here."""

@@ -11,7 +11,7 @@ from adventure import (
     place_can,
     do_buy,
     do_examine,
-    do_read,
+    # do_read,
     # setup_aliases,
 )
 # import pdbr
@@ -546,7 +546,6 @@ def test_do_examine_item_not_for_sale(capsys):
     # And: no price should print
     assert "gems" not in output, "No price should print"
 
-# @pytest.mark.skip(reason="work in progress (10.4D)")
 def test_do_examine_player_inventory_item_quantity(capsys):
     # Given: Player is in current place
     adventure.PLAYER["place"] = "somewhere"
@@ -576,6 +575,7 @@ def test_do_examine_player_inventory_item_quantity(capsys):
     # And: quantity in inventory should be printed
     assert "99" in output, "The quantity of the item should print"
 
+@pytest.mark.skip(reason="work in progress (12.2)")
 def test_do_read(capsys):
     # Given: Player is in current place 
     adventure.PLAYER["place"] = "somewhere"

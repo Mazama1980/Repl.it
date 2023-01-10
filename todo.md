@@ -56,7 +56,10 @@ Proposed order of file is:
 1. docstring
 2. imports
 3. global variables
-4. 
+4. functions: (each section in alphabetical order)
+   1. utility functions (all except main and do_*)
+   2. command functions (do_*)
+   3. main()
 
 ### Aliases function
 
