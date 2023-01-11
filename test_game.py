@@ -11,7 +11,7 @@ from adventure import (
     place_can,
     do_buy,
     do_examine,
-    # do_read,
+    do_read,
     # setup_aliases,
 )
 # import pdbr
@@ -575,15 +575,32 @@ def test_do_examine_player_inventory_item_quantity(capsys):
     # And: quantity in inventory should be printed
     assert "99" in output, "The quantity of the item should print"
 
-@pytest.mark.skip(reason="work in progress (12.2)")
-def test_do_read(capsys):
+# @pytest.mark.skip(reason="work in progress (12.2)")
+def test_do_read_no_args(capsys):
     # Given: Player is in current place 
     adventure.PLAYER["place"] = "somewhere"
     # When: Player is reading
-    do_read()
+    do_read([])
     output = capsys.readouterr().out
     # Then: "Trying to read" should be in output
     assert "Trying to read" in output
+    assert "What do you want to read?" in output
+
+def test_do_read_missing_item(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items":[],
+    }
+    # When: the item to read is missing
+    do_read(["bottle"])
+    output = capsys.readouterr().out
+    # breakpoint()
+    # Then: a message should print "Trying to read"
+    assert "Trying to read" in output
+    # And: a message should print "Sorry, I don't know what this is"
+    assert "Sorry, I don't know what this is:" in output
 
 # def test_setup_aliases():
     # ...

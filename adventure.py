@@ -178,7 +178,7 @@ def get_place(key: str =None) -> dict:
     # Making sure that the key is in the PLACES dictionary
     place = PLACES.get(key)
     if not place:
-        error(f"Woops! The information about the place {key} seems to be missing.")
+        abort(f"Woops! The information about the place {key} seems to be missing.")
     return place
 
 def header(title: str):
@@ -236,6 +236,8 @@ def place_has(item_key: str) -> bool:
           "items" list
         """
     place = get_place()
+    if not place:
+        return
     if item_key in place.get("items", []):
         return True
     else:
@@ -362,8 +364,7 @@ def do_examine(args: list):
     wrap(item["description"])
 
 # TODO: no docstring
-# TODO: the annotation is incorrect
-def do_go(args: str):
+def do_go(args: list):
     debug(f"Trying to go: {args}")
     if not args:
         error("Which way do you want to go?")
@@ -450,6 +451,21 @@ def do_quit():
     write(fg.lightyellow("Goodbye!"))
     quit()
 
+def do_read(args):
+    """Player can read a particular item in the current place using the 'read' or 'r' command"""
+    debug(f'Trying to read {args}.')
+    if not args:
+        error("What do you want to read?")
+        return
+    #Checking if the current place of the player has the item or the player has the item.
+    name = args[0].lower()
+    # breakpoint()
+    if not (place_has(name) or player_has(name)):
+        error(f"Sorry, I don't know what this is: {name}")
+        return
+
+
+
 
 def do_shop():
     """Listing items that are for sale by using the "shop" command."""
@@ -527,6 +543,8 @@ def main():
             do_drop(args)
         elif command == "buy":
             do_buy(args)
+        elif command in ("r", "read"):
+            do_read(args)
         else:
             error("No such command.")
             continue
