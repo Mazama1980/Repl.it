@@ -12,6 +12,7 @@ from adventure import (
     do_buy,
     do_examine,
     do_read,
+    place_add,
     # setup_aliases,
 )
 # import pdbr
@@ -596,11 +597,31 @@ def test_do_read_missing_item(capsys):
     # When: the item to read is missing
     do_read(["bottle"])
     output = capsys.readouterr().out
-    # breakpoint()
     # Then: a message should print "Trying to read"
     assert "Trying to read" in output
     # And: a message should print "Sorry, I don't know what this is"
     assert "Sorry, I don't know what this is:" in output
+
+def test_do_read_unreadable_item(capsys):
+    # Given: Player is in the current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: add an unreadable item to the current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items": [],
+    }
+    # And: add a fake item to the current place
+    adventure.ITEMS["bottle"] = {
+        "name": "bottle",
+    }
+    place_add("bottle")
+
+    # When: the item is unreadable
+    do_read(["bottle"])
+    output = capsys.readouterr().out
+
+    # Then: a message should print "This item can't be read."
+    assert "Sorry, I can't read bottle" in output
 
 # def test_setup_aliases():
     # ...

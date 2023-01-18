@@ -451,7 +451,7 @@ def do_quit():
     write(fg.lightyellow("Goodbye!"))
     quit()
 
-def do_read(args):
+def do_read(args: list):
     """Player can read a particular item in the current place using the 'read' or 'r' command"""
     debug(f'Trying to read {args}.')
     if not args:
@@ -459,9 +459,12 @@ def do_read(args):
         return
     #Checking if the current place of the player has the item or the player has the item.
     name = args[0].lower()
-    # breakpoint()
     if not (place_has(name) or player_has(name)):
         error(f"Sorry, I don't know what this is: {name}")
+        return
+    item = get_item(name)
+    if not item.get("read"):
+        error(f"Sorry, I can't read {name}")
         return
 
 
@@ -476,7 +479,6 @@ def do_shop():
     header("Items for sale")
     count_items = 0 
     for key in place.get('items', []):
-        # breakpoint()
         item = get_item(key)
         # Checking to see if an item can be purchased with the is_for_sale() function
         if not is_for_sale(item):
