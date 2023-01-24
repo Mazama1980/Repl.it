@@ -623,6 +623,33 @@ def test_do_read_unreadable_item(capsys):
     # Then: a message should print "This item can't be read."
     assert "Sorry, I can't read bottle" in output
 
+def test_do_read_in_place(capsys):
+    # Given: Player is in the current place
+    adventure.PLAYER["place"] = "somewhere"
+
+    # And: add an item to the current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items": [],
+    }
+
+    # And: add a fake item to the current place
+    adventure.ITEMS["bottle"] = {
+        "name": "bottle",
+        "title": "Bottle Label",
+        "message": "Drink Me",
+    }
+    place_add("bottle")
+
+    # When: the item is readable
+    do_read(["bottle"])
+    output = capsys.readouterr().out
+
+    # Then: The statement "Bottle Label" should print
+    assert "Bottle Label" in output
+    # Then: The statement "Drink Me" should print
+    assert "Drink Me" in output
+
 # def test_setup_aliases():
     # ...
     # Given: there are aliases for each item in the ITEMS dictionary

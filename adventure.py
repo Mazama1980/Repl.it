@@ -58,8 +58,20 @@ ITEMS = {
     "book": {
         "key": "book",
         "name": "Book",
-        "summary": "Diary of a wimpy dragon",
+        "title": "Diary of a Purple Dragon",
+        "summary": "a book about a dragon's adventures.",
         "description": "A soft leather bound book laying on the desk at home. There may be useful information in it.",
+        "message": (
+            "At the edge of the woods is a cave that is home to a three " "headed dragon, each with a different temperament. "
+
+            "Legend says that if you happen upon the dragon sleeping, the "
+            "brave may pet one of its three heads. "
+            
+            "Choose the right head and you will be rewarded with great "
+            "fortunes. "
+
+            "But beware, choose poorly and it will surely mean your doom! "
+        ),
         "can_take": True,
     },
     "desk": {
@@ -463,9 +475,12 @@ def do_read(args: list):
         error(f"Sorry, I don't know what this is: {name}")
         return
     item = get_item(name)
-    if not item.get("read"):
+    if not item.get("message"):
         error(f"Sorry, I can't read {name}")
         return
+    print("It reads.... ")
+    header(item["title"])
+    wrap(item["message"])
 
 
 
