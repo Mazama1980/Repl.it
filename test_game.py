@@ -13,6 +13,7 @@ from adventure import (
     do_examine,
     do_read,
     place_add,
+    wrap,
     # setup_aliases,
 )
 # import pdbr
@@ -649,6 +650,54 @@ def test_do_read_in_place(capsys):
     assert "Bottle Label" in output
     # Then: The statement "Drink Me" should print
     assert "Drink Me" in output
+
+def test_do_read_in_inventory(capsys):
+    # Given: Player in current place
+    adventure.PLAYER["place"] = "somewhere"
+
+    # And: item is not in current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items": [],
+    }
+    # And: the inventory item exists
+    adventure.ITEMS["bottle"] = {
+        "name": "Bottle",
+        "title": "Bottle Label",
+        "message": "Drink Me",
+    }
+
+    # And: add an item to Player's inventory
+    adventure.PLAYER["inventory"] = {"bottle": 1}
+
+    # When: item is in inventory when Player reads it
+    do_read(["bottle"])
+    output = capsys.readouterr().out
+    lines = output.splitlines()
+    # breakpoint()
+    # Then: the statement "Bottle Label" should print
+    assert "Bottle Label" in output
+    # Then: the statement "Drink Me" should print
+    assert "Drink Me" in output
+    # Then: the statement "    Drink Me" should print with the indent
+    assert lines[-2].endswith("Drink Me")
+
+# @pytest.mark.skip(reason="work in progress (12.6)")
+def test_wrap(capsys):
+    # Given: that you have a long string
+    text = ("Directions for use: Apply liberally to infected area. if infected area gets worse discontinue use and break bottle over your enemy's head.")
+    # When: you call the function on that string
+    wrap(text) 
+    # Then: the long string should be printed wrapped
+    output = capsys.readouterr().out
+    lines = output.splitlines()
+    # breakpoint()
+    # Then: Length of the lines should be greater than 1
+    assert len(lines) > 1
+    # Then: the statement "Directions for use:" should print
+    assert lines[0].startswith("  Directions for use:")
+    # Then: the statement "over your enemy's head" should print
+    assert lines[-2].startswith("  over your enemy's head.")
 
 # def test_setup_aliases():
     # ...

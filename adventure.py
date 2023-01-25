@@ -482,9 +482,6 @@ def do_read(args: list):
     header(item["title"])
     wrap(item["message"])
 
-
-
-
 def do_shop():
     """Listing items that are for sale by using the "shop" command."""
     if not place_can("shop"):
