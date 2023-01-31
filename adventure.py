@@ -166,7 +166,7 @@ def debug(message: str):
         # fg = foreground; bg = background
         # breakpoint()
         debug_color = fg.gray + bg.lightblack
-        print(MARGIN*" ", debug_color("Debug:"), message)
+        print(MARGIN*" ", debug_color("Debug:"), message, sep="")
 
 def error(message: str):
     """Print the error message in colors for the Player"""
@@ -280,20 +280,21 @@ def player_has(key: str, qty: int=1) -> bool:
              
 # TODO: You should also say in the doc string that this prints the formatted
 #       text
-def wrap(text: str):
+def wrap(text: str, indent = 1):
     """Longer text will wrap and be readable to the Player by calling the wrap command"""
+    # breakpoint()
     paragraph = textwrap.fill(
         text,
         WIDTH,
-        initial_indent = MARGIN * " ",
-        subsequent_indent = MARGIN * " "
+        initial_indent = (MARGIN * " ") * indent,
+        subsequent_indent = (MARGIN * " ") * indent
     )
     print(paragraph)
     print()
 
 def write(text: str):
     """Prints a single line of text indented."""
-    print(f"{MARGIN * ' '} {text}")
+    print(f"{MARGIN * ' '}{text}")
 
 def do_buy(args: list):
     """Player can buy an item, if any, in the current place using the 'buy' command.
@@ -464,7 +465,7 @@ def do_quit():
     quit()
 
 def do_read(args: list):
-    """Player can read a particular item in the current place using the 'read' or 'r' command"""
+    """Player can read a particular item in the current place or in Player's inventory using the 'read' or 'r' command"""
     debug(f'Trying to read {args}.')
     if not args:
         error("What do you want to read?")

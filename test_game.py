@@ -691,13 +691,26 @@ def test_wrap(capsys):
     # Then: the long string should be printed wrapped
     output = capsys.readouterr().out
     lines = output.splitlines()
-    # breakpoint()
     # Then: Length of the lines should be greater than 1
     assert len(lines) > 1
     # Then: the statement "Directions for use:" should print
     assert lines[0].startswith("  Directions for use:")
-    # Then: the statement "over your enemy's head" should print
+    # Then: the statement "over your enemy's head." should print
     assert lines[-2].startswith("  over your enemy's head.")
+
+def test_wrap_with_indent(capsys):
+    # Given: the item has a long string of text
+    text = ("Directions for use: Apply liberally to infected area. if infected area gets worse discontinue use and break bottle over your enemy's head.")
+    # When: you call the function on that string
+    # breakpoint()
+    wrap(text, indent = 2)
+    output = capsys.readouterr().out
+    lines = output.splitlines()
+    # Then: the statement "Directions for use:" should print
+    assert lines[0].startswith("    Directions for use:")
+    # Then: the statement "bottle over your enemies head." should print
+    assert lines[-2].startswith("    bottle over your enemy's head.")
+
 
 # def test_setup_aliases():
     # ...
