@@ -481,7 +481,7 @@ def do_read(args: list):
         return
     print("It reads.... ")
     header(item["title"])
-    wrap(item["message"])
+    wrap(item["message"], indent=2)
 
 def do_shop():
     """Listing items that are for sale by using the "shop" command."""

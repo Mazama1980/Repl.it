@@ -638,7 +638,11 @@ def test_do_read_in_place(capsys):
     adventure.ITEMS["bottle"] = {
         "name": "bottle",
         "title": "Bottle Label",
-        "message": "Drink Me",
+        "message": (
+            "Directions for use:",
+            "Apply liberally to infected area.", 
+            "If infected area gets worse discontinue use and break bottle over your enemy's head."
+            ),
     }
     place_add("bottle")
 
@@ -649,7 +653,9 @@ def test_do_read_in_place(capsys):
     # Then: The statement "Bottle Label" should print
     assert "Bottle Label" in output
     # Then: The statement "Drink Me" should print
-    assert "Drink Me" in output
+    assert "    Directions for use:" in output
+    # Then: the statement "Directions for use:" should print with two blank lines and 4 indentation spaces.
+    assert "\n\n    Directions for use:" in output
 
 def test_do_read_in_inventory(capsys):
     # Given: Player in current place
@@ -711,7 +717,26 @@ def test_wrap_with_indent(capsys):
     # Then: the statement "bottle over your enemies head." should print
     assert lines[-2].startswith("    bottle over your enemy's head.")
 
+def test_wrap_with_iterable(capsys):
+    # Given: an item has iterable text
+    message = (
+        "This is the song that never ends",
+        "It goes on and on my friend",
+        "Some people started singing it not knowing what it was",
+        "And they just kept on singing it forever just because",
+        "This is the song that never ends",
+    )
 
+    # When: call wrap() with message as an argument
+    wrap(message)
+    output = capsys.readouterr().out
+
+    # Then: the statement "This is the song that never ends" should print
+    assert "This is the song that never ends" in output
+    # Then: the statement "This is the song that never ends" should print without parentheses
+    assert "(This is the song that never ends)" not in output
+    # Then: the statement "This is the song that never ends" should print with 2 blank lines and 4 indented spaces
+    assert "\n\n    This is the song that never ends" in output
 # def test_setup_aliases():
     # ...
     # Given: there are aliases for each item in the ITEMS dictionary
