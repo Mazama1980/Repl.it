@@ -129,6 +129,8 @@ def test_do_go(capsys):
     output = capsys.readouterr().out
     # Then: the statement should print "town-square"
     assert "town-square" in output
+    # And: Player should be in the new place
+    assert adventure.PLAYER["place"] == "town-square", "Player should be in the new place 'town-square'."
 
 
 def test_do_take(capsys):
