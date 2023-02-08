@@ -390,7 +390,7 @@ def do_go(args: list):
     direction = args[0].lower()
     compass = ["north", "south", "east", "west"]
     if direction not in compass:
-        error(f"sorry, I don't know how to go : {direction}")
+        error(f"sorry, I don't know how to go: {direction}")
         return
     # Look up where Player is currently and if Player can go in requested direction
     old_place = get_place()

@@ -132,6 +132,20 @@ def test_do_go(capsys):
     # And: Player should be in the new place
     assert adventure.PLAYER["place"] == "town-square", "Player should be in the new place 'town-square'."
 
+def test_do_go_valid_direction(capsys):
+    # Given: Player in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: Player is trying to go in a direction
+    # adventure.PLACES[""]
+    # When: call do_go(["up"])
+    do_go(["up"])
+    output = capsys.readouterr().out
+    # breakpoint()
+    # Then: debug should say "Trying to go up"
+    assert "Trying to go: ['up']" in output
+    # And: error should say "Which way do you want to go?"
+    assert "sorry, I don't know how to go: up" in output
+
 
 def test_do_take(capsys):
     # Given: Item and quantity in Player's inventory
