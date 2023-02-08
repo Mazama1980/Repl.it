@@ -62,15 +62,16 @@ ITEMS = {
         "summary": "a book about a dragon's adventures.",
         "description": "A soft leather bound book laying on the desk at home. There may be useful information in it.",
         "message": (
-            "At the edge of the woods is a cave that is home to a three " "headed dragon, each with a different temperament. "
+            "At the edge of the woods is a cave that is home to a three "
+            "headed dragon, each with a different temperament. ",
 
             "Legend says that if you happen upon the dragon sleeping, the "
-            "brave may pet one of its three heads. "
+            "brave may pet one of its three heads. ",
             
             "Choose the right head and you will be rewarded with great "
-            "fortunes. "
+            "fortunes. ",
 
-            "But beware, choose poorly and it will surely mean your doom! "
+            "But beware, choose poorly and it will surely mean your doom! ",
         ),
         "can_take": True,
     },
@@ -164,7 +165,6 @@ def debug(message: str):
     """If the Global Variable DEBUG is True then the message will print in colors for the Player"""
     if DEBUG == True:
         # fg = foreground; bg = background
-        # breakpoint()
         debug_color = fg.gray + bg.lightblack
         print(MARGIN*" ", debug_color("Debug:"), message, sep="")
 
@@ -183,7 +183,6 @@ def get_item(key: str) -> dict:
 
 def get_place(key: str =None) -> dict:
     """Getting (returns the current place) where the Player is at currently in the game"""
-    # breakpoint()
     # Getting the current Player place if there is no key 
     if not key:
         key = PLAYER["place"]
@@ -282,14 +281,19 @@ def player_has(key: str, qty: int=1) -> bool:
 #       text
 def wrap(text: str, indent = 1):
     """Longer text will wrap and be readable to the Player by calling the wrap command"""
-    # breakpoint()
-    paragraph = textwrap.fill(
-        text,
-        WIDTH,
-        initial_indent = (MARGIN * " ") * indent,
-        subsequent_indent = (MARGIN * " ") * indent
-    )
-    print(paragraph)
+    # check if text is a string then making it a tuple
+    if isinstance(text, str):
+        text = (text,)
+    blocks = []
+    for stanza in text:
+        paragraph = textwrap.fill(
+            stanza,
+            WIDTH,
+            initial_indent = (MARGIN * " ") * indent,
+            subsequent_indent = (MARGIN * " ") * indent
+        )
+        blocks.append(paragraph)
+    print(*blocks, sep="\n\n")
     print()
 
 def write(text: str):
@@ -376,9 +380,10 @@ def do_examine(args: list):
         print()
     wrap(item["description"])
 
-# TODO: no docstring
 def do_go(args: list):
+    """Player is moving to another area"""
     debug(f"Trying to go: {args}")
+    # checking that a valid direction has been asked
     if not args:
         error("Which way do you want to go?")
         return
@@ -387,23 +392,16 @@ def do_go(args: list):
     if direction not in compass:
         error(f"sorry, I don't know how to go : {direction}")
         return
+    # Look up where Player is currently and if Player can go in requested direction
     old_place = get_place()
     new_name = old_place.get(direction)
     if not new_name:
         error(f"Sorry, you can't go {direction} from here.")
         return
+    # update Player to new place and describe new place
     new_place = get_place(new_name)
     PLAYER["place"] = new_name
-    header(new_place["name"])
-    wrap(new_place["description"])
-    # from the current place
-    directions = ["north", "east", "south", "west"]
-    for direction in directions:
-        name = place.get(direction)
-        if not name:
-            continue
-        destination = get_place(name)
-        write(f"To the {direction} is {destination['name']}.")
+    do_look()
 
 
 def do_inventory():
@@ -458,6 +456,14 @@ def do_look():
     print()
 
     # Printing what can be seen in a north, south, east, or west direction
+    # from the current place
+    directions = ["north", "east", "south", "west"]
+    for direction in directions:
+        name = place.get(direction)
+        if not name:
+            continue
+        destination = get_place(name)
+        write(f"To the {direction} is {destination['name']}.")
 
 def do_quit():
     """If Player types 'q' or 'quit' the game will end and the the word "Goodbye!" will print"""
@@ -533,7 +539,7 @@ def main():
     while True:
         debug(f"You are at: {PLAYER['place']}")
         reply = input(">").strip()
-        args = split(reply)
+        args = reply.split()
         if not args:
             continue
         command = args.pop(0)

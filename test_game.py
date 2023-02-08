@@ -14,6 +14,7 @@ from adventure import (
     do_read,
     place_add,
     wrap,
+    do_go,
     # setup_aliases,
 )
 # import pdbr
@@ -110,6 +111,25 @@ def test_inventory_change_remove():
 
     # Then: Should remove quantity of item from Player's inventory
     assert "lembas" not in adventure.PLAYER["inventory"], f"inventory_change() subtracting quantity <= 0 will remove key or item."
+
+def test_do_go(capsys):
+    # Given: Player is in the current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: Player moves to another place
+    adventure.PLACES["somewhere"] = {
+        "name": "Somewhere out there",
+        "east": "town-square",
+    }
+    adventure.PLACES["town-square"] = {
+        "name": "town-square",
+        "description": "the square",
+    }
+    # When: call do_go() with "east" for args and capture output
+    do_go(["east"])
+    output = capsys.readouterr().out
+    # Then: the statement should print "town-square"
+    assert "town-square" in output
+
 
 def test_do_take(capsys):
     # Given: Item and quantity in Player's inventory
@@ -722,8 +742,10 @@ def test_wrap_with_iterable(capsys):
     message = (
         "This is the song that never ends",
         "It goes on and on my friend",
+
         "Some people started singing it not knowing what it was",
         "And they just kept on singing it forever just because",
+
         "This is the song that never ends",
     )
 
@@ -734,9 +756,10 @@ def test_wrap_with_iterable(capsys):
     # Then: the statement "This is the song that never ends" should print
     assert "This is the song that never ends" in output
     # Then: the statement "This is the song that never ends" should print without parentheses
-    assert "(This is the song that never ends)" not in output
+    assert "(" not in output
     # Then: the statement "This is the song that never ends" should print with 2 blank lines and 4 indented spaces
-    assert "\n\n    This is the song that never ends" in output
+    assert "\n\n  It goes on and on my friend" in output
+
 # def test_setup_aliases():
     # ...
     # Given: there are aliases for each item in the ITEMS dictionary
