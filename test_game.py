@@ -132,19 +132,42 @@ def test_do_go(capsys):
     # And: Player should be in the new place
     assert adventure.PLAYER["place"] == "town-square", "Player should be in the new place 'town-square'."
 
-def test_do_go_valid_direction(capsys):
+def test_do_go_no_args(capsys):
     # Given: Player in current place
     adventure.PLAYER["place"] = "somewhere"
-    # And: Player is trying to go in a direction
-    # adventure.PLACES[""]
+    adventure.PLACES["somewhere"] = {
+        "name": "Somewhere out there",
+    }
+    # When: call do_go()
+    do_go([])
+    output = capsys.readouterr().out
+    # Then: Statement should print "Which way do you want to go?"
+    assert "Which way do you want to go?" in output
+
+
+def test_do_go_invalid_direction(capsys):
+    # Given: Player in current place
+    adventure.PLAYER["place"] = "somewhere"
     # When: call do_go(["up"])
     do_go(["up"])
     output = capsys.readouterr().out
-    # breakpoint()
     # Then: debug should say "Trying to go up"
     assert "Trying to go: ['up']" in output
     # And: error should say "Which way do you want to go?"
     assert "sorry, I don't know how to go: up" in output
+
+def test_do_go_unallowed_direction(capsys):
+    # Given: Player is in the current place
+    adventure.PLAYER["place"] = "somewhere" 
+    # And: current place does not have the key of a particular direction
+    adventure.PLACES["somewhere"] = {
+        "name": "Somewhere out there",
+    }
+    # When: call do_go() with that direction
+    do_go(["west"])
+    output = capsys.readouterr().out
+    # Then: statement should print "Sorry, you can't go west from here."
+    assert "Sorry, you can't go west from here." in output
 
 
 def test_do_take(capsys):
@@ -617,7 +640,7 @@ def test_do_examine_player_inventory_item_quantity(capsys):
 def test_do_read_no_args(capsys):
     # Given: Player is in current place 
     adventure.PLAYER["place"] = "somewhere"
-    # When: Player is reading
+    # When: Player tries to read without any args
     do_read([])
     output = capsys.readouterr().out
     # Then: "Trying to read" should be in output

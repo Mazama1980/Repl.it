@@ -11,6 +11,10 @@ from shlex import split
 WIDTH = 60
 MARGIN = 2
 DEBUG = True
+{ "key": "value", "key2": "value2"}
+{"value1", "value2"}
+
+COMPASS = ("north", "south", "east", "west")
 PLAYER = {
     "place": "home",
     "inventory": {"gems": 50},
@@ -155,9 +159,9 @@ PLACES = {
     },
 }
 
-# TODO: also mention that the error message is printed first
 def abort(message: str):
-    """Game will end if it encounters an error and cannot continue"""
+    """Game will end if it encounters an error and cannot continue and
+    an error message will print before the Player is exited from the game"""
     error(message)
     exit(1)
 
@@ -219,7 +223,6 @@ def place_add(key: str):
     """Add an item to a current place"""
     # Get the current place
     place = get_place()
-
     # Add the item key to the current place items list
     place.setdefault("items", [])
     if key not in place["items"]:
@@ -276,11 +279,8 @@ def player_has(key: str, qty: int=1) -> bool:
     else:
         return False
 
-             
-# TODO: You should also say in the doc string that this prints the formatted
-#       text
 def wrap(text: str, indent = 1):
-    """Longer text will wrap and be readable to the Player by calling the wrap command"""
+    """Formatted text and longer text will wrap and be readable to the Player by calling the wrap command"""
     # check if text is a string then making it a tuple
     if isinstance(text, str):
         text = (text,)
@@ -338,8 +338,7 @@ def do_buy(args: list):
     place_remove(key)
     wrap(f"You bought a {key}.")
 
-# TODO: the annotation here is incorrect
-def do_drop(args: str):
+def do_drop(args: list):
     """Player can drop an item from their inventory using the 'drop' command"""
     debug(f'Trying to drop {args}')
     if not args:
@@ -388,8 +387,7 @@ def do_go(args: list):
         error("Which way do you want to go?")
         return
     direction = args[0].lower()
-    compass = ["north", "south", "east", "west"]
-    if direction not in compass:
+    if direction not in COMPASS:
         error(f"sorry, I don't know how to go: {direction}")
         return
     # Look up where Player is currently and if Player can go in requested direction
@@ -399,7 +397,6 @@ def do_go(args: list):
         error(f"Sorry, you can't go {direction} from here.")
         return
     # update Player to new place and describe new place
-    new_place = get_place(new_name)
     PLAYER["place"] = new_name
     do_look()
 
@@ -457,8 +454,7 @@ def do_look():
 
     # Printing what can be seen in a north, south, east, or west direction
     # from the current place
-    directions = ["north", "east", "south", "west"]
-    for direction in directions:
+    for direction in COMPASS:
         name = place.get(direction)
         if not name:
             continue
