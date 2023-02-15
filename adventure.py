@@ -11,9 +11,6 @@ from shlex import split
 WIDTH = 60
 MARGIN = 2
 DEBUG = True
-{ "key": "value", "key2": "value2"}
-{"value1", "value2"}
-
 COMPASS = ("north", "south", "east", "west")
 PLAYER = {
     "place": "home",
@@ -206,6 +203,8 @@ def header(title: str):
 # TODO: same notes as for player_has() regarding the `qty` argument
 def inventory_change(key: str, quantity: int=1):
     """Add item to player inventory"""
+    # .setdefault() method returns the value of the key (if the key is in the dictionary).
+    # if not, it inserts key with a value to the dictionary
     PLAYER["inventory"].setdefault(key,0)
     PLAYER["inventory"][key] += quantity
     # Remove from inventory dictionary if quantity is zero
@@ -273,13 +272,21 @@ def place_remove(key: str):
 #       it, and that it defaults to 1
 #       This is a good place to use the extra "Args:" section in the docstring
 def player_has(key: str, qty: int=1) -> bool:
-    """Determining (return True/False) if there is an item in the PLAYER inventory"""
-    if key in PLAYER["inventory"] and PLAYER["inventory"][key] >= qty:
+    """Determining (return True/False) if there is an item (key) in the PLAYER inventory.
+     The qty argument is used to see if any item (key) is >= 1 in the PLAYER inventory.
+      It defaults to "1" if no other qty argument is given. 
+    
+      Args:
+      * key (str): the key looks up the item in the inventory dictionary
+                   (this key also cooresponds to a key in the ITEMS dictionary)
+      * qty (int): the player needs to have at least this much in inventory to return True
+    """
+    if (key in PLAYER["inventory"]) and (PLAYER["inventory"][key] >= qty):
         return True
     else:
         return False
 
-def wrap(text: str, indent = 1):
+def wrap(text: str, indent: int=1):
     """Formatted text and longer text will wrap and be readable to the Player by calling the wrap command"""
     # check if text is a string then making it a tuple
     if isinstance(text, str):
