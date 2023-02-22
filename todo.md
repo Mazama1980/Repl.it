@@ -121,3 +121,47 @@ ITEMS_ALIASES = {
 # buy "crystal ball"
 # buy globe
 ```
+```python
+###############################################
+# example of how to test an expected exception
+###############################################
+
+# a function that raises an exception sometimes
+def func(something=None):
+    if not something:
+        # ValueError is the exception class
+        raise ValueError("you can't do that!")
+    return something
+
+# a normal test, where the exception is not raised
+def test_func():
+    result = func("hello")
+    assert result == "hello"
+    
+# test for the expected exception
+def test_func_when_no_arg():
+    # put the exception class inside the pytest.raises() parens
+    # ex is an object containing the exception that was raised
+    with pytest.raises(ValueError) as ex:  # "for the following code, we expect an exception to be raised"
+        # the code that you expect to raise the exception goes here
+        func()
+
+    # ex.value is the actual exception that was raised
+    # convert it to a string to see the exception message
+    assert str(ex.value) == "you can't do that!"
+
+#########################################################
+# example of with statement to open a file
+#########################################################
+
+# without a with statement
+fp = open("something.txt")
+text = fp.read()
+fp.close()
+print(text)
+
+# using a with statement
+with open("something.txt") as fp:   # "for as long as this file is open"
+    text = fp.read()
+
+print(text)

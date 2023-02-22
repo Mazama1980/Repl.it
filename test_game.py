@@ -72,7 +72,6 @@ def test_get_item():
     # Then: the item is returned to be used for another function
     assert result
 
-# @pytest.mark.skip(reason="in progress")
 def test_get_item_no_item(capsys):
     # Given: an item is not in the ITEMS dictionary
     adventure.ITEMS = {}
@@ -80,8 +79,47 @@ def test_get_item_no_item(capsys):
     with pytest.raises(SystemExit) as ex:
         get_item("sword")
     output = capsys.readouterr().out
-    # Then: the statement "Woops! The information about the sword seems to be missing."
+    # Then: the statement "Woops! The information about the sword seems to be missing." should print
     assert "Woops! The information about the item sword seems to be missing." in output
+
+def test_get_place_default():
+    # Given: Player is in a current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: current place is in the PLACES dictionary
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+    }
+    # When: call get_place() and no key is given
+    result = get_place()
+    # Then: the current place is returned to be used in other functions
+    assert result["name"] == "somewhere"
+
+# @pytest.mark.skip(reason="in progress")
+def test_get_place_with_key():
+    # Given: Player is in a current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: current place is in the PLACES dictionary
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+    }
+    # And: another place exists
+    adventure.PLACES["nowhere"] = {
+        "name": "Anywhere but here",
+    }
+    # When: call get_place("nowhere") with a key other than Player's current place
+    result = get_place("nowhere")
+    # Then: the PLACES dictionary for that place should be returned, instead of the current place
+    assert result["name"] == "Anywhere but here"
+
+def test_get_place_missing_from_PLACES(capsys):
+    # When: call get_place("nowhere") with a nonexistent place (key)
+    with pytest.raises(SystemExit) as ex:
+        get_place("nowhere")
+    output = capsys.readouterr().out
+    # Then: the statement beginning with "Woops!" should print 
+    assert "Woops!" in output
+    
+    
 
 def test_inventory_change_with_no_quantity_arg():
     # Given: Item and quantity Player's inventory
