@@ -15,6 +15,7 @@ from adventure import (
     place_add,
     wrap,
     do_go,
+    get_item,
     # setup_aliases,
 )
 # import pdbr
@@ -62,6 +63,25 @@ def test_is_for_sale():
 
     # THEN: it should return True
     assert result, "is_for_sale() should return True if the item has a price"
+
+def test_get_item():
+    # Given: an item is in the ITEMS dictionary
+    adventure.ITEMS["sword"] = {"name": "sword"}
+    # When: get_item is called with a key
+    result = get_item("sword")
+    # Then: the item is returned to be used for another function
+    assert result
+
+# @pytest.mark.skip(reason="in progress")
+def test_get_item_no_item(capsys):
+    # Given: an item is not in the ITEMS dictionary
+    adventure.ITEMS = {}
+    # When: call get_item("sword")
+    with pytest.raises(SystemExit) as ex:
+        get_item("sword")
+    output = capsys.readouterr().out
+    # Then: the statement "Woops! The information about the sword seems to be missing."
+    assert "Woops! The information about the item sword seems to be missing." in output
 
 def test_inventory_change_with_no_quantity_arg():
     # Given: Item and quantity Player's inventory
@@ -805,6 +825,51 @@ def test_wrap_with_iterable(capsys):
     # When:
     # Then:
 
+###############################################
+# example of how to test an expected exception
+###############################################
+
+# a function that raises an exception sometimes
+def func(something=None):
+    if not something:
+        # ValueError is the exception class
+        raise ValueError("you can't do that!")
+    return something
+
+# a normal test, where the exception is not raised
+def test_func():
+    result = func("hello")
+    assert result == "hello"
+    
+# test for the expected exception
+def test_func_when_no_arg():
+    # put the exception class inside the pytest.raises() parens
+    # ex is an object containing the exception that was raised
+    with pytest.raises(ValueError) as ex:  # "for the following code, we expect an exception to be raised"
+        # the code that you expect to raise the exception goes here
+        func()
+
+    # ex.value is the actual exception that was raised
+    # convert it to a string to see the exception message
+    assert str(ex.value) == "you can't do that!"
+
+#########################################################
+# example of with statement to open a file
+#########################################################
+
+# without a with statement
+# fp = open("something.txt")
+# text = fp.read()
+# fp.close()
+# print(text)
+
+# # using a with statement
+# with open("something.txt") as fp:   # "for as long as this file is open"
+#     text = fp.read()
+
+# print(text)
+
+    
 def test_teardown():
     assert "lembas" not in adventure.PLAYER["inventory"], \
         "Each test should start with a fresh data set."

@@ -200,9 +200,16 @@ def header(title: str):
     write(header_title)
     print()
     
-# TODO: same notes as for player_has() regarding the `qty` argument
 def inventory_change(key: str, quantity: int=1):
-    """Add item to player inventory"""
+    """Add or remove an item to the Player's inventory
+
+       Args:
+       * key (str): the key looks up the item in the inventory dictionary
+                    (this key also cooresponds to a key in the ITEMS dictionary)
+       * qty (int): the player needs to have at least this much (default 1) in inventory. 
+                    A negative quantity greater than the Player's current quantity
+                    will remove items from the Player's inventory dictionary
+    """
     # .setdefault() method returns the value of the key (if the key is in the dictionary).
     # if not, it inserts key with a value to the dictionary
     PLAYER["inventory"].setdefault(key,0)
@@ -268,9 +275,6 @@ def place_remove(key: str):
     # Remove the item from current place if the item is in that current place
     place["items"].remove(key)
 
-# TODO: you should also mention the `qty` argument, what the function does with
-#       it, and that it defaults to 1
-#       This is a good place to use the extra "Args:" section in the docstring
 def player_has(key: str, qty: int=1) -> bool:
     """Determining (return True/False) if there is an item (key) in the PLAYER inventory.
      The qty argument is used to see if any item (key) is >= 1 in the PLAYER inventory.
