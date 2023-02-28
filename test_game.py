@@ -16,6 +16,8 @@ from adventure import (
     wrap,
     do_go,
     get_item,
+    player_has,
+    do_inventory,
     # setup_aliases,
 )
 # import pdbr
@@ -119,7 +121,50 @@ def test_get_place_missing_from_PLACES(capsys):
     # Then: the statement beginning with "Woops!" should print 
     assert "Woops!" in output
     
-    
+def test_player_has_with_key_in_inventory():
+    # Given: the Player has an item in inventory
+    adventure.PLAYER["inventory"] = {"neurolizer": 1}
+    # And: the item exists in the ITEMS dictionary
+    adventure.ITEMS["neurolizer"] = {
+        "name": "neurolizer",
+        "description": "A gadget the size of a pen that erases memory in the set parameters",
+    }
+    # When: call player_has() with a key that is in inventory
+    result = player_has("neurolizer")
+    # Then: the function will return True
+    assert result is True, "player_has should return True with the item neurolizer in inventory"
+
+@pytest.mark.parametrize(["inventory", "message"], [
+            ({}, 'without item neurolizer in inventory'),
+            ({'neurolizer': 0}, 'when neurolizer has zero inventory'),
+        ]
+)
+def test_player_has_with_key_not_in_inventory(inventory, message):
+    # Given: the Player has nothing in inventory
+    adventure.PLAYER["inventory"] = inventory
+    # And: an item exists in the ITEMS dictionary
+    adventure.ITEMS["neurolizer"] = {
+        "name": "neurolizer",
+    }
+    # When: call player_has() with a particular key
+    result = player_has("neurolizer")
+    # Then: the function will return False
+    assert result is False, f"player_has should return False {message}"
+
+def test_do_inventory(capsys):
+    # Given: the Player has an item in inventory
+    adventure.PLAYER["inventory"] = {"quill": 3}
+    # And: the item exists in the ITEMS dictionary
+    adventure.ITEMS["quill"] = {
+        "name": "quill",
+    }
+    # When: call do_inventory() without a key argument
+    do_inventory()
+    output = capsys.readouterr().out
+    # Then: the statement should print out with the word "quill" in it
+    assert "quill" in output
+    # Then: the statement should print a quantity of "3"
+    assert " 3\n" in output
 
 def test_inventory_change_with_no_quantity_arg():
     # Given: Item and quantity Player's inventory
