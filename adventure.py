@@ -124,7 +124,8 @@ PLACES = {
         "south": "woods",
         "north": "lake",
         "description": "a cozy cabin nestled in the tall trees",
-        "items": ["book", "desk", "stick", "bag"],
+        # "items": ["book", "desk", "stick", "bag"],
+        "items": ["book", "desk", "stick",]
     },
     "town-square": {
         "key": "town-square",
@@ -428,7 +429,8 @@ def do_inventory():
 
 
 def do_look():
-    """Player can look around in their current place using the 'l' or 'look' command. Player can also look in a direction"""
+    """Player can look around in their current place using the 'l' or 'look' command. 
+    Player can also look in a direction"""
     debug(f"Trying to look around.")
 
     # Getting the current place of the Player

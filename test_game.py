@@ -18,6 +18,7 @@ from adventure import (
     get_item,
     player_has,
     do_inventory,
+    do_look,
     # setup_aliases,
 )
 # import pdbr
@@ -163,9 +164,58 @@ def test_do_inventory(capsys):
     output = capsys.readouterr().out
     # Then: the statement should print out with the word "quill" in it
     assert "quill" in output
-    # Then: the statement should print a quantity of "3"
+    # And: the statement should print a quantity of "3"
     assert " 3\n" in output
 
+def test_do_inventory_if_empty(capsys):
+    # Given: the Player has nothing in inventory
+    adventure.PLAYER["inventory"] = {}
+    # And: an item exists in the ITEMS dictionary
+    adventure.ITEMS["quill"] = {
+        "name": "quill",
+    }
+    # When: call do_inventory() without a key argument
+    do_inventory()
+    output = capsys.readouterr().out
+    # Then:  the statement "Empty" should print
+    assert "Empty" in output
+
+@pytest.mark.parametrize(["items", "items_text", "message"], [
+    #    ([], "", 'no items in current place'),  # TODO
+       (['sword'], "sword", 'one item in current place'),
+       (['sword', 'book'], "sword and book", 'two items in current place'),
+       (['sword', 'book', 'sack'], "sword, book and sack", 'three items in current place'),
+    ]
+)
+def test_do_look(capsys, items, items_text, message):
+    # Given: Player is in a current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: that place exists with items in the current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items": items,
+        "description": "Hard to tell where you are.",
+    }
+    # And: items with descriptions are in the ITEMS dictionary
+    adventure.ITEMS["sword"] = {
+        "name": "sword",
+    }
+    adventure.ITEMS["book"] = {
+        "name": "book",
+    }
+    adventure.ITEMS["sack"] = {
+        "name": "sack",
+    }
+    # When: call do_look() with no key arguments
+    do_look()
+    output = capsys.readouterr().out
+    # Then: it should print the name of the place
+    # TODO
+    # And: it should print a list of items in the place
+    assert f"You see {items_text}." in output, message 
+    # And: should print nearby places
+    # TODO
+   
 def test_inventory_change_with_no_quantity_arg():
     # Given: Item and quantity Player's inventory
     adventure.PLAYER["inventory"]["lembas"] = 99
