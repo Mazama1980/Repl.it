@@ -19,6 +19,7 @@ from adventure import (
     player_has,
     do_inventory,
     do_look,
+    do_quit,
     # setup_aliases,
 )
 # import pdbr
@@ -181,7 +182,6 @@ def test_do_inventory_if_empty(capsys):
     assert "Empty" in output
 
 @pytest.mark.parametrize(["items", "items_text", "message"], [
-    #    ([], "", 'no items in current place'),  # TODO
        (['sword'], "sword", 'one item in current place'),
        (['sword', 'book'], "sword and book", 'two items in current place'),
        (['sword', 'book', 'sack'], "sword, book and sack", 'three items in current place'),
@@ -195,6 +195,17 @@ def test_do_look(capsys, items, items_text, message):
         "name": "somewhere",
         "items": items,
         "description": "Hard to tell where you are.",
+        "east": "pit of despair",
+        "north": "fire swamp",
+    }
+    # And: places exist in different directions from the current place
+    adventure.PLACES["pit of despair"] = {
+        "key": "the pit",
+        "name": "pit of despair",
+    }
+    adventure.PLACES["fire swamp"] = {
+        "key": "fire swamp",
+        "name": "fire swamp",
     }
     # And: items with descriptions are in the ITEMS dictionary
     adventure.ITEMS["sword"] = {
@@ -210,12 +221,39 @@ def test_do_look(capsys, items, items_text, message):
     do_look()
     output = capsys.readouterr().out
     # Then: it should print the name of the place
-    # TODO
+    assert "somewhere" in output
+    # And: it should print the description of the current place
+    assert "Hard to tell where you are." in output
     # And: it should print a list of items in the place
     assert f"You see {items_text}." in output, message 
     # And: should print nearby places
-    # TODO
-   
+    assert f"To the north is fire swamp." in output
+    assert f"To the east is pit of despair." in output
+
+def test_do_look_no_items(capsys):
+    # Given: Player is in a current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: that place exists with no items in the current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items": [],
+        "description": "Hard to tell where you are.",
+    }
+    # When: call do_look() with no key arguments
+    do_look()
+    output = capsys.readouterr().out
+    # Then: the statement "You see..." will not print out
+    assert "You see" not in output
+
+def test_do_quit(capsys):
+    # Given: Player types "q" or "quit" to exit the game
+    # When: call do_quit()
+    with pytest.raises(SystemExit) as ex:
+        do_quit()
+    output = capsys.readouterr().out
+    # Then: "Goodbye!" should print
+    assert "Goodbye!" in output
+
 def test_inventory_change_with_no_quantity_arg():
     # Given: Item and quantity Player's inventory
     adventure.PLAYER["inventory"]["lembas"] = 99

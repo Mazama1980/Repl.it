@@ -1,4 +1,4 @@
-"""Textbased adventure game. https://alissa-huskey.github.io/python-class/exercises/adventure.html 
+"""Textbased adventure game. https://alissa-huskey.github.io/python-class/  https://alissa-huskey.github.io/python-class/exercises/adventure/intro.html
 
 """
 
