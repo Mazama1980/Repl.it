@@ -487,26 +487,26 @@ def test_do_shop(capsys):
     # And: the item is for sale but not in the current place will not be listed
     assert "neurolizer" not in output, "The item is for sale but not in the current place will not be listed."
 
-def test_do_shop_with_no_shop_key(capsys):
+@pytest.mark.parametrize(["action", "message"],[
+    ({}, "Current place has no 'can' key"),
+    ({"can": []}, "Current place has no 'shop' key.")
+])
+def test_do_shop_with_no_shop_key(capsys, action, message):
     # Given: the Player is in a current place
     adventure.PLAYER["place"] = "somewhere"
 
     # And: the current place does not have the 'can':'shop' key
     adventure.PLACES["somewhere"] = {"name":"Somewhere out there"}
 
-    # TODO: we may want to add another test at some point that tests both if the
-    # "can" key is missing AND if the "shop" key is missing from the "can" list
-    # (like below). But we've tested it both ways manually for now, so that's
-    # good for now.
-    adventure.PLACES["somewhere"]["can"] = []
+    adventure.PLACES["somewhere"].update(action)
 
     # When: call do_shop() and capture the output
     do_shop()
     output = capsys.readouterr().out
 
-    # And: an error message saying there are no items to shop for in the current place should print under the header
-    assert "Sorry, you can't shop here." in output, "The statement should print"
-
+    # And an error message will print that shopping is not possible in current place
+    assert "Sorry, you can't shop here." in output, message
+    
 
 def test_do_shop_place_with_no_items_key(capsys):
     # Given: Player is in a particular place
@@ -526,7 +526,7 @@ def test_do_shop_place_with_no_items_key(capsys):
     assert "Items for sale" in output, "The header for the current place should print"
 
     # And: a statement should say there are no 'items' for the current place
-    assert "No items in this place" in output, "The statement should print under the header"
+    assert "No items in this place." in output, "The statement should print under the header"
 
 # @pytest.mark.skip(reason="to be implemented")
 def test_place_can_when_true():

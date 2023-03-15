@@ -145,6 +145,7 @@ PLACES = {
         "key": "lake",
         "name": "Lake Pukaki",
         "south": "home",
+        "can": [],
         "description": "Deep blue in color but will change to a purple hue when its mood is unsettled. There are mysteries to be found in it's dark waters."
     },
     "market": {
