@@ -15,6 +15,7 @@ COMPASS = ("north", "south", "east", "west")
 PLAYER = {
     "place": "home",
     "inventory": {"gems": 50},
+    "health": {100},
 
 }
 
@@ -201,7 +202,16 @@ def header(title: str):
     header_title = fx.bold(title)
     write(header_title)
     print()
-    
+
+def health_change(amount: int):
+    """Add or remove the Player's health quantity
+
+       Arg:
+       * amount (int): the quantity of health will get added or subtracted for the Player.
+         If the quantity goes to 0 or less then the game will end as the Player has expired.
+    """
+    amount = PLAYER["health"]
+
 def inventory_change(key: str, quantity: int=1):
     """Add or remove an item to the Player's inventory
 

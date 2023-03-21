@@ -20,6 +20,7 @@ from adventure import (
     do_inventory,
     do_look,
     do_quit,
+    health_change,
     # setup_aliases,
 )
 # import pdbr
@@ -937,6 +938,14 @@ def test_do_read_in_inventory(capsys):
     assert "Drink Me" in output
     # Then: the statement "    Drink Me" should print with the indent
     assert lines[-2].endswith("Drink Me")
+
+def test_health_change():
+    # Given: Player's current quantity of health
+    adventure.PLAYER["health"] = 50
+    # When: call health_change with a quantity arg
+    health_change(30)
+    # Then: should add the health quantity to Player's health inventory
+    assert adventure.PLAYER["health"] == 80
 
 # @pytest.mark.skip(reason="work in progress (12.6)")
 def test_wrap(capsys):
