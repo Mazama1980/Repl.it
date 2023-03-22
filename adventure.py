@@ -210,7 +210,13 @@ def health_change(amount: int):
        * amount (int): the quantity of health will get added or subtracted for the Player.
          If the quantity goes to 0 or less then the game will end as the Player has expired.
     """
-    amount = PLAYER["health"]
+    # need to determine the Player's current health 
+    # breakpoint()
+    energy = PLAYER["health"]
+    # need to add (or subtract) Players current health from the argument (amount)
+    fitness = energy + amount
+    PLAYER["health"] = fitness
+    
 
 def inventory_change(key: str, quantity: int=1):
     """Add or remove an item to the Player's inventory
@@ -355,7 +361,7 @@ def do_buy(args: list):
         error(f'Sorry, you can not afford {key} because it costs {price} gems and you only have {gems} gems.')
         return
     # Player buys the item - subtract gems from inventory and add item to inventory
-    # breakpoint()
+
     inventory_change("gems", -price)
     inventory_change(key)
     place_remove(key)

@@ -939,13 +939,21 @@ def test_do_read_in_inventory(capsys):
     # Then: the statement "    Drink Me" should print with the indent
     assert lines[-2].endswith("Drink Me")
 
-def test_health_change():
+@pytest.mark.parametrize(
+        ["start", "amount", "result", "message"], [
+        (50, 30, 80, "adding to current Player health"),
+        (50, -30, 20, "subtracting from current Player health"),
+        (50, -60, 0, "abort game when Player health is 0"),
+        ]
+)
+def test_health_change(start, amount, result, message):
     # Given: Player's current quantity of health
-    adventure.PLAYER["health"] = 50
+    adventure.PLAYER["health"] = start
     # When: call health_change with a quantity arg
-    health_change(30)
+    health_change(amount)
     # Then: should add the health quantity to Player's health inventory
-    assert adventure.PLAYER["health"] == 80
+    assert adventure.PLAYER["health"] == result, message
+    
 
 # @pytest.mark.skip(reason="work in progress (12.6)")
 def test_wrap(capsys):
