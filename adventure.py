@@ -7,15 +7,22 @@ from sys import stderr
 import textwrap
 from console import fg, bg, fx
 from shlex import split
+from console.progress import ProgressBar
 
 WIDTH = 60
 MARGIN = 2
 DEBUG = True
 COMPASS = ("north", "south", "east", "west")
+MAX_HEALTH = 100
+BAR = ProgressBar(
+    total = (MAX_HEALTH + 0.1),
+    clear_left = False,
+    width = (WIDTH - len("Health") - len("100%")),
+)
 PLAYER = {
     "place": "home",
     "inventory": {"gems": 50},
-    "health": {100},
+    "health": MAX_HEALTH,
 
 }
 
@@ -203,6 +210,10 @@ def header(title: str):
     write(header_title)
     print()
 
+def health_bar():
+    write("Health")
+    BAR(PLAYER["health"]) #not sure how to return the value in section 13.4C2.
+
 def health_change(amount: int):
     """Add or remove the Player's health quantity
 
@@ -216,6 +227,11 @@ def health_change(amount: int):
     # need to add (or subtract) Players current health from the argument (amount)
     fitness = energy + amount
     PLAYER["health"] = fitness
+    # setting Player's health to zero if it should become a negative number
+    if PLAYER["health"] < 0:
+        PLAYER["health"] = 0
+    if PLAYER["health"] > MAX_HEALTH:
+        PLAYER["health"] = MAX_HEALTH
     
 
 def inventory_change(key: str, quantity: int=1):

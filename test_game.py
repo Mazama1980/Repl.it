@@ -21,6 +21,7 @@ from adventure import (
     do_look,
     do_quit,
     health_change,
+    MAX_HEALTH,
     # setup_aliases,
 )
 # import pdbr
@@ -939,11 +940,16 @@ def test_do_read_in_inventory(capsys):
     # Then: the statement "    Drink Me" should print with the indent
     assert lines[-2].endswith("Drink Me")
 
+# def test_health_bar():
+    # When: call BAR(PLAYER["health"]) 
+    # BAR(PLAYER["health"])
+
 @pytest.mark.parametrize(
         ["start", "amount", "result", "message"], [
         (50, 30, 80, "adding to current Player health"),
         (50, -30, 20, "subtracting from current Player health"),
-        (50, -60, 0, "abort game when Player health is 0"),
+        (50, -60, 0, "setting Player's health to zero should it become less than 0"),
+        ( 90, 20, MAX_HEALTH, "setting Player's health to a max of 100 should it become greater than 100"),
         ]
 )
 def test_health_change(start, amount, result, message):
@@ -958,7 +964,7 @@ def test_health_change(start, amount, result, message):
 # @pytest.mark.skip(reason="work in progress (12.6)")
 def test_wrap(capsys):
     # Given: that you have a long string
-    text = ("Directions for use: Apply liberally to infected area. if infected area gets worse discontinue use and break bottle over your enemy's head.")
+    text = ("Directions for use: Apply liberally to infected area. If infected area gets worse discontinue use and break bottle over your enemy's head.")
     # When: you call the function on that string
     wrap(text) 
     # Then: the long string should be printed wrapped
