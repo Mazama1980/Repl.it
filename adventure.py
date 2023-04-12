@@ -211,8 +211,8 @@ def header(title: str):
     print()
 
 def health_bar():
-    write("Health")
-    BAR(PLAYER["health"]) #not sure how to return the value in section 13.4C2.
+    """Using a progress bar to show Player health"""
+    write(f"Health {BAR(PLAYER['health'])}")
 
 def health_change(amount: int):
     """Add or remove the Player's health quantity
@@ -228,6 +228,7 @@ def health_change(amount: int):
     fitness = energy + amount
     PLAYER["health"] = fitness
     # setting Player's health to zero if it should become a negative number
+    # and setting Player's health to a max of 100 if health should become greater than 100
     if PLAYER["health"] < 0:
         PLAYER["health"] = 0
     if PLAYER["health"] > MAX_HEALTH:
@@ -447,9 +448,10 @@ def do_go(args: list):
 
 
 def do_inventory():
-    """Listing the Player's current inventory. Called when the player types the
+    """Listing the Player's current health and inventory. Called when the player types the
     "inventory" or "i" command. """
     debug("Trying to show inventory.")
+    health_bar()
     header("Inventory")
     # If the Player's inventory is empty then print the message "Empty"
     if not PLAYER["inventory"]:
@@ -506,6 +508,18 @@ def do_look():
             continue
         destination = get_place(name)
         write(f"To the {direction} is {destination['name']}.")
+
+def do_pet(args: str):
+    """Player can pet an object in the current place using the 'pet' command.
+     
+    Args:
+    * args (list[str]): input from the player will be turned into a list   
+    """
+    debug(f'Trying to pet {args}')
+    if not args:
+        error("What do you want to pet?")
+        return
+    # finish this function do_pet() with instructions in 14.1B
 
 def do_quit():
     """If Player types 'q' or 'quit' the game will end and the the word "Goodbye!" will print"""

@@ -22,6 +22,7 @@ from adventure import (
     do_quit,
     health_change,
     MAX_HEALTH,
+    do_pet,
     # setup_aliases,
 )
 # import pdbr
@@ -939,6 +940,14 @@ def test_do_read_in_inventory(capsys):
     assert "Drink Me" in output
     # Then: the statement "    Drink Me" should print with the indent
     assert lines[-2].endswith("Drink Me")
+
+def test_do_pet(capsys):
+    # Given: 
+    # When: call the function do_pet() with an empty list as an argument
+    do_pet([])
+    output = capsys.readouterr().out
+    # Then: a debug statement should print "Trying to pet: []"
+    assert "Trying to pet: []" in output
 
 # def test_health_bar():
     # When: call BAR(PLAYER["health"]) 
