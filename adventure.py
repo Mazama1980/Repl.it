@@ -120,7 +120,8 @@ ITEMS = {
 #              home <-> town-square <-> market
 #                /
 #              woods
-#
+#               /
+#             cave
 #
 #############################################
 
@@ -147,6 +148,7 @@ PLACES = {
         "key": "woods",
         "name": "Deep, dark woods",
         "north": "home",
+        "south": "cave",
         "description": "A deep forest of Redwood trees. Ferns and bushs growing on the forest floor. A path running through it. It's quiet and peaceful." 
     },
     "lake": {
@@ -164,6 +166,14 @@ PLACES = {
         "items": ["crystal ball", "short dagger", "green potion", "waybread", "fishing tackle",],
         "can": ["shop", "buy"],
     },
+    "cave": {
+        "key": "cave",
+        "name": "Deep Cave",
+        "north": "woods",
+        "description": " A cave that is deep and windy.",
+        "items": ["gems", "dragon",],
+        "can": ["pet"],
+    }
 }
 
 def abort(message: str):
@@ -509,17 +519,21 @@ def do_look():
         destination = get_place(name)
         write(f"To the {direction} is {destination['name']}.")
 
-def do_pet(args: str):
+def do_pet(args: list):
     """Player can pet an object in the current place using the 'pet' command.
      
     Args:
     * args (list[str]): input from the player will be turned into a list   
     """
+    # Check if you can pet things in the current place
+    if not place_can("pet"):
+        error("Sorry, you can't pet things here.")
+        return
     debug(f'Trying to pet {args}')
     if not args:
         error("What do you want to pet?")
         return
-    # finish this function do_pet() with instructions in 14.1B
+    # continue with 14.3
 
 def do_quit():
     """If Player types 'q' or 'quit' the game will end and the the word "Goodbye!" will print"""
@@ -622,6 +636,8 @@ def main():
             do_buy(args)
         elif command in ("r", "read"):
             do_read(args)
+        elif command == "pet":
+            do_pet(args)
         else:
             error("No such command.")
             continue

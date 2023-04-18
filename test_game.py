@@ -942,12 +942,32 @@ def test_do_read_in_inventory(capsys):
     assert lines[-2].endswith("Drink Me")
 
 def test_do_pet(capsys):
-    # Given: 
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: Current place has the "can pet" option
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "can": ["pet"],
+    }
     # When: call the function do_pet() with an empty list as an argument
     do_pet([])
     output = capsys.readouterr().out
-    # Then: a debug statement should print "Trying to pet: []"
-    assert "Trying to pet: []" in output
+    # Then: a debug statement should print "Trying to pet []"
+    assert 'Trying to pet []' in output
+
+def test_do_pet_cant_pet(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: petting is not allowed in current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "can": [],
+    }
+    # When:call do_pet(["cat"]) with no argument
+    do_pet(["cat"])
+    output = capsys.readouterr().out
+    # Then: the statement should print "Sorry, you can't pet things here."
+    assert "Sorry, you can't pet things here." in output
 
 # def test_health_bar():
     # When: call BAR(PLAYER["health"]) 
