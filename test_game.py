@@ -963,11 +963,25 @@ def test_do_pet_cant_pet(capsys):
         "name": "somewhere",
         "can": [],
     }
-    # When:call do_pet(["cat"]) with no argument
+    # When:call do_pet(["cat"]) with argument
     do_pet(["cat"])
     output = capsys.readouterr().out
     # Then: the statement should print "Sorry, you can't pet things here."
     assert "Sorry, you can't pet things here." in output
+
+def test_do_pet_no_args(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: petting is allowed in current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "can": ["pet"],
+    }
+    # When: call do_pet with no argument
+    do_pet([])
+    output = capsys.readouterr().out
+    # Then: the statement should print out "What do you want to pet?"
+    assert "What do you want to pet?" in output
 
 # def test_health_bar():
     # When: call BAR(PLAYER["health"]) 

@@ -110,6 +110,12 @@ ITEMS = {
         "summary": "various sized  gems",
         "description": "A pile of sparkling gems of different sizes and colors.",
     },
+    "dragon": {
+    "key": "dragon",
+    "name": "The Belfry Dragon",
+    "summary": "A three headed dragon",
+    "description": "A three headed dragon that sits just inside the Deep Cave. It's unclear if the dragon is friendly.",
+    }
 }
 
 #############################################
@@ -530,10 +536,11 @@ def do_pet(args: list):
         error("Sorry, you can't pet things here.")
         return
     debug(f'Trying to pet {args}')
+    # Making sure the player typed an item to pet (args)
     if not args:
         error("What do you want to pet?")
         return
-    # continue with 14.3
+    # continue with 14.4
 
 def do_quit():
     """If Player types 'q' or 'quit' the game will end and the the word "Goodbye!" will print"""
