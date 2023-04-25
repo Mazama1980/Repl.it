@@ -983,6 +983,21 @@ def test_do_pet_no_args(capsys):
     # Then: the statement should print out "What do you want to pet?"
     assert "What do you want to pet?" in output
 
+@pytest.mark.skip(reason="work in progress (14.4B)")
+def test_do_pet_no_color(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: petting is allowed in current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "can": ["pet"],
+    }
+    # When: call do_pet with argument of "dragon" or "head" but no color
+    do_pet(["dragon",])
+    output = capsys.readouterr().out
+    # Then: an error message should print " What do you want to pet?"
+    assert "What do you want to pet?" in output
+
 # def test_health_bar():
     # When: call BAR(PLAYER["health"]) 
     # BAR(PLAYER["health"])

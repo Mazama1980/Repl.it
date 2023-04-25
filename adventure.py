@@ -114,7 +114,7 @@ ITEMS = {
     "key": "dragon",
     "name": "The Belfry Dragon",
     "summary": "A three headed dragon",
-    "description": "A three headed dragon that sits just inside the Deep Cave. It's unclear if the dragon is friendly.",
+    "description": "A three headed dragon that sits just inside the Deep Cave. It's unclear if the dragon is friendly. Each head is a different color.",
     }
 }
 
@@ -536,6 +536,11 @@ def do_pet(args: list):
         error("Sorry, you can't pet things here.")
         return
     debug(f'Trying to pet {args}')
+    # Removing words from args 
+    words = ["dragon", "head"]
+    breakpoint()   
+    for word in words:
+        args.remove(word)
     # Making sure the player typed an item to pet (args)
     if not args:
         error("What do you want to pet?")
