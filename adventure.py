@@ -13,6 +13,7 @@ WIDTH = 60
 MARGIN = 2
 DEBUG = True
 COMPASS = ("north", "south", "east", "west")
+COLORS = ["red", "blue", "green",]
 MAX_HEALTH = 100
 BAR = ProgressBar(
     total = (MAX_HEALTH + 0.1),
@@ -538,14 +539,16 @@ def do_pet(args: list):
     debug(f'Trying to pet {args}')
     # Removing words from args 
     words = ["dragon", "head"]
-    breakpoint()   
+    # breakpoint()
     for word in words:
-        args.remove(word)
+        # When the word is in args we want to remove it
+        if word in args:
+            args.remove(word)
     # Making sure the player typed an item to pet (args)
     if not args:
         error("What do you want to pet?")
         return
-    # continue with 14.4
+    # continue with 14.4D,E
 
 def do_quit():
     """If Player types 'q' or 'quit' the game will end and the the word "Goodbye!" will print"""
