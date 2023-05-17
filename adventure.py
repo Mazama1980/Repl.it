@@ -8,6 +8,7 @@ import textwrap
 from console import fg, bg, fx
 from shlex import split
 from console.progress import ProgressBar
+import random
 
 WIDTH = 60
 MARGIN = 2
@@ -26,6 +27,12 @@ PLAYER = {
     "health": MAX_HEALTH,
 
 }
+
+DRAGONS = [
+        {"mood": "skeptical"},
+        {"mood": "affirming"},
+        {"mood": "mischievous"},
+]
 
 ITEMS = {
 # Crystal Ball      faintly glowing ball       5
@@ -536,10 +543,9 @@ def do_pet(args: list):
     if not place_can("pet"):
         error("Sorry, you can't pet things here.")
         return
-    debug(f'Trying to pet {args}')
+    debug(f'Trying to pet a {args} dragon.')
     # Removing words from args 
     words = ["dragon", "head"]
-    # breakpoint()
     for word in words:
         # When the word is in args we want to remove it
         if word in args:
@@ -548,7 +554,19 @@ def do_pet(args: list):
     if not args:
         error("What do you want to pet?")
         return
-    # continue with 14.4D,E
+    # setting the remaining arg word to the variable 'color'
+    color = args[0].lower()
+    # breakpoint()
+    # making sure the color is valid
+    if color not in COLORS:
+        error("I don't see a dragon with that color here.")
+        return
+    # the dragon will be randomly selected
+    dragon = random.choice(DRAGONS)
+    # the color the Player chose will be added to the randomly selected dragon
+    dragon["color"] = color
+    debug(f"You picked the dragon's {dragon['mood']} {dragon['color']} head.")
+    # continue with 14.6
 
 def do_quit():
     """If Player types 'q' or 'quit' the game will end and the the word "Goodbye!" will print"""

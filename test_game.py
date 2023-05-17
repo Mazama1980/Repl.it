@@ -1010,17 +1010,37 @@ def test_do_pet_invalid_color(capsys):
     # Given: Player is in current place
     adventure.PLAYER["place"] = "somewhere"
     # And: the valid colors are listed
-    adventure.COLORS["red", "blue", "green"]
+    adventure.COLORS = ["red", "blue", "green"]
     # And: petting is allowed in current place
     adventure.PLACES["somewhere"] = {
         "name": "somewhere",
         "can": ["pet"],
     }
     # When: call do_pet with an invalid color
-    do_pet("yellow")
+    do_pet(["yellow"])
     output = capsys.readouterr().out
     # Then: a statement should print out "I don't see a dragon with that color here."
     assert "I don't see a dragon with that color here." in output
+
+def test_do_pet_affirming_dragon(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: petting is allowed in current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "can": ["pet"]
+    }
+    # And: there is a blue dragon
+    adventure.COLORS = ["blue"]
+    # And: there is one dragon
+    adventure.DRAGONS = [{
+        "mood": "affirming",
+    }]
+    # When: call do_pet() with a valid argument
+    do_pet(["blue"])
+    output = capsys.readouterr().out
+    # Then: a statement should print "You chose the affirming dragon."
+    assert "You picked the dragon's affirming blue head." in output
 
 # def test_health_bar():
     # When: call BAR(PLAYER["health"]) 
