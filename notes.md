@@ -123,3 +123,12 @@ Using parametrization to combine similiar tests: (example below)
 def test_addition(number_one, number_two, result):
     assert number_one + number_two == result
     
+```python
+  randomly choosing a number of gems from the range assigned to that dragon mood
+    dragon["gems"] = random.randint([20, 20])    # 1 argument: [20, 20]
+    dragon["gems"] = random.randint(20, 20)      # 2 arguments: 20 and 20
+
+    dragon["gems"] = random.randint(possible_treasure[0], possible_treasure[1]) # 2 arguments: 20 and 20
+	# the astrik tells python to make each item a separate argument instead just one argument together
+    dragon["gems"] = random.randint(*possible_treasure)
+```

@@ -29,8 +29,12 @@ PLAYER = {
 }
 
 DRAGONS = [
-        {"mood": "skeptical"},
-        {"mood": "affirming"},
+        {"mood": "skeptical",
+         "treasure": (10, 30,),
+        },
+        {"mood": "affirming",
+         "treasure": (20, 80,),
+        },
         {"mood": "mischievous"},
 ]
 
@@ -566,7 +570,16 @@ def do_pet(args: list):
     # the color the Player chose will be added to the randomly selected dragon
     dragon["color"] = color
     debug(f"You picked the dragon's {dragon['mood']} {dragon['color']} head.")
-    # continue with 14.6
+    # getting the value of the treasure key
+    possible_treasure = dragon.get("treasure", (0, 0))
+    # randomly choosing a number of gems from the range assigned to that dragon mood
+    dragon["gems"] = random.randint(*possible_treasure)
+    # adding treasure to Player's inventory
+    inventory_change("gems", dragon["gems"])
+    # print a message if gems are added
+    if dragon["gems"]:
+        write(f"The dragon's {dragon['mood']} head gave you {dragon['gems']} gems.")
+    # continue with 14.7
 
 def do_quit():
     """If Player types 'q' or 'quit' the game will end and the the word "Goodbye!" will print"""
