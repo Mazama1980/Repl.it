@@ -953,7 +953,7 @@ def test_do_pet(capsys):
     do_pet([])
     output = capsys.readouterr().out
     # Then: a debug statement should print "Trying to pet []"
-    assert 'Trying to pet []' in output
+    assert 'Trying to pet a []' in output
 
 def test_do_pet_cant_pet(capsys):
     # Given: Player is in current place
@@ -1035,12 +1035,54 @@ def test_do_pet_affirming_dragon(capsys):
     # And: there is one dragon
     adventure.DRAGONS = [{
         "mood": "affirming",
+        "treasure": (10, 10),
     }]
+    # And: Player has some gems
+    adventure.PLAYER["inventory"] = {"gems": 50}
+    # And: Player has health
+    adventure.PLAYER["health"] = 90
     # When: call do_pet() with a valid argument
     do_pet(["blue"])
     output = capsys.readouterr().out
     # Then: a statement should print "You chose the affirming dragon."
     assert "You picked the dragon's affirming blue head." in output
+    # And: there should be 60 gems in Player's inventory
+    assert adventure.PLAYER["inventory"]["gems"] == 60
+    # And: a statement should print "gave you 60 gems"
+    assert "gave you 10 gems." in output
+    # And: Player's health should be unchanged
+    assert adventure.PLAYER["health"] == 90
+
+def test_do_pet_mischievous_dragon(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: petting is allowed in current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "can": ["pet"],
+    }
+    # And: there is a blue dragon
+    adventure.COLORS = ["blue"]
+    # And: there is one dragon
+    adventure.DRAGONS = [{
+        "mood": "mischievous",
+        "damage": (-20, -20),
+    }]
+    # And: Player has some gems
+    adventure.PLAYER["inventory"] = {"gems": 50}
+    # And: Player has some health
+    adventure.PLAYER["health"] = 90
+    # When: call do_pet() with a valid argument
+    do_pet(["blue"])
+    output = capsys.readouterr().out
+    # Then: a statement should print "You picked the dragon's mischievous blue head."
+    assert "You picked the dragon's mischievous blue head." in output
+    # And: Player's health should decrease to 70
+    assert adventure.PLAYER["health"] == 70
+    # And: Player's amount of gems have not changed
+    assert adventure.PLAYER["inventory"]["gems"] == 50
+    # And: a statement should print "caused you {damage} damage"
+    assert f"causes you -20 damage" in output
 
 # def test_health_bar():
     # When: call BAR(PLAYER["health"]) 

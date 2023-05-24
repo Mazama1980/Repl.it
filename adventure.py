@@ -31,11 +31,15 @@ PLAYER = {
 DRAGONS = [
         {"mood": "skeptical",
          "treasure": (10, 30,),
+         "damage": (-15, -5),
         },
         {"mood": "affirming",
          "treasure": (20, 80,),
         },
-        {"mood": "mischievous"},
+        {"mood": "mischievous",
+         "damage": (-50, -5),
+        },
+
 ]
 
 ITEMS = {
@@ -579,7 +583,15 @@ def do_pet(args: list):
     # print a message if gems are added
     if dragon["gems"]:
         write(f"The dragon's {dragon['mood']} head gave you {dragon['gems']} gems.")
-    # continue with 14.7
+    # getting the amount of damage
+    possible_damage = dragon.get("damage", (0,0))
+    dragon["health"] = random.randint(*possible_damage)
+    # reducing Player's health
+    health_change(dragon["health"])
+    # print a statement if damage was done to Player's health
+    if dragon["health"]:
+        write(f"The dragon's {dragon['mood']} head causes you {dragon['health']} damage.")
+    # continue with 14.8
 
 def do_quit():
     """If Player types 'q' or 'quit' the game will end and the the word "Goodbye!" will print"""
