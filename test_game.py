@@ -36,6 +36,7 @@ PLAYER_STATE = deepcopy(adventure.PLAYER)
 PLACES_STATE = deepcopy(adventure.PLACES)
 ITEMS_STATE = deepcopy(adventure.ITEMS)
 
+adventure.DELAY = 0
 
 def revert():
     """Revert game data to its original state."""
@@ -1082,7 +1083,7 @@ def test_do_pet_mischievous_dragon(capsys):
     # And: Player's amount of gems have not changed
     assert adventure.PLAYER["inventory"]["gems"] == 50
     # And: a statement should print "caused you {damage} damage"
-    assert f"causes you -2 damage" in output
+    assert f"causes you -20 damage" in output
 
 # def test_health_bar():
     # When: call BAR(PLAYER["health"]) 

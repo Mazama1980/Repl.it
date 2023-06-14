@@ -9,9 +9,11 @@ from console import fg, bg, fx
 from shlex import split
 from console.progress import ProgressBar
 import random
+from time import sleep 
 
 WIDTH = 60
 MARGIN = 2
+DELAY = 1.5
 DEBUG = True
 COMPASS = ("north", "south", "east", "west")
 COLORS = ["red", "blue", "green",]
@@ -22,22 +24,23 @@ BAR = ProgressBar(
     width = (WIDTH - len("Health") - len("100%")),
 )
 PLAYER = {
-    "place": "home",
+    "place": "cave",
     "inventory": {"gems": 50},
     "health": MAX_HEALTH,
 
 }
 
 DRAGONS = [
-        {"mood": "skeptical",
-         "treasure": (10, 30,),
-         "damage": (-15, -5),
+        {
+            "mood": "mischievous",
+            "treasure": (10, 30,),
+            "damage": (-15, -5),
         },
-        {"mood": "affirming",
-         "treasure": (20, 80,),
+        {   "mood": "affirming",
+            "treasure": (20, 80,),
         },
-        {"mood": "mischievous",
-         "damage": (-50, -5),
+        {   "mood": "skeptical",
+            "damage": (-50, -5),
         },
 
 ]
@@ -564,7 +567,6 @@ def do_pet(args: list):
         return
     # setting the remaining arg word to the variable 'color'
     color = args[0].lower()
-    # breakpoint()
     # making sure the color is valid
     if color not in COLORS:
         error("I don't see a dragon with that color here.")
@@ -580,18 +582,32 @@ def do_pet(args: list):
     dragon["gems"] = random.randint(*possible_treasure)
     # adding treasure to Player's inventory
     inventory_change("gems", dragon["gems"])
-    # print a message if gems are added
-    if dragon["gems"]:
-        write(f"The dragon's {dragon['mood']} head gave you {dragon['gems']} gems.")
     # getting the amount of damage
     possible_damage = dragon.get("damage", (0,0))
     dragon["health"] = random.randint(*possible_damage)
     # reducing Player's health
     health_change(dragon["health"])
+    # create a dramatic effect with timed (delayed) sentences
+    sentences = [
+        "You slowly creep forward...", 
+        "...gingerly reach out your hand...",
+        f"...and gently pat the dragon's {dragon['color']} head.",
+        "...",
+        "He blinks sleepy eyes and peers at you...",
+    ]
+    # breakpoint()
+    for text in sentences:
+        print()
+        write(text)
+        sleep(DELAY)
+    print()
+    # print a message if gems are added
+    if dragon["gems"]:
+        write(f"The dragon's {dragon['mood']} head gave you {dragon['gems']} gems.")
     # print a statement if damage was done to Player's health
     if dragon["health"]:
         write(f"The dragon's {dragon['mood']} head causes you {dragon['health']} damage.")
-    # continue with 14.8
+    # continue with 14.9
 
 def do_quit():
     """If Player types 'q' or 'quit' the game will end and the the word "Goodbye!" will print"""
