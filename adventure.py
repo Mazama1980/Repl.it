@@ -33,7 +33,7 @@ PLAYER = {
 DRAGONS = [
         {
             "mood": "mischievous",
-            "treasure": (10, 30,),
+            "treasure": (100, 30,),
             "damage": (-15, -5),
         },
         {   "mood": "affirming",
