@@ -35,12 +35,15 @@ DRAGONS = [
             "mood": "mischievous",
             "treasure": (100, 30,),
             "damage": (-15, -5),
+            "message": ("throws {gems} gems at you causing you {health} damage."),
         },
         {   "mood": "affirming",
             "treasure": (20, 80,),
+            "message": ("wants you to be happy and gives you {gems} gems.")
         },
         {   "mood": "skeptical",
             "damage": (-50, -5),
+            "message": ("thinks you smell bad and gives you {health} damage when it sneezes.")
         },
 
 ]
@@ -579,7 +582,11 @@ def do_pet(args: list):
     # getting the value of the treasure key
     possible_treasure = dragon.get("treasure", (0, 0))
     # randomly choosing a number of gems from the range assigned to that dragon mood
-    dragon["gems"] = random.randint(*possible_treasure)
+    try:
+        dragon["gems"] = random.randint(*possible_treasure)
+    except ValueError as e:
+        breakpoint()
+        ...
     # adding treasure to Player's inventory
     inventory_change("gems", dragon["gems"])
     # getting the amount of damage
@@ -601,13 +608,11 @@ def do_pet(args: list):
         write(text)
         sleep(DELAY)
     print()
-    # print a message if gems are added
-    if dragon["gems"]:
-        write(f"The dragon's {dragon['mood']} head gave you {dragon['gems']} gems.")
-    # print a statement if damage was done to Player's health
-    if dragon["health"]:
-        write(f"The dragon's {dragon['mood']} head causes you {dragon['health']} damage.")
-    # continue with 14.9
+    # print a message if gems are added or damage is done to Player's health
+    tpl = ("The dragon's {mood} {color} head ") + dragon["message"]
+    text = tpl.format(**dragon)
+    wrap(text)
+    # continue with 14.10 also run breakpoint line 588 by playing the game
 
 def do_quit():
     """If Player types 'q' or 'quit' the game will end and the the word "Goodbye!" will print"""

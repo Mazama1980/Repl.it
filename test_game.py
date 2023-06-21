@@ -1037,6 +1037,7 @@ def test_do_pet_affirming_dragon(capsys):
     adventure.DRAGONS = [{
         "mood": "affirming",
         "treasure": (10, 10),
+        "message": ("wants you to be happy and gives you {gems} gems.")
     }]
     # And: Player has some gems
     adventure.PLAYER["inventory"] = {"gems": 50}
@@ -1050,7 +1051,7 @@ def test_do_pet_affirming_dragon(capsys):
     # And: there should be 60 gems in Player's inventory
     assert adventure.PLAYER["inventory"]["gems"] == 60
     # And: a statement should print "gave you 60 gems"
-    assert "gave you 10 gems." in output
+    assert "gives you 10 gems." in output
     # And: Player's health should be unchanged
     assert adventure.PLAYER["health"] == 90
 
@@ -1068,7 +1069,8 @@ def test_do_pet_mischievous_dragon(capsys):
     adventure.DRAGONS = [{
         "mood": "mischievous",
         "damage": (-20, -20),
-        "treasure": (20 ,20)
+        "treasure": (20 ,20),
+        "message": ("throws {gems} gems at you causing you {health} damage."),
     }]
     # And: Player has some gems
     adventure.PLAYER["inventory"] = {"gems": 50}
@@ -1084,9 +1086,9 @@ def test_do_pet_mischievous_dragon(capsys):
     # And: Player's amount of gems have changed
     assert adventure.PLAYER["inventory"]["gems"] == 70
     # And: a statement should print "caused you {damage} damage"
-    assert f"causes you -20 damage" in output
+    assert f"causing you -20 damage" in output
     # And: a statement should print "gave you 20 gems"
-    assert f"gave you 20 gems" in output
+    assert f"throws 20 gems" in output
 
 def test_do_pet_skeptical_dragon(capsys):
     # Given: Player is in current place
@@ -1102,6 +1104,7 @@ def test_do_pet_skeptical_dragon(capsys):
     adventure.DRAGONS = [{
         "mood": "skeptical",
         "damage": (-10, -10),
+        "message": ("thinks you smell bad and gives you {health} damage when it sneezes.")
     }]
     # And: Player has some gems
     adventure.PLAYER["inventory"] = {"gems": 50}
@@ -1117,7 +1120,7 @@ def test_do_pet_skeptical_dragon(capsys):
     # And: Player's amount of gems have not changed
     assert adventure.PLAYER["inventory"]["gems"] == 50
     # And: a statement should print "caused you {damage} damage"
-    assert f"causes you -10 damage" in output
+    assert f"gives you -10 damage" in output
 
 # def test_health_bar():
     # When: call BAR(PLAYER["health"]) 
