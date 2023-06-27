@@ -13,7 +13,7 @@ from time import sleep
 
 WIDTH = 60
 MARGIN = 2
-DELAY = 1.5
+DELAY = 2
 DEBUG = True
 COMPASS = ("north", "south", "east", "west")
 COLORS = ["red", "blue", "green",]
@@ -33,7 +33,7 @@ PLAYER = {
 DRAGONS = [
         {
             "mood": "mischievous",
-            "treasure": (100, 30,),
+            "treasure": (30, 100,),
             "damage": (-15, -5),
             "message": ("throws {gems} gems at you causing you {health} damage."),
         },
@@ -62,7 +62,11 @@ ITEMS = {
         "key": "short dagger",
         "name": "Short dagger",
         "summary": "double edged blade",
-        "description": "hardened steel, the blade is sharp on both sides, polished antler bone handle, about 10 inches in length, comes with a sheath",
+        "description": (
+            "The blade is hardened steel with a hollowed double edge."
+            " It has a polished antler bone handle."
+            "It is about 10 inches in length and comes with a sheath.",
+        ),
         "price": -22,
     },
     "green potion": {
@@ -83,7 +87,11 @@ ITEMS = {
         "key": "fishing tackle",
         "name": "Fishing tackle",
         "summary": "gear for catching fish",
-        "description": "Gear needed for catching fish from streams and lakes. Hooks, lines, folding pole, bobbers, weights. It is all contained in its own bag.",
+        "description": (
+            "Gear needed for catching fish from streams and lakes."
+            " Hooks, lines, folding pole, bobbers, weights."
+            " It is all contained in its own bag.",
+        ),
         "price": -10,
     },
     "book": {
@@ -116,14 +124,17 @@ ITEMS = {
         "key": "stick",
         "name": "Stick",
         "summary": "walking stick",
-        "description": "a staff made from osage orange. It's about 4 feet tall. It has curious carvings on it.",
+        "description": "A staff made from osage orange. It's about 4 feet tall. It has curious carvings on it.",
         "can_take": True,
     },
     "bag": {
         "key": "bag",
         "name": "Bag",
         "summary": "a bag",
-        "description": "A bag made of rough cloth that appears to be strong. It is about 12 inches long and 8 inches wide.",
+        "description": (
+            "A bag made of rough cloth that appears to be strong."
+            " It is about 12 inches long and 8 inches wide.",
+        ),
         "can_take": True,
     },
     "gems": {
@@ -136,7 +147,12 @@ ITEMS = {
     "key": "dragon",
     "name": "The Belfry Dragon",
     "summary": "A three headed dragon",
-    "description": "A three headed dragon that sits just inside the Deep Cave. It's unclear if the dragon is friendly. Each head is a different color.",
+    "description": (
+        f"A three headed dragon that sits just inside the Deep Cave."
+        f" It's unclear if the dragon is friendly."
+        f" Each head has a different color which are {', ' .join(COLORS[0:-1])}"
+        f" and {COLORS[2]}."
+    ),
     }
 }
 
@@ -198,7 +214,13 @@ PLACES = {
         "key": "cave",
         "name": "Deep Cave",
         "north": "woods",
-        "description": " A cave that is deep and windy.",
+        "description": (
+            "There is a cave in front of you that is deep"
+            " and twists away out of sight in the back of the cave."
+            " You can see something glinting in the sunlight - piles of gems!"
+            " Resting on the biggest pile of gems is a dragon with three heads."
+            " Each head is snoring peacefully.",
+        ),
         "items": ["gems", "dragon",],
         "can": ["pet"],
     }
@@ -582,11 +604,7 @@ def do_pet(args: list):
     # getting the value of the treasure key
     possible_treasure = dragon.get("treasure", (0, 0))
     # randomly choosing a number of gems from the range assigned to that dragon mood
-    try:
-        dragon["gems"] = random.randint(*possible_treasure)
-    except ValueError as e:
-        breakpoint()
-        ...
+    dragon["gems"] = random.randint(*possible_treasure)
     # adding treasure to Player's inventory
     inventory_change("gems", dragon["gems"])
     # getting the amount of damage
@@ -602,7 +620,6 @@ def do_pet(args: list):
         "...",
         "He blinks sleepy eyes and peers at you...",
     ]
-    # breakpoint()
     for text in sentences:
         print()
         write(text)
