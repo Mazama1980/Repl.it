@@ -24,7 +24,7 @@ BAR = ProgressBar(
     width = (WIDTH - len("Health") - len("100%")),
 )
 PLAYER = {
-    "place": "cave",
+    "place": "home",
     "inventory": {"gems": 50},
     "health": MAX_HEALTH,
 
@@ -55,7 +55,7 @@ ITEMS = {
         "aliases": ["ball", "globe"],
         "name": "Crystal ball",
         "summary": "a faintly glowing ball",
-        "description": "all it does is glow faintly; could be used in dark places.",
+        "description": "All it does is glow faintly; could be used in dark places.",
         "price": -5,
     },
     "short dagger": {
@@ -63,8 +63,8 @@ ITEMS = {
         "name": "Short dagger",
         "summary": "double edged blade",
         "description": (
-            "The blade is hardened steel with a hollowed double edge."
-            " It has a polished antler bone handle."
+            "The blade is hardened steel with a hollowed double edge. "
+            " It has a polished antler bone handle. "
             "It is about 10 inches in length and comes with a sheath.",
         ),
         "price": -22,
@@ -73,14 +73,17 @@ ITEMS = {
         "key": "green potion",
         "name": "Green potion",
         "summary": "a health potion ",
-        "description": "it will return half your life",
+        "description": "Drinking this potion will return half your health.",
         "price": -30,
     },
     "waybread": {
         "key": "waybread",
         "name": "Waybread",
         "summary": "food for travel",
-        "description": "A bread like food that nourishes. It doesn't spoil so it works well for traveling.",
+        "description": (
+            "A bread like food that nourishes. "
+            "It doesn't spoil so it works well for traveling."
+        ),
         "price": -5,
     },
     "fishing tackle": {
@@ -88,8 +91,8 @@ ITEMS = {
         "name": "Fishing tackle",
         "summary": "gear for catching fish",
         "description": (
-            "Gear needed for catching fish from streams and lakes."
-            " Hooks, lines, folding pole, bobbers, weights."
+            "Gear needed for catching fish from streams and lakes. "
+            " Hooks, lines, folding pole, bobbers, weights. "
             " It is all contained in its own bag.",
         ),
         "price": -10,
@@ -97,7 +100,7 @@ ITEMS = {
     "book": {
         "key": "book",
         "name": "Book",
-        "title": "Diary of a Purple Dragon",
+        "title": "My Adventures",
         "summary": "a book about a dragon's adventures.",
         "description": "A soft leather bound book laying on the desk at home. There may be useful information in it.",
         "message": (
@@ -118,13 +121,20 @@ ITEMS = {
         "key": "desk",
         "name": "Desk",
         "summary": "writing desk",
-        "description": "A smallish wooden desk with 5 drawers. There is a large book laying on the top.",
+        "description": (
+            "A smallish wooden desk with 5 drawers. "
+            "There is a large book laying on the top."
+        ),
     },
     "stick": {
         "key": "stick",
         "name": "Stick",
         "summary": "walking stick",
-        "description": "A staff made from osage orange. It's about 4 feet tall. It has curious carvings on it.",
+        "description": (
+            "A staff made from osage orange. "
+            "It's about 4 feet tall. "
+            "It has curious carvings on it."
+        ),
         "can_take": True,
     },
     "bag": {
@@ -133,7 +143,7 @@ ITEMS = {
         "summary": "a bag",
         "description": (
             "A bag made of rough cloth that appears to be strong."
-            " It is about 12 inches long and 8 inches wide.",
+            " It is about 12 inches long and 8 inches wide."
         ),
         "can_take": True,
     },
@@ -178,14 +188,18 @@ PLACES = {
         "north": "lake",
         "description": "a cozy cabin nestled in the tall trees",
         # "items": ["book", "desk", "stick", "bag"],
-        "items": ["book", "desk", "stick",]
+        "items": ["desk", "book", "stick","bag",]
     },
     "town-square": {
         "key": "town-square",
         "name": "Old Towne Square",
         "west": "home",
         "east": "market",
-        "description": "An obelisk sits on a platform in the center of the square. The obelisk is about three feet tall and made of a shiny, black material much like obsidian.",
+        "description": (
+            "An obelisk sits on a platform in the center of the square. " 
+            "The obelisk is about three feet tall and made of a shiny, "
+            "black material much like obsidian." 
+        ),
         "items": []
     },
     "woods": {
@@ -193,20 +207,33 @@ PLACES = {
         "name": "Deep, dark woods",
         "north": "home",
         "south": "cave",
-        "description": "A deep forest of Redwood trees. Ferns and bushs growing on the forest floor. A path running through it. It's quiet and peaceful." 
+        "description": (
+            "There is a deep forest of Redwood trees with. "
+            "ferns and bushs growing on the forest floor. "
+            "An inviting path is running through it. "
+            "You notice that it's quiet and peaceful." 
+        ),
     },
     "lake": {
         "key": "lake",
         "name": "Lake Pukaki",
         "south": "home",
         "can": [],
-        "description": "Deep blue in color but will change to a purple hue when its mood is unsettled. There are mysteries to be found in it's dark waters."
+        "description": (
+            "The lake is a deep blue in color but it will change "
+            "to a purple hue when its mood is unsettled. "
+            "There are mysteries to be found in Lake Pukaki's dark waters."
+        ),
     },
     "market": {
         "key": "market",
         "name": "Town Square Market",
         "west": "town-square",
-        "description": "A store with a flower boxed window and brick pavers leading to the front door. Inside there are many things to buy.",
+        "description": (
+            "A store with a flower boxed window and "
+            "brick pavers leading to the front door. "
+            "Inside there are many things to buy."
+        ),
         "items": ["crystal ball", "short dagger", "green potion", "waybread", "fishing tackle",],
         "can": ["shop", "buy"],
     },
@@ -236,7 +263,7 @@ def debug(message: str):
     """If the Global Variable DEBUG is True then the message will print in colors for the Player"""
     if DEBUG == True:
         # fg = foreground; bg = background
-        debug_color = fg.gray + bg.lightblack
+        debug_color = fg.lightblack + fx.italic
         print(MARGIN*" ", debug_color("Debug:"), message, sep="")
 
 def error(message: str):
@@ -557,7 +584,7 @@ def do_look():
         text = text + last
 
         print()
-        write(f"You see {text}. \n")
+        write(f"You see a {text}. \n")
     print()
 
     # Printing what can be seen in a north, south, east, or west direction
@@ -629,7 +656,7 @@ def do_pet(args: list):
     tpl = ("The dragon's {mood} {color} head ") + dragon["message"]
     text = tpl.format(**dragon)
     wrap(text)
-    # continue with 14.10 also run breakpoint line 588 by playing the game
+    # continue with fixing the Debug text
 
 def do_quit():
     """If Player types 'q' or 'quit' the game will end and the the word "Goodbye!" will print"""
@@ -651,6 +678,7 @@ def do_read(args: list):
     if not item.get("message"):
         error(f"Sorry, I can't read {name}")
         return
+    print()
     print("It reads.... ")
     header(item["title"])
     wrap(item["message"], indent=2)
@@ -695,8 +723,8 @@ def do_take(args: list):
     place_remove(key)
     #Adding the item to the player's inventory
     inventory_change(key)
-
-    wrap(f"You pick up {key} and put it in your pack.")
+    print()
+    wrap(f"You pick up a {key} and put it in your pack.")
 
 def main():
     """Game User interface (UI). The game starts here."""
