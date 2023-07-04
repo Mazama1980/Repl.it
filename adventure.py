@@ -48,6 +48,7 @@ DRAGONS = [
 
 ]
 
+ITEMS_ALIASES = {}
 ITEMS = {
 # Crystal Ball      faintly glowing ball       5
     "crystal ball": {
@@ -264,7 +265,7 @@ def debug(message: str):
     if DEBUG == True:
         # fg = foreground; bg = background
         debug_color = fg.lightblack + fx.italic
-        print(MARGIN*" ", debug_color("Debug:"), message, sep="")
+        print(MARGIN*" ", debug_color("Debug:" + message), sep="")
 
 def error(message: str):
     """Print the error message in colors for the Player"""
@@ -411,6 +412,19 @@ def player_has(key: str, qty: int=1) -> bool:
         return True
     else:
         return False
+
+def setup_aliases():
+    """Setting up ITEMS_ALIASES dictionary with alternate names or aliases the Player could type for particular items of interest.
+      There is no argument or returned value."""
+    # A for loop will itirate over the items dictionary to aquire the key and item then iterate 
+    # over the ITEMS_ALIASES dictionary to check for alternate names (aliases) for that item.
+    # for key, value in dictionary(): *getting the key and value pair from a dictionary*
+    for key, item in ITEMS.items():
+        for key, item in item["aliases"]:
+            ITEMS_ALIASES.append(key, item)
+        # continue working on aliases from the Todo file line 73
+        # Alissa continue fixing the ipython error message problem
+
 
 def wrap(text: str, indent: int=1):
     """Formatted text and longer text will wrap and be readable to the Player by calling the wrap command"""
@@ -656,7 +670,6 @@ def do_pet(args: list):
     tpl = ("The dragon's {mood} {color} head ") + dragon["message"]
     text = tpl.format(**dragon)
     wrap(text)
-    # continue with fixing the Debug text
 
 def do_quit():
     """If Player types 'q' or 'quit' the game will end and the the word "Goodbye!" will print"""

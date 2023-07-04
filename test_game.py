@@ -23,7 +23,7 @@ from adventure import (
     health_change,
     MAX_HEALTH,
     do_pet,
-    # setup_aliases,
+    setup_aliases,
 )
 # import pdbr
 from copy import deepcopy
@@ -1195,11 +1195,23 @@ def test_wrap_with_iterable(capsys):
     # Then: the statement "This is the song that never ends" should print with 2 blank lines and 4 indented spaces
     assert "\n\n  It goes on and on my friend" in output
 
-# def test_setup_aliases():
-    # ...
-    # Given: there are aliases for each item in the ITEMS dictionary
-    # When:
-    # Then:
+def test_setup_aliases():
+    # Given: ITEMS_ALIASES dictionary exists
+    adventure.ITEMS_ALIASES = {}
+    # And: there are aliases for each item in the ITEMS dictionary
+    adventure.ITEMS["sword"] = {
+        "name": "short sword",
+        "aliases": ["long knife", "broad sword", "knife", "stabby thing"],
+    }
+    # When:call setup_aliases()
+    setup_aliases()
+    # Then: make sure that each alias for the item is in the ITEMS dictionary and in the ITEMS_ALIASES dictionary
+    assert adventure.ITEMS_ALIASES["long knife"] == adventure.ITEMS["sword"]
+    assert adventure.ITEMS_ALIASES["broad sword"] == adventure.ITEMS["sword"]
+    assert adventure.ITEMS_ALIASES["knife"] == adventure.ITEMS["sword"]
+    assert adventure.ITEMS_ALIASES["stabby thing"] == adventure.ITEMS["sword"]
+    # And: make sure that the key is in the ITEMS dictionary and the ITEMS_ALIASES dictionary
+    assert adventure.ITEMS_ALIASES["sword"] == adventure.ITEMS["sword"]
 
 ###############################################
 # example of how to test an expected exception

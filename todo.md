@@ -74,7 +74,7 @@ Proposed order of file is:
 [ ] add 'aliases' key to each item where needed in the ITEMS dicionary
     [ ] add a list of possible words for each item as a dictionary in the 'aliases' key   
 [ ] make a new global dicitionary ITEMS_ALIASES that's empty    
-[ ] write or modify a test_get_item() test to reflect pulling from ITEM_ALIASES
+[ ] write or modify a test_get_item() test to reflect pulling from ITEMS_ALIASES
     [ ] make sure it works with the original item key, any alias in the aliases list, and for items with no "aliases" key
 [ ] change the get_item() function to get items from ITEMS_ALIASES instead of ITEMS
 [ ] call the function setup_aliases() in main()
