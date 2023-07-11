@@ -53,8 +53,8 @@ ITEMS = {
 # Crystal Ball      faintly glowing ball       5
     "crystal ball": {
         "key": "crystal ball",
-        "aliases": ["ball", "globe"],
         "name": "Crystal ball",
+        "aliases": ["ball", "globe", "light"],
         "summary": "a faintly glowing ball",
         "description": "All it does is glow faintly; could be used in dark places.",
         "price": -5,
@@ -62,6 +62,7 @@ ITEMS = {
     "short dagger": {
         "key": "short dagger",
         "name": "Short dagger",
+        "aliases": ["knife", "sword", "stabby thing", "dagger",],
         "summary": "double edged blade",
         "description": (
             "The blade is hardened steel with a hollowed double edge. "
@@ -73,6 +74,7 @@ ITEMS = {
     "green potion": {
         "key": "green potion",
         "name": "Green potion",
+        "aliases": ["green", "green drink", "health", "potion",],
         "summary": "a health potion ",
         "description": "Drinking this potion will return half your health.",
         "price": -30,
@@ -80,6 +82,7 @@ ITEMS = {
     "waybread": {
         "key": "waybread",
         "name": "Waybread",
+        "aliases": ["bread", "food", "travel food",],
         "summary": "food for travel",
         "description": (
             "A bread like food that nourishes. "
@@ -90,6 +93,7 @@ ITEMS = {
     "fishing tackle": {
         "key": "fishing tackle",
         "name": "Fishing tackle",
+        "aliases": ["tackle", "fishing gear", "fish stuff", "hook", "pole",],
         "summary": "gear for catching fish",
         "description": (
             "Gear needed for catching fish from streams and lakes. "
@@ -101,6 +105,7 @@ ITEMS = {
     "book": {
         "key": "book",
         "name": "Book",
+        "aliases": ["story", "hints", "diary",],
         "title": "My Adventures",
         "summary": "a book about a dragon's adventures.",
         "description": "A soft leather bound book laying on the desk at home. There may be useful information in it.",
@@ -121,6 +126,7 @@ ITEMS = {
     "desk": {
         "key": "desk",
         "name": "Desk",
+        "aliases": ["table", "surface",],
         "summary": "writing desk",
         "description": (
             "A smallish wooden desk with 5 drawers. "
@@ -130,6 +136,7 @@ ITEMS = {
     "stick": {
         "key": "stick",
         "name": "Stick",
+        "aliases": ["walking stick", "staff", "trek pole",],
         "summary": "walking stick",
         "description": (
             "A staff made from osage orange. "
@@ -141,6 +148,7 @@ ITEMS = {
     "bag": {
         "key": "bag",
         "name": "Bag",
+        "aliases": ["sack", "pack",],
         "summary": "a bag",
         "description": (
             "A bag made of rough cloth that appears to be strong."
@@ -414,14 +422,15 @@ def player_has(key: str, qty: int=1) -> bool:
         return False
 
 def setup_aliases():
-    """Setting up ITEMS_ALIASES dictionary with alternate names or aliases the Player could type for particular items of interest.
+    """Setting up ITEMS_ALIASES dictionary with alternate names or aliases that the Player could type for particular items of interest.
       There is no argument or returned value."""
     # A for loop will itirate over the items dictionary to aquire the key and item then iterate 
     # over the ITEMS_ALIASES dictionary to check for alternate names (aliases) for that item.
     # for key, value in dictionary(): *getting the key and value pair from a dictionary*
+    # breakpoint()
     for key, item in ITEMS.items():
-        for key, item in item["aliases"]:
-            ITEMS_ALIASES.append(key, item)
+        for alias in item.get('aliases', []):
+            ITEMS_ALIASES[alias] = item
         # continue working on aliases from the Todo file line 73
         # Alissa continue fixing the ipython error message problem
 
@@ -742,6 +751,7 @@ def do_take(args: list):
 def main():
     """Game User interface (UI). The game starts here."""
     debug("Hello")
+    setup_aliases()
     header(fg.lightyellow("Welcome!"))
     while True:
         debug(f"You are at: {PLAYER['place']}")
