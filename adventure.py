@@ -159,12 +159,14 @@ ITEMS = {
     "gems": {
         "key": "gems",
         "name": "Gems",
+        "aliases": ["rocks", "stones", "jewels"],
         "summary": "various sized  gems",
         "description": "A pile of sparkling gems of different sizes and colors.",
     },
     "dragon": {
     "key": "dragon",
     "name": "The Belfry Dragon",
+    "aliases": ["dragons", "three headed dragon","big guy"],
     "summary": "A three headed dragon",
     "description": (
         f"A three headed dragon that sits just inside the Deep Cave."
@@ -427,11 +429,12 @@ def setup_aliases():
     # A for loop will itirate over the items dictionary to aquire the key and item then iterate 
     # over the ITEMS_ALIASES dictionary to check for alternate names (aliases) for that item.
     # for key, value in dictionary(): *getting the key and value pair from a dictionary*
-    # breakpoint()
     for key, item in ITEMS.items():
-        for alias in item.get('aliases', []):
+        aliases = item.get('aliases', [])
+        ITEMS_ALIASES[key] = item
+        for alias in aliases:
             ITEMS_ALIASES[alias] = item
-        # continue working on aliases from the Todo file line 73
+        # continue working on aliases from the Todo file line 77
         # Alissa continue fixing the ipython error message problem
 
 

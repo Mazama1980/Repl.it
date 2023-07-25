@@ -1199,6 +1199,7 @@ def test_setup_aliases():
     # Given: ITEMS_ALIASES dictionary exists
     adventure.ITEMS_ALIASES = {}
     # And: there are aliases for each item in the ITEMS dictionary
+    adventure.ITEMS = {}
     adventure.ITEMS["sword"] = {
         "name": "short sword",
         "aliases": ["long knife", "broad sword", "knife", "stabby thing"],

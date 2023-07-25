@@ -63,17 +63,17 @@ Proposed order of file is:
 
 ### Aliases function
 
-[ ] write a test_setup_aliases() test
-    [ ] ...
-[ ] write a function setup_aliases() 
-    [ ] write a for loop iterating over ITEMS.items() getting two variables `key` (str) and `item` (dict)
-        [ ] nest a for loop iterating over item['aliases'] (list) getting the variable `alias` (str)
-            [ ] add to ITEMS_ALIASES (dict) with the key `alias`(str) and the value `item` (dict) 
-    [ ] add to ITEMS_ALIASES with the key `key` (str) and the value `item` (dict)
-[ ] add ITEMS_ALIASES to tests and call setup_aliases() in tests (Alissa to figure this part out)
-[ ] add 'aliases' key to each item where needed in the ITEMS dicionary
-    [ ] add a list of possible words for each item as a dictionary in the 'aliases' key   
-[ ] make a new global dicitionary ITEMS_ALIASES that's empty    
+[x] write a test_setup_aliases() test
+    [x] ...
+[x] write a function setup_aliases() 
+    [x] write a for loop iterating over ITEMS.items() getting two variables `key` (str) and `item` (dict)
+        [x] nest a for loop iterating over item['aliases'] (list) getting the variable `alias` (str)
+            [x] add to ITEMS_ALIASES (dict) with the key `alias`(str) and the value `item` (dict) 
+    [x] add to ITEMS_ALIASES with the key `key` (str) and the value `item` (dict)
+[x] add ITEMS_ALIASES to tests and call setup_aliases() in tests (Alissa to figure this part out)
+[x] add 'aliases' key to each item where needed in the ITEMS dicionary
+    [x] add a list of possible words for each item as a dictionary in the 'aliases' key   
+[x] make a new global dicitionary ITEMS_ALIASES that's empty    
 [ ] write or modify a test_get_item() test to reflect pulling from ITEMS_ALIASES
     [ ] make sure it works with the original item key, any alias in the aliases list, and for items with no "aliases" key
 [ ] change the get_item() function to get items from ITEMS_ALIASES instead of ITEMS
