@@ -80,6 +80,11 @@ def test_get_item():
     # Then: the item is returned to be used for another function
     assert result
 
+def test_get_item_and_aliases():
+    # Given: an item is in the ITEMS dictionary with aliases
+    # When:
+    # Then:
+
 def test_get_item_no_item(capsys):
     # Given: an item is not in the ITEMS dictionary
     adventure.ITEMS = {}
@@ -1198,8 +1203,9 @@ def test_wrap_with_iterable(capsys):
 def test_setup_aliases():
     # Given: ITEMS_ALIASES dictionary exists
     adventure.ITEMS_ALIASES = {}
-    # And: there are aliases for each item in the ITEMS dictionary
+    # And: the ITEMS dictionary is empty except for the sword
     adventure.ITEMS = {}
+    # And: there are aliases for each item in the ITEMS dictionary
     adventure.ITEMS["sword"] = {
         "name": "short sword",
         "aliases": ["long knife", "broad sword", "knife", "stabby thing"],

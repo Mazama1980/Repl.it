@@ -434,7 +434,7 @@ def setup_aliases():
         ITEMS_ALIASES[key] = item
         for alias in aliases:
             ITEMS_ALIASES[alias] = item
-        # continue working on aliases from the Todo file line 77
+        # continue working on aliases from the Todo file line 77 continue writing the test line 83
         # Alissa continue fixing the ipython error message problem
 
 
