@@ -74,10 +74,10 @@ Proposed order of file is:
 [x] add 'aliases' key to each item where needed in the ITEMS dicionary
     [x] add a list of possible words for each item as a dictionary in the 'aliases' key   
 [x] make a new global dicitionary ITEMS_ALIASES that's empty    
-[ ] write or modify a test_get_item() test to reflect pulling from ITEMS_ALIASES
-    [ ] make sure it works with the original item key, any alias in the aliases list, and for items with no "aliases" key
-[ ] change the get_item() function to get items from ITEMS_ALIASES instead of ITEMS
-[ ] call the function setup_aliases() in main()
+[x] write or modify a test_get_item() test to reflect pulling from ITEMS_ALIASES
+    [x] make sure it works with the original item key, any alias in the aliases list, and for items with no "aliases" key
+[x] change the get_item() function to get items from ITEMS_ALIASES instead of ITEMS
+[x] call the function setup_aliases() in main()
 [ ] might need to change some tests if any of them broke
 
 ```python

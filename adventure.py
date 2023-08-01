@@ -285,7 +285,7 @@ def error(message: str):
 
 def get_item(key: str) -> dict:
     """Getting (or returning) an item from the ITEMS dictionary"""
-    item = ITEMS.get(key)
+    item = ITEMS_ALIASES.get(key)
     if not item:
         abort(f"Woops! The information about the item {key} seems to be missing.")
     return item
@@ -434,7 +434,7 @@ def setup_aliases():
         ITEMS_ALIASES[key] = item
         for alias in aliases:
             ITEMS_ALIASES[alias] = item
-        # continue working on aliases from the Todo file line 77 continue writing the test line 83
+        # continue working on aliases from the Todo file line 81 and try using aliases in the game for 'take', 'drop', etc
         # Alissa continue fixing the ipython error message problem
 
 

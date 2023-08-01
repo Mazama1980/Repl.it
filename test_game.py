@@ -80,10 +80,30 @@ def test_get_item():
     # Then: the item is returned to be used for another function
     assert result
 
-def test_get_item_and_aliases():
-    # Given: an item is in the ITEMS dictionary with aliases
-    # When:
-    # Then:
+@pytest.mark.parametrize(
+        ["alias",], [
+            ("knife",),
+            ("broad sword",),
+            ("stabby thing",),
+        ]
+)
+def test_get_item_with_aliases(alias):
+    # Given: the ITEMS_ALIASES dictionary exists
+    adventure.ITEMS_ALIASES = {}
+    # And: the ITEMS dictionary is empty except for the sword
+    adventure.ITEMS = {}
+    # And: an item is in the ITEMS dictionary with aliases
+    adventure.ITEMS["sword"] = {
+        'name': "short sword",
+        'aliases': [alias],
+    }
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
+    # When: call get_item() with an alias key
+    result = get_item(alias)
+    # Then: make sure that each alias that get_item returns is associated with the item's key
+    assert result == adventure.ITEMS["sword"]
+    
 
 def test_get_item_no_item(capsys):
     # Given: an item is not in the ITEMS dictionary
