@@ -285,6 +285,7 @@ def error(message: str):
 
 def get_item(key: str) -> dict:
     """Getting (or returning) an item from the ITEMS dictionary"""
+    # breakpoint()
     item = ITEMS_ALIASES.get(key)
     if not item:
         abort(f"Woops! The information about the item {key} seems to be missing.")
@@ -429,6 +430,8 @@ def setup_aliases():
     # A for loop will itirate over the items dictionary to aquire the key and item then iterate 
     # over the ITEMS_ALIASES dictionary to check for alternate names (aliases) for that item.
     # for key, value in dictionary(): *getting the key and value pair from a dictionary*
+    global ITEMS_ALIASES
+    ITEMS_ALIASES = {}
     for key, item in ITEMS.items():
         aliases = item.get('aliases', [])
         ITEMS_ALIASES[key] = item

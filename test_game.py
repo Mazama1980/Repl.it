@@ -32,23 +32,31 @@ import pytest
 
 import adventure
 
-PLAYER_STATE = deepcopy(adventure.PLAYER)
-PLACES_STATE = deepcopy(adventure.PLACES)
-ITEMS_STATE = deepcopy(adventure.ITEMS)
+# this function will be run once before any tests are executed
+@pytest.fixture(autouse=True, scope="module")
+def before_all():
+    global PLAYER_STATE, PLACES_STATE, ITEMS_STATE
+    PLAYER_STATE = deepcopy(adventure.PLAYER)
+    PLACES_STATE = deepcopy(adventure.PLACES)
+    ITEMS_STATE = deepcopy(adventure.ITEMS)
+    adventure.DELAY = 0
+    setup_aliases()
+    
+# this will be run around each test
+@pytest.fixture(autouse=True, scope="function")
+def setup_test():
+    global PLAYER_STATE, PLACES_STATE, ITEMS_STATE
 
-adventure.DELAY = 0
+    # code here will be run before the test
 
-def revert():
-    """Revert game data to its original state."""
+    # this is where the test is run
+    yield
+
+    # code here will be run after the test
     adventure.PLAYER = deepcopy(PLAYER_STATE)
     adventure.PLACES = deepcopy(PLACES_STATE)
     adventure.ITEMS = deepcopy(ITEMS_STATE)
-
-
-@pytest.fixture(autouse=True)
-def teardown(request):
-    """Auto-add teardown method to all tests."""
-    request.addfinalizer(revert)
+    
 
 # GIVEN: some context
 # WHEN: some action
@@ -107,7 +115,7 @@ def test_get_item_with_aliases(alias):
 
 def test_get_item_no_item(capsys):
     # Given: an item is not in the ITEMS dictionary
-    adventure.ITEMS = {}
+    adventure.ITEMS_ALIASES = {}
     # When: call get_item("sword")
     with pytest.raises(SystemExit) as ex:
         get_item("sword")
@@ -189,6 +197,8 @@ def test_do_inventory(capsys):
     adventure.ITEMS["quill"] = {
         "name": "quill",
     }
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
     # When: call do_inventory() without a key argument
     do_inventory()
     output = capsys.readouterr().out
@@ -219,23 +229,7 @@ def test_do_inventory_if_empty(capsys):
 def test_do_look(capsys, items, items_text, message):
     # Given: Player is in a current place
     adventure.PLAYER["place"] = "somewhere"
-    # And: that place exists with items in the current place
-    adventure.PLACES["somewhere"] = {
-        "name": "somewhere",
-        "items": items,
-        "description": "Hard to tell where you are.",
-        "east": "pit of despair",
-        "north": "fire swamp",
-    }
-    # And: places exist in different directions from the current place
-    adventure.PLACES["pit of despair"] = {
-        "key": "the pit",
-        "name": "pit of despair",
-    }
-    adventure.PLACES["fire swamp"] = {
-        "key": "fire swamp",
-        "name": "fire swamp",
-    }
+
     # And: items with descriptions are in the ITEMS dictionary
     adventure.ITEMS["sword"] = {
         "name": "sword",
@@ -246,15 +240,39 @@ def test_do_look(capsys, items, items_text, message):
     adventure.ITEMS["sack"] = {
         "name": "sack",
     }
+
+    # And: that place exists with items in the current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items": items,
+        "description": "Hard to tell where you are.",
+        "east": "pit of despair",
+        "north": "fire swamp",
+    }
+
+    # And: places exist in different directions from the current place
+    adventure.PLACES["pit of despair"] = {
+        "key": "the pit",
+        "name": "pit of despair",
+    }
+    adventure.PLACES["fire swamp"] = {
+        "key": "fire swamp",
+        "name": "fire swamp",
+    }
+
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
     # When: call do_look() with no key arguments
     do_look()
     output = capsys.readouterr().out
+    # breakpoint()
     # Then: it should print the name of the place
     assert "somewhere" in output
     # And: it should print the description of the current place
     assert "Hard to tell where you are." in output
     # And: it should print a list of items in the place
-    assert f"You see {items_text}." in output, message 
+    # breakpoint()
+    assert f"You see a {items_text}." in output, message 
     # And: should print nearby places
     assert f"To the north is fire swamp." in output
     assert f"To the east is pit of despair." in output
@@ -406,6 +424,9 @@ def test_do_take(capsys):
     # And: item is in the correct place
     adventure.PLACES["somewhere"]["items"] = ["sword"]
 
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
+
     # When: call do_take item
     do_take(["sword"])
 
@@ -418,7 +439,7 @@ def test_do_take(capsys):
     assert adventure.PLACES ["somewhere"]["items"] == [], "The items list should be empty when the sword is taken"
 
     # And: Print for player should say item was picked up
-    assert "pick up sword" in output, "A message should be printed telling the Player that they took the item."
+    assert "pick up a sword" in output, "A message should be printed telling the Player that they took the item."
 
 
 def test_do_drop(capsys):
@@ -502,6 +523,9 @@ def test_do_shop(capsys):
     # And: items for sale but not in current place
     adventure.PLACES["nowhere"] = {"name": "Anywhere but here"}
     adventure.PLACES["nowhere"]["items"] = ["neurolizer"]
+
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
 
     # When: Call do_shop() and capture the output
     do_shop()
@@ -680,6 +704,9 @@ def test_do_buy_player_does_not_have_enough_gems(capsys):
     # And: Player does not have enough gems
     adventure.PLAYER["inventory"]["gems"] = 50
 
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
+
     # When: call do_buy("sword") to see if Player can afford the item and capture output
     do_buy(["sword"])
     output = capsys.readouterr().out
@@ -700,6 +727,9 @@ def test_do_buy(capsys):
     }
     # And: Player has enough gems
     adventure.PLAYER["inventory"]["gems"] = 50
+
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
 
     # When: call do_buy("sword") to buy the item and capture output
     do_buy(["sword"])
@@ -737,6 +767,9 @@ def test_do_examine(capsys, key, description):
         "description": description
     }
 
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
+
     # When: call do_examine with the key and capture the output
     do_examine([key])
     output = capsys.readouterr().out
@@ -761,6 +794,8 @@ def test_do_examine_item_in_inventory(capsys):
         "name": "somewhere",
         "items": [],
     }
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
     # When: call item with do_examine("item") from Player's inventory to examine and capture output
     do_examine(["neurolizer"])
     output = capsys.readouterr().out
@@ -798,6 +833,9 @@ def test_do_examine_can_shop(capsys):
     # And: items are for sale in current place
     adventure.ITEMS["sword"] = {"name": "short sword", "description": "leaf shaped double bladed", "price": -30}
 
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
+
     # When: call do_examine ["sword"] and capture output
     do_examine(["sword"])
     output = capsys.readouterr().out
@@ -816,6 +854,9 @@ def test_do_examine_item_not_for_sale(capsys):
         "items": ["quill"],
     }
     adventure.ITEMS["quill"] = {"name": "quill", "description": "a writing utensil that uses ink",}
+
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
 
     # When: call do_exanine ["quill"]
     do_examine(["quill"])
@@ -845,6 +886,9 @@ def test_do_examine_player_inventory_item_quantity(capsys):
         "name": "somewhere",
         "items": [],
     }
+
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
 
     # When: the Player examines the item
     do_examine(["neurolizer"])
@@ -895,7 +939,8 @@ def test_do_read_unreadable_item(capsys):
         "name": "bottle",
     }
     place_add("bottle")
-
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
     # When: the item is unreadable
     do_read(["bottle"])
     output = capsys.readouterr().out
@@ -924,6 +969,8 @@ def test_do_read_in_place(capsys):
             ),
     }
     place_add("bottle")
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
 
     # When: the item is readable
     do_read(["bottle"])
@@ -931,7 +978,7 @@ def test_do_read_in_place(capsys):
 
     # Then: The statement "Bottle Label" should print
     assert "Bottle Label" in output
-    # Then: The statement "Drink Me" should print
+    # Then: The statement "Directions for use:" should print
     assert "    Directions for use:" in output
     # Then: the statement "Directions for use:" should print with two blank lines and 4 indentation spaces.
     assert "\n\n    Directions for use:" in output
@@ -954,6 +1001,9 @@ def test_do_read_in_inventory(capsys):
 
     # And: add an item to Player's inventory
     adventure.PLAYER["inventory"] = {"bottle": 1}
+
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
 
     # When: item is in inventory when Player reads it
     do_read(["bottle"])
