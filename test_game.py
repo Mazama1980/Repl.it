@@ -159,7 +159,22 @@ def test_get_place_missing_from_PLACES(capsys):
     output = capsys.readouterr().out
     # Then: the statement beginning with "Woops!" should print 
     assert "Woops!" in output
-    
+
+# @pytest.mark.skip(reason="to be implemented")
+def test_place_has():
+    # Given: the current place has an item
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items": "sword",
+    }
+    adventure.ITEMS["sword"] = {
+        "name": "sword",
+    } 
+    # When: call place_has() with one argument (item)
+    result = place_has("sword")
+    # Then: result will return True if the item is in the current place
+    assert result
+
 def test_player_has_with_key_in_inventory():
     # Given: the Player has an item in inventory
     adventure.PLAYER["inventory"] = {"neurolizer": 1}

@@ -7,7 +7,7 @@
 [ ] respond to the TODO comments above some functions and fix the stuff
 [ ] for at least some, add an "Args:" section (to get practice)
 [ ] add tests for
-    [ ] place_has()
+    [ ] place_has() #continue with writing this test 8/8/23
 
 ### Part 10.2 (tests)
 
@@ -78,7 +78,7 @@ Proposed order of file is:
     [x] make sure it works with the original item key, any alias in the aliases list, and for items with no "aliases" key
 [x] change the get_item() function to get items from ITEMS_ALIASES instead of ITEMS
 [x] call the function setup_aliases() in main()
-[ ] might need to change some tests if any of them broke
+[x] might need to change some tests if any of them broke
 
 ```python
 # imaginary ITEMS dict

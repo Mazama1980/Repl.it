@@ -199,7 +199,7 @@ PLACES = {
         "north": "lake",
         "description": "a cozy cabin nestled in the tall trees",
         # "items": ["book", "desk", "stick", "bag"],
-        "items": ["desk", "book", "stick","bag",]
+        "items": ["desk", "book", "stick", "bag",]
     },
     "town-square": {
         "key": "town-square",
@@ -219,7 +219,7 @@ PLACES = {
         "north": "home",
         "south": "cave",
         "description": (
-            "There is a deep forest of Redwood trees with. "
+            "There is a deep forest of Redwood trees with "
             "ferns and bushs growing on the forest floor. "
             "An inviting path is running through it. "
             "You notice that it's quiet and peaceful." 
@@ -437,7 +437,6 @@ def setup_aliases():
         ITEMS_ALIASES[key] = item
         for alias in aliases:
             ITEMS_ALIASES[alias] = item
-        # continue working on aliases from the Todo file line 81 and try using aliases in the game for 'take', 'drop', etc
         # Alissa continue fixing the ipython error message problem
 
 
