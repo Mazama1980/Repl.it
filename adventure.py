@@ -321,7 +321,6 @@ def health_change(amount: int):
          If the quantity goes to 0 or less then the game will end as the Player has expired.
     """
     # need to determine the Player's current health 
-    # breakpoint()
     energy = PLAYER["health"]
     # need to add (or subtract) Players current health from the argument (amount)
     fitness = energy + amount
@@ -498,6 +497,21 @@ def do_buy(args: list):
     inventory_change(key)
     place_remove(key)
     wrap(f"You bought a {key}.")
+
+def do_consume(action: str, args: list):
+    """Player can eat or drink an item using the 'eat' or 'drink' command.
+    
+    Args:
+    * action (str): "eat" or "drink"
+    * args (list[str]): input from player will be turned into a list
+    """
+    debug(f'Trying to {action}: "a" {args}')
+    # check if Player typed an args (item for the action)
+    if not args:
+        error(f'What would you like to {action}?')
+        return
+    # continue with 15.1 C
+
 
 def do_drop(args: list):
     """Player can drop an item from their inventory using the 'drop' command"""

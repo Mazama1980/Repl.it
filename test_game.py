@@ -24,6 +24,7 @@ from adventure import (
     MAX_HEALTH,
     do_pet,
     setup_aliases,
+    do_consume,
 )
 # import pdbr
 from copy import deepcopy
@@ -162,7 +163,9 @@ def test_get_place_missing_from_PLACES(capsys):
 
 # @pytest.mark.skip(reason="to be implemented")
 def test_place_has():
-    # Given: the current place has an item
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: the current place has an item
     adventure.PLACES["somewhere"] = {
         "name": "somewhere",
         "items": "sword",
@@ -914,6 +917,45 @@ def test_do_examine_player_inventory_item_quantity(capsys):
 
     # And: quantity in inventory should be printed
     assert "99" in output, "The quantity of the item should print"
+
+@pytest.mark.parametrize(["action", ],[
+    ("eat",),
+    ("drink",),
+])
+def test_do_consume_no_args(capsys, action):
+    # Given: Player does not type an argument (an item in current place)
+    # When: call do_consume([]) with no argument
+    do_consume(action,[])
+    output = capsys.readouterr().out
+    # Then: a debug message should print "Trying to ACTION: {action}"
+    assert f'Trying to ACTION: {action}'
+    # And: an error message should print "What would you like to {action}?"
+    assert f'What would you like to {action}?' in output
+
+# @pytest.mark.parametrize(["action", "message"],[
+#     ("eat", "Player is able to eat the snozzberry" ),
+#     ("drink", "Player is able to drink the healing juice")
+# ])
+# def test_do_consume_no_args(capsys, action, [], message):
+#     # Given: Player is current place
+#     adventure.PLAYER["place"] = "somewhere"
+#     # And: an item exists in the current place
+#     adventure.ITEMS["snozzberry"] = {
+#         "name": "snozzberry",
+#     }
+#     # And: current place has a consumable item that can be eaten or drank
+#     adventure.PLACES["somewhere"] = {
+#         "name": "somewhere",
+#         "items": "snozzberry",
+#         "can": [action],
+#     }
+#     # When: call do_consume("snozzberry") to eat the food
+#     do_consume("snozzberry")
+#     output = capsys.readouterr().out
+#     # Then: print that Player was able to perform an action of eat or drink something
+#     assert message in output
+
+
 
 # @pytest.mark.skip(reason="work in progress (12.2)")
 def test_do_read_no_args(capsys):
