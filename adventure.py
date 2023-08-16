@@ -505,14 +505,18 @@ def do_consume(action: str, args: list):
     * action (str): "eat" or "drink"
     * args (list[str]): input from player will be turned into a list
     """
+
     debug(f'Trying to {action}: "a" {args}')
     # check if Player typed an args (item for the action)
     if not args:
         error(f'What would you like to {action}?')
         return
-    # continue with 15.1 C
-
-
+    key = args[0].lower()
+    if not player_has(key):
+        error(f'Sorry, You do not have any {key} to {action}.')
+    # continue with 15.3 A
+    
+    
 def do_drop(args: list):
     """Player can drop an item from their inventory using the 'drop' command"""
     debug(f'Trying to drop {args}')
@@ -804,6 +808,8 @@ def main():
             do_read(args)
         elif command == "pet":
             do_pet(args)
+        elif command in ("eat", "drink"):
+            do_consume(command, args)
         else:
             error("No such command.")
             continue

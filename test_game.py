@@ -932,6 +932,24 @@ def test_do_consume_no_args(capsys, action):
     # And: an error message should print "What would you like to {action}?"
     assert f'What would you like to {action}?' in output
 
+@pytest.mark.parametrize(["action",],[
+    ("eat",),
+    ("drink",),
+])
+def test_do_consume_not_in_inventory(capsys, action):
+    # Given: Player has nothing in inventory
+    adventure.PLAYER["inventory"] = {}
+    # And: an item exists that Player wants to consume
+    adventure.ITEMS["snozzberry"] = {
+        "name": "snozzberry",
+    }
+    # When: call do_consume(action, "snozzberry") with the action ("eat", "drink") and the args ("snozzberry")
+    do_consume(action, ["snozzberry"])
+    output = capsys.readouterr().out
+    # Then: an error message should print "Sorry, You do not have any snozzberry to eat"
+    assert f'Sorry, You do not have any snozzberry to {action}.' in output
+
+
 # @pytest.mark.parametrize(["action", "message"],[
 #     ("eat", "Player is able to eat the snozzberry" ),
 #     ("drink", "Player is able to drink the healing juice")
