@@ -949,6 +949,22 @@ def test_do_consume_not_in_inventory(capsys, action):
     # Then: an error message should print "Sorry, You do not have any snozzberry to eat"
     assert f'Sorry, You do not have any snozzberry to {action}.' in output
 
+@pytest.mark.parametrize(["action",],[
+    ("eat",),
+    ("drink",),
+])
+def test_do_consume_cant_consume(capsys, action):
+    # Given: Player has an item in inventory
+    adventure.PLAYER["inventory"] = {"hat": 1}
+    # And: the item exists in ITEMS and does not have the "can": ["eat", "drink"] so can not be consumed
+    adventure.ITEMS["hat"] = {
+        "name": "hat",
+    }
+    # When: call do_consume(action,["hat"]) with the action ("eat", "drink") and the argument ("hat")
+    do_consume(action, ["hat"])
+    output = capsys.readouterr().out
+    # Then: an error message should print "Silly, you can not eat this hat."
+    assert f"Silly, you can not {action} this hat." in output
 
 # @pytest.mark.parametrize(["action", "message"],[
 #     ("eat", "Player is able to eat the snozzberry" ),

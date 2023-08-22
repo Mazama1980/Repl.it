@@ -514,7 +514,8 @@ def do_consume(action: str, args: list):
     key = args[0].lower()
     if not player_has(key):
         error(f'Sorry, You do not have any {key} to {action}.')
-    # continue with 15.3 A
+        return
+    # continue with 15.3 B
     
     
 def do_drop(args: list):
