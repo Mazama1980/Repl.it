@@ -320,6 +320,8 @@ def health_change(amount: int):
        * amount (int): the quantity of health will get added or subtracted for the Player.
          If the quantity goes to 0 or less then the game will end as the Player has expired.
     """
+    # save Player's current health to a variable to use at the end of the function
+    before = PLAYER["health"]
     # need to determine the Player's current health 
     energy = PLAYER["health"]
     # need to add (or subtract) Players current health from the argument (amount)
@@ -331,6 +333,7 @@ def health_change(amount: int):
         PLAYER["health"] = 0
     if PLAYER["health"] > MAX_HEALTH:
         PLAYER["health"] = MAX_HEALTH
+    return PLAYER["health"] - before
     
 
 def inventory_change(key: str, quantity: int=1):
@@ -511,9 +514,17 @@ def do_consume(action: str, args: list):
     if not args:
         error(f'What would you like to {action}?')
         return
-    key = args[0].lower()
-    if not player_has(key):
-        error(f'Sorry, You do not have any {key} to {action}.')
+    # get the item entered by Player and make it lowercase
+    name = " ".join(args).lower()
+    # check if the item is in the Player's inventory
+    if not player_has(name):
+        error(f'Sorry, You do not have any {name} to {action}.')
+        return
+    # check if the item can be eaten or is drinkable
+    # breakpoint()
+    item = get_item(name)
+    if not item.get(f'{action}_message'):
+        error(f'Silly, you can not {action} this {item}.')
         return
     # continue with 15.3 B
     

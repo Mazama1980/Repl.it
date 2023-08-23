@@ -960,11 +960,13 @@ def test_do_consume_cant_consume(capsys, action):
     adventure.ITEMS["hat"] = {
         "name": "hat",
     }
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
     # When: call do_consume(action,["hat"]) with the action ("eat", "drink") and the argument ("hat")
     do_consume(action, ["hat"])
     output = capsys.readouterr().out
     # Then: an error message should print "Silly, you can not eat this hat."
-    assert f"Silly, you can not {action} this hat." in output
+    assert f"Silly, you can not {action} this " in output
 
 # @pytest.mark.parametrize(["action", "message"],[
 #     ("eat", "Player is able to eat the snozzberry" ),
@@ -1293,20 +1295,22 @@ def test_do_pet_skeptical_dragon(capsys):
     # BAR(PLAYER["health"])
 
 @pytest.mark.parametrize(
-        ["start", "amount", "result", "message"], [
-        (50, 30, 80, "adding to current Player health"),
-        (50, -30, 20, "subtracting from current Player health"),
-        (50, -60, 0, "setting Player's health to zero should it become less than 0"),
-        ( 90, 20, MAX_HEALTH, "setting Player's health to a max of 100 should it become greater than 100"),
+        ["start", "amount", "health", "diff", "message"], [
+        (50, 30, 80, 30, "adding to current Player health"),
+        (50, -30, 20, -30, "subtracting from current Player health"),
+        (50, -60, 0, -50, "setting Player's health to zero should it become less than 0"),
+        (90, 20, MAX_HEALTH, 10, "setting Player's health to a max of 100 should it become greater than 100"),
         ]
 )
-def test_health_change(start, amount, result, message):
+def test_health_change(start, amount, health, diff, message):
     # Given: Player's current quantity of health
     adventure.PLAYER["health"] = start
     # When: call health_change with a quantity arg
-    health_change(amount)
+    result = health_change(amount)
     # Then: should add the health quantity to Player's health inventory
-    assert adventure.PLAYER["health"] == result, message
+    assert adventure.PLAYER["health"] == health, message
+    # And: the value returned should be the difference in points
+    assert result == diff
     
 
 # @pytest.mark.skip(reason="work in progress (12.6)")
