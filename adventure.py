@@ -322,10 +322,8 @@ def health_change(amount: int):
     """
     # save Player's current health to a variable to use at the end of the function
     before = PLAYER["health"]
-    # need to determine the Player's current health 
-    energy = PLAYER["health"]
     # need to add (or subtract) Players current health from the argument (amount)
-    fitness = energy + amount
+    fitness = before + amount
     PLAYER["health"] = fitness
     # setting Player's health to zero if it should become a negative number
     # and setting Player's health to a max of 100 if health should become greater than 100
@@ -526,7 +524,7 @@ def do_consume(action: str, args: list):
     if not item.get(f'{action}_message'):
         error(f'Silly, you can not {action} this {item}.')
         return
-    # continue with 15.3 B
+    # continue with 15.5 B
     
     
 def do_drop(args: list):

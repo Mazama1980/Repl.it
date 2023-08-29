@@ -968,28 +968,54 @@ def test_do_consume_cant_consume(capsys, action):
     # Then: an error message should print "Silly, you can not eat this hat."
     assert f"Silly, you can not {action} this " in output
 
-# @pytest.mark.parametrize(["action", "message"],[
-#     ("eat", "Player is able to eat the snozzberry" ),
-#     ("drink", "Player is able to drink the healing juice")
-# ])
-# def test_do_consume_no_args(capsys, action, [], message):
-#     # Given: Player is current place
-#     adventure.PLAYER["place"] = "somewhere"
-#     # And: an item exists in the current place
-#     adventure.ITEMS["snozzberry"] = {
-#         "name": "snozzberry",
-#     }
-#     # And: current place has a consumable item that can be eaten or drank
-#     adventure.PLACES["somewhere"] = {
-#         "name": "somewhere",
-#         "items": "snozzberry",
-#         "can": [action],
-#     }
-#     # When: call do_consume("snozzberry") to eat the food
-#     do_consume("snozzberry")
-#     output = capsys.readouterr().out
-#     # Then: print that Player was able to perform an action of eat or drink something
-#     assert message in output
+@pytest.mark.parametrize(
+        ["action", "item"],
+        [
+            (
+                "eat",
+                {
+                    "name": "snozzberry",
+                    "health": 30,
+                    "eat_message": (
+                        "You pick some purple berries to save for later. "
+                        "You try one and it tastes a little tart but good. "
+                        "It seems that your mind suddenly becomes calm and clear "
+                        "so you decide that these berries will be useful at the right time."
+                    ),
+                }
+            ),
+            (
+                "drink",
+                {
+                    "name": "fizzy pop",
+                    "health": -5,
+                    "drink_message": (
+                        "You purchase a flask of bubbly drink."
+                        "It hisses softly when you take off the cork."
+                        "When you take a sip it makes your mouth and nose tickle"
+                        "and your heart begins to race a little."
+                    )
+                }
+            )
+        ]
+)
+def test_do_consume(capsys, action, item,):
+    # Given: an item exists
+    name = item["name"]
+    adventure.ITEMS[name] = item
+    # And: Player should have the item in their inventory
+    inventory_change(name)
+    # And: set width to an extra large number to avoid wrapping of the message
+    WIDTH = 200
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
+    # When: call do_consume(action, [item]) to eat or drink the food item
+    # breakpoint()
+    do_consume(action, [name])
+    output = capsys.readouterr().out
+    # Then: print that Player was able to perform an action with the message for that item
+    line = item[f"{action}_message"]
+    assert line in output
 
 
 
