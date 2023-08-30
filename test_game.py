@@ -977,12 +977,12 @@ def test_do_consume_cant_consume(capsys, action):
                     "name": "snozzberry",
                     "health": 30,
                     "eat_message": (
-                        "You pick some purple berries to save for later. "
-                        "You try one and it tastes a little tart but good. "
-                        "It seems that your mind suddenly becomes calm and clear "
-                        "so you decide that these berries will be useful at the right time."
+                        "You pick some purple berries to save for later.",
+                        "You try one and it tastes a little tart but good.",
+                        "It seems that your mind suddenly becomes calm and clear",
+                        "so you decide that these berries will be useful at the right time.",
                     ),
-                }
+                },
             ),
             (
                 "drink",
@@ -990,13 +990,13 @@ def test_do_consume_cant_consume(capsys, action):
                     "name": "fizzy pop",
                     "health": -5,
                     "drink_message": (
-                        "You purchase a flask of bubbly drink."
-                        "It hisses softly when you take off the cork."
-                        "When you take a sip it makes your mouth and nose tickle"
-                        "and your heart begins to race a little."
-                    )
-                }
-            )
+                        "You purchase a flask of bubbly drink.",
+                        "It hisses softly when you take off the cork.",
+                        "When you take a sip it makes your mouth and nose tickle",
+                        "and your heart begins to race a little.",
+                    ),
+                },
+            ),
         ]
 )
 def test_do_consume(capsys, action, item,):
@@ -1006,16 +1006,16 @@ def test_do_consume(capsys, action, item,):
     # And: Player should have the item in their inventory
     inventory_change(name)
     # And: set width to an extra large number to avoid wrapping of the message
-    WIDTH = 200
+    adventure.WIDTH = 200
     # And: the aliases are added to the ITEMS_ALIASES dictionary
     setup_aliases()
     # When: call do_consume(action, [item]) to eat or drink the food item
-    # breakpoint()
     do_consume(action, [name])
     output = capsys.readouterr().out
     # Then: print that Player was able to perform an action with the message for that item
-    line = item[f"{action}_message"]
-    assert line in output
+    lines = item[f"{action}_message"]
+    # breakpoint()
+    assert lines[0] in output
 
 
 

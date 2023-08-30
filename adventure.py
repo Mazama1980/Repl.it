@@ -524,7 +524,13 @@ def do_consume(action: str, args: list):
     if not item.get(f'{action}_message'):
         error(f'Silly, you can not {action} this {item}.')
         return
-    # continue with 15.5 B
+    print()
+    sentences = item[f"{action}_message"]
+    for sentence in sentences:
+        wrap(sentence)
+        print()
+        sleep(DELAY)
+    # continue with 15.5 C
     
     
 def do_drop(args: list):
