@@ -76,8 +76,13 @@ ITEMS = {
         "name": "Green potion",
         "aliases": ["green", "green drink", "health", "potion",],
         "summary": "a health potion ",
-        "description": "Drinking this potion will return half your health.",
+        "description": "Drinking this potion will make you feel refreshed.",
         "price": -30,
+        "drink_message": (
+            "You take the cork off the green flask.",
+            "You try a small taste. It tastes light and fruity",
+            "You drink the rest and you begin to feel refreshed.",
+        ),
     },
     "waybread": {
         "key": "waybread",
@@ -89,6 +94,12 @@ ITEMS = {
             "It doesn't spoil so it works well for traveling."
         ),
         "price": -5,
+        "eat_message": (
+            "You unwrap the bread from it's covering.",
+            "You try a small bite.",
+            "You want to eat the whole wafer,",
+            "but you know you must only nibble at it sparingly.",
+        ),
     },
     "fishing tackle": {
         "key": "fishing tackle",
@@ -156,6 +167,41 @@ ITEMS = {
         ),
         "can_take": True,
     },
+    "waterskin": {
+        "key": "waterskin",
+        "name": "Waterskin",
+        "aliases": ["water bottle", "pouch", "water",],
+        "summary": "a waterskin",
+        "description": (
+            "An oval shaped bag made of hide.",
+            "It's water tight so it works well as a water bottle.",
+        ),
+        "can_take": True,
+        "drink_message": (
+            "You take off the wooden topper",
+            "and take a long drink of the cool water.",
+            "Your throat is no longer parched.",
+        ),
+    },
+    "berries": {
+        "key": "berries",
+        "name": "Berries",
+        "aliases": ["wild food", "fruit",],
+        "summary": "wild fruit from the woods",
+        "description": (
+            "Berries that can be picked",
+            "in the woods or near the lake.",
+            "They are good to eat but it takes",
+            "many, many of them to be filling."
+        ),
+        "can_take": True,
+        "eat_message": (
+            "You pass by some bushes with fruit growing on them.",
+            "You try one. It tastes tart but good.",
+            "You decide to spend some time picking the fruits.",
+            "Your fingers turn purple after a while.",
+        ),
+    },
     "gems": {
         "key": "gems",
         "name": "Gems",
@@ -199,7 +245,7 @@ PLACES = {
         "north": "lake",
         "description": "a cozy cabin nestled in the tall trees",
         # "items": ["book", "desk", "stick", "bag"],
-        "items": ["desk", "book", "stick", "bag",]
+        "items": ["desk", "book", "stick", "bag", "waterskin",]
     },
     "town-square": {
         "key": "town-square",
@@ -224,6 +270,7 @@ PLACES = {
             "An inviting path is running through it. "
             "You notice that it's quiet and peaceful." 
         ),
+        "items": ["berries",],
     },
     "lake": {
         "key": "lake",
