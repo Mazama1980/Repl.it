@@ -25,6 +25,7 @@ from adventure import (
     do_pet,
     setup_aliases,
     do_consume,
+    do_warp,
 )
 # import pdbr
 from copy import deepcopy
@@ -367,6 +368,24 @@ def test_inventory_change_remove():
 
     # Then: Should remove quantity of item from Player's inventory
     assert "lembas" not in adventure.PLAYER["inventory"], f"inventory_change() subtracting quantity <= 0 will remove key or item."
+
+def test_do_warp(capsys):
+    # Given: Player is in the current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: Player warps (jumps) to another place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere out there",
+    }
+    adventure.PLACES["woods"] = {
+        "name": "deep, dark woods",
+    }
+    # When: call do_warp() with the name of the place to jump to for the args
+    do_warp(["key"])
+    output = capsys.readouterr().out
+    # Then: the statement should print the new location
+    assert "deep, dark woods" in output; 
+    # And: the Player should be in the new location
+    assert adventure.PLAYER["place"] == "deep, dark woods"
 
 def test_do_go(capsys):
     # Given: Player is in the current place

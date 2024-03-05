@@ -57,6 +57,59 @@ if can_whitney_drink == True:
 else:
     print("Have some water.")
     
+def dictionary_review():
+    # basic dict
+    inventory = {
+        "apples": 5,
+        "hats": 1,
+    }
+    # accessing an item
+    print(inventory["apples"])  # 5
+    
+    # changing an item
+    inventory["hats"] = 2
+    print(inventory["hats"])    # 2
+    
+    # add an item
+    inventory["bread"] = 3
+    print(inventory["bread"])    # 3
+    
+    # nested dictionary
+    addresses = {
+        "alissa": {
+            "name": "alissa",
+            "city": "Denver, CO",
+        }
+    }
+
+    print(addresses["alissa"])          # {"name": "alissa", "city": "Denver, CO"}
+    print(addresses["alissa"]["city"])  # "Denver, CO"
+
+
+    # another way to do a nested dictionary
+    addresses = {}
+    addresses["alissa"] = {
+        "name": "alissa",
+        "city": "Denver, CO",
+    }
+
+    # nested list (list that contains dictionaries that contain a list)
+    menu = [
+        { # 0
+            "meal": "sandwich",
+            "price": 7.75,
+            "ingredients": ["bread", "cheese", "mayo", "turkey"],
+        },
+        { # 1
+            "meal": "pizza",
+            "price": 5,
+            "ingredients": ["dough", "cheese", "sauce"],
+        }
+    ]
+    print(menu[0]["ingredients"][1])    # cheese
+    
+    
+    
 # Your task, should you choose to accept it:
 # Write one or more tests for your can_drink() function
 def test_can_drink(capsys):
