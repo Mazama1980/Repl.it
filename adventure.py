@@ -834,6 +834,12 @@ def do_take(args: list):
     print()
     wrap(f"You pick up a {key} and put it in your pack.")
 
+def do_warp(args: list):
+    """Player warps or jumps to another area."""
+    debug(f'Trying to warp to: {args}')
+    # checking that a valid place has been asked
+    # continue using the do_go function as a model to write this function 
+
 def main():
     """Game User interface (UI). The game starts here."""
     debug("Hello")
@@ -841,7 +847,7 @@ def main():
     header(fg.lightyellow("Welcome!"))
     while True:
         debug(f"You are at: {PLAYER['place']}")
-        reply = input(">").strip()
+        reply = input("> ").strip()
         args = reply.split()
         if not args:
             continue
@@ -873,6 +879,8 @@ def main():
             do_pet(args)
         elif command in ("eat", "drink"):
             do_consume(command, args)
+        elif command == "warp":
+            do_warp(args)
         else:
             error("No such command.")
             continue

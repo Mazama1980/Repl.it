@@ -112,7 +112,7 @@ def dictionary_review():
     
 # Your task, should you choose to accept it:
 # Write one or more tests for your can_drink() function
-def test_can_drink(capsys):
+def test_can_drink():
     # Given: if age is >= 21
     # When: call can_drink() with an age arguement >= 21
     result = can_drink(21)

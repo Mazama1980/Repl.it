@@ -372,20 +372,20 @@ def test_inventory_change_remove():
 def test_do_warp(capsys):
     # Given: Player is in the current place
     adventure.PLAYER["place"] = "somewhere"
-    # And: Player warps (jumps) to another place
     adventure.PLACES["somewhere"] = {
         "name": "somewhere out there",
     }
-    adventure.PLACES["woods"] = {
-        "name": "deep, dark woods",
+    # And: The place where the Player warps (jumps) to exists
+    adventure.PLACES["desert"] = {
+        "key": "desert",
     }
-    # When: call do_warp() with the name of the place to jump to for the args
-    do_warp(["key"])
+    # When: call do_warp() with the ["key"] of the name of the place to jump to for the args
+    do_warp(["desert"]) #figure out which key to use. Refer to Alissa's notes in warmup file
     output = capsys.readouterr().out
     # Then: the statement should print the new location
-    assert "deep, dark woods" in output; 
+    assert "desert" in output; 
     # And: the Player should be in the new location
-    assert adventure.PLAYER["place"] == "deep, dark woods"
+    assert adventure.PLAYER["place"] == "desert"
 
 def test_do_go(capsys):
     # Given: Player is in the current place
