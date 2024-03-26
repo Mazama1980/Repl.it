@@ -245,7 +245,8 @@ PLACES = {
         "north": "lake",
         "description": "a cozy cabin nestled in the tall trees",
         # "items": ["book", "desk", "stick", "bag"],
-        "items": ["desk", "book", "stick", "bag", "waterskin",]
+        "items": ["desk", "book", "stick", "bag", "waterskin",],
+        "can": ["warp"]
     },
     "town-square": {
         "key": "town-square",
@@ -257,7 +258,8 @@ PLACES = {
             "The obelisk is about three feet tall and made of a shiny, "
             "black material much like obsidian." 
         ),
-        "items": []
+        "items": [],
+        "can": ["warp"],
     },
     "woods": {
         "key": "woods",
@@ -271,12 +273,13 @@ PLACES = {
             "You notice that it's quiet and peaceful." 
         ),
         "items": ["berries",],
+        "can": ["warp"],
     },
     "lake": {
         "key": "lake",
         "name": "Lake Pukaki",
         "south": "home",
-        "can": [],
+        "can": ["pick", "warp"],
         "description": (
             "The lake is a deep blue in color but it will change "
             "to a purple hue when its mood is unsettled. "
@@ -293,7 +296,7 @@ PLACES = {
             "Inside there are many things to buy."
         ),
         "items": ["crystal ball", "short dagger", "green potion", "waybread", "fishing tackle",],
-        "can": ["shop", "buy"],
+        "can": ["shop", "buy", "warp"],
     },
     "cave": {
         "key": "cave",
@@ -307,7 +310,7 @@ PLACES = {
             " Each head is snoring peacefully.",
         ),
         "items": ["gems", "dragon",],
-        "can": ["pet"],
+        "can": ["pet", "warp"],
     }
 }
 
@@ -835,10 +838,24 @@ def do_take(args: list):
     wrap(f"You pick up a {key} and put it in your pack.")
 
 def do_warp(args: list):
-    """Player warps or jumps to another area."""
+    """Creator (Original Player) warps or jumps to another area."""
+    breakpoint()
     debug(f'Trying to warp to: {args}')
     # checking that a valid place has been asked
-    # continue using the do_go function as a model to write this function 
+    if not args:
+        error("Choose a place that you created.")
+        return
+    # Look up where Player is currently and if Player can go (warp) to a new place
+    old_place = get_place()
+    new_place = args[0].lower # This line is the problem when I did the debugger it returned 'none'
+    new_name = old_place.get(new_place)
+    if not new_name:
+        error(f"Sorry, you can't go to the {new_place}.")
+        return
+    # Update Player to new place and describe new place
+    PLAYER["place"] = new_name
+    print(new_name)
+    do_look()
 
 def main():
     """Game User interface (UI). The game starts here."""

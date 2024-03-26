@@ -368,16 +368,17 @@ def test_inventory_change_remove():
 
     # Then: Should remove quantity of item from Player's inventory
     assert "lembas" not in adventure.PLAYER["inventory"], f"inventory_change() subtracting quantity <= 0 will remove key or item."
-
 def test_do_warp(capsys):
     # Given: Player is in the current place
     adventure.PLAYER["place"] = "somewhere"
     adventure.PLACES["somewhere"] = {
         "name": "somewhere out there",
     }
+    # breakpoint()
     # And: The place where the Player warps (jumps) to exists
     adventure.PLACES["desert"] = {
-        "key": "desert",
+        "name": "desert",
+        "can": ["warp"]
     }
     # When: call do_warp() with the ["key"] of the name of the place to jump to for the args
     do_warp(["desert"]) #figure out which key to use. Refer to Alissa's notes in warmup file
