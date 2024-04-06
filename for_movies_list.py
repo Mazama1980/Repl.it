@@ -34,6 +34,7 @@ def name():
     ]
     letters_iterator = iter(letters)
     next(letters_iterator)
+    print(letters)
 
 
 """Exercise 29 (Game Characters)
