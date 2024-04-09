@@ -1,3 +1,4 @@
+
 """Textbased adventure game. https://alissa-huskey.github.io/python-class/  https://alissa-huskey.github.io/python-class/exercises/adventure/intro.html
 
 """
@@ -246,7 +247,6 @@ PLACES = {
         "description": "a cozy cabin nestled in the tall trees",
         # "items": ["book", "desk", "stick", "bag"],
         "items": ["desk", "book", "stick", "bag", "waterskin",],
-        "can": ["warp"]
     },
     "town-square": {
         "key": "town-square",
@@ -259,7 +259,6 @@ PLACES = {
             "black material much like obsidian." 
         ),
         "items": [],
-        "can": ["warp"],
     },
     "woods": {
         "key": "woods",
@@ -273,13 +272,13 @@ PLACES = {
             "You notice that it's quiet and peaceful." 
         ),
         "items": ["berries",],
-        "can": ["warp"],
+        "can": ["pick"]
     },
     "lake": {
         "key": "lake",
         "name": "Lake Pukaki",
         "south": "home",
-        "can": ["pick", "warp"],
+        "can": ["pick",],
         "description": (
             "The lake is a deep blue in color but it will change "
             "to a purple hue when its mood is unsettled. "
@@ -310,7 +309,7 @@ PLACES = {
             " Each head is snoring peacefully.",
         ),
         "items": ["gems", "dragon",],
-        "can": ["pet", "warp"],
+        "can": ["pet",],
     }
 }
 
@@ -839,22 +838,22 @@ def do_take(args: list):
 
 def do_warp(args: list):
     """Creator (Original Player) warps or jumps to another area."""
-    breakpoint()
     debug(f'Trying to warp to: {args}')
     # checking that a valid place has been asked
     if not args:
         error("Choose a place that you created.")
         return
-    # Look up where Player is currently and if Player can go (warp) to a new place
-    old_place = get_place()
-    new_place = args[0].lower # This line is the problem when I did the debugger it returned 'none'
-    new_name = old_place.get(new_place)
-    if not new_name:
+    valid_place = PLACES.get("key")#this is returning none. Look at dictionary lesson and reference to see what the sytax is
+    breakpoint()                   #the .get() method is okay. There is another error on line 847 to fix.
+    if args not in valid_place:
+        error(f"This place {args} does not exist. Choose from these places: .")
+    new_place = args[0].lower() 
+    if not new_place:
         error(f"Sorry, you can't go to the {new_place}.")
         return
     # Update Player to new place and describe new place
-    PLAYER["place"] = new_name
-    print(new_name)
+    PLAYER["place"] = new_place
+    print(new_place)
     do_look()
 
 def main():
