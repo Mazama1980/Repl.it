@@ -525,8 +525,9 @@ def do_buy(args: list):
     if not args:
         error("What do you want to buy?")
         return
-    # Does the current place have the item
+    # changing the args from a list to a string
     key = args[0].lower()
+    # Does the current place have the item
     if not place_has(key):
         error(f"Sorry, I don't see a {key} here.")
         return
@@ -835,6 +836,7 @@ def do_take(args: list):
     inventory_change(key)
     print()
     wrap(f"You pick up a {key} and put it in your pack.")
+    # if new_place not in valid_place:
 
 def do_warp(args: list):
     """Creator (Original Player) warps or jumps to another area."""
@@ -843,11 +845,12 @@ def do_warp(args: list):
     if not args:
         error("Choose a place that you created.")
         return
-    valid_place = PLACES.get("key")#this is returning none. Look at dictionary lesson and reference to see what the sytax is
-    breakpoint()                   #the .get() method is okay. There is another error on line 847 to fix.
-    if args not in valid_place:
-        error(f"This place {args} does not exist. Choose from these places: .")
-    new_place = args[0].lower() 
+    # write more tests for this function
+    # putting args from a list to a string                 
+    new_place = args[0].lower()
+    valid_place = PLACES.get(new_place)
+    if not valid_place:
+        error(f"This place {args} does not exist. Choose from these places: ...")
     if not new_place:
         error(f"Sorry, you can't go to the {new_place}.")
         return

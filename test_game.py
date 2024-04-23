@@ -34,30 +34,30 @@ import pytest
 
 import adventure
 
-# this function will be run once before any tests are executed
-@pytest.fixture(autouse=True, scope="module")
-def before_all():
-    global PLAYER_STATE, PLACES_STATE, ITEMS_STATE
+# this will be run around each test
+@pytest.fixture(autouse=True)
+def setup():
+    # code here will be run before the test
+
+    global PLAYER_STATE, PLACES_STATE, ITEMS_ALIASES_STATE, ITEMS_STATE, WIDTH_STATE
     PLAYER_STATE = deepcopy(adventure.PLAYER)
     PLACES_STATE = deepcopy(adventure.PLACES)
     ITEMS_STATE = deepcopy(adventure.ITEMS)
+    ITEMS_ALIASES_STATE = deepcopy(adventure.ITEMS_ALIASES)
+    WIDTH_STATE = deepcopy(adventure.WIDTH)
     adventure.DELAY = 0
-    setup_aliases()
-    
-# this will be run around each test
-@pytest.fixture(autouse=True, scope="function")
-def setup_test():
-    global PLAYER_STATE, PLACES_STATE, ITEMS_STATE
-
-    # code here will be run before the test
 
     # this is where the test is run
     yield
 
-    # code here will be run after the test
+    # code here will be run after every test
+
     adventure.PLAYER = deepcopy(PLAYER_STATE)
     adventure.PLACES = deepcopy(PLACES_STATE)
     adventure.ITEMS = deepcopy(ITEMS_STATE)
+    adventure.ITEMS_ALIASES = deepcopy(ITEMS_ALIASES_STATE)
+    adventure.setup_aliases()
+    adventure.WIDTH = WIDTH_STATE
     
 
 # GIVEN: some context
@@ -65,9 +65,26 @@ def setup_test():
 # THEN: some result
 
 
-def test_truth():
-    assert True
+@pytest.fixture
+def fake_item():
+    item = {
+        "key": "quill",
+        "name": "A quill",
+    }
+    adventure.ITEMS["quill"] = item
+    adventure.setup_aliases()
+    return item
 
+# @pytest.fixture
+# def yielding_fixture():
+#     print("\n==================== before the test\n")
+#     yield "here is some data"
+#     print("\n==================== after the test\n")
+#     assert False
+
+# def test_example(yielding_fixture):
+#     """This test demonstrates the concept of fixtures that yield."""
+#     print(f"====================== from the test: {yielding_fixture}")
 
 def test_is_for_sale():
     # GIVEN: an item with a price
@@ -84,7 +101,7 @@ def test_is_for_sale():
 
 def test_get_item():
     # Given: an item is in the ITEMS dictionary
-    adventure.ITEMS["sword"] = {"name": "sword"}
+    adventure.ITEMS["sword"] = {"key": "sword", "name": "sword"}
     # When: get_item is called with a key
     result = get_item("sword")
     # Then: the item is returned to be used for another function
@@ -368,6 +385,7 @@ def test_inventory_change_remove():
 
     # Then: Should remove quantity of item from Player's inventory
     assert "lembas" not in adventure.PLAYER["inventory"], f"inventory_change() subtracting quantity <= 0 will remove key or item."
+
 def test_do_warp(capsys):
     # Given: Player is in the current place
     adventure.PLAYER["place"] = "somewhere"
@@ -378,7 +396,7 @@ def test_do_warp(capsys):
     # And: The place where the Player warps (jumps) to exists
     adventure.PLACES["desert"] = {
         "name": "desert",
-        "can": ["warp"]
+        "description": "An arid land with scrub brush."
     }
     # When: call do_warp() with the ["key"] of the name of the place to jump to for the args
     do_warp(["desert"]) #figure out which key to use. Refer to Alissa's notes in warmup file
@@ -705,7 +723,8 @@ def test_do_buy_if_no_item_in_place(capsys):
     # Then: Print "Sorry, I don't see a neurolizer here."
     assert ("Sorry, I don't see a neurolizer here.") in output, "The statement should print"
 
-def test_do_buy_if_item_is_not_for_sale(capsys):
+
+def test_do_buy_if_item_is_not_for_sale(capsys, fake_item):
     # Given: Player is in a current place
     adventure.PLAYER["place"] = "somewhere"
 
@@ -717,7 +736,7 @@ def test_do_buy_if_item_is_not_for_sale(capsys):
     }
 
     # And: adding an item that is in the current place but not for sale
-    adventure.ITEMS["quill"] = {"name": "quill"}
+    # NOTE: this is done with the fake_item fixture above
 
     # When: Player types an item but it's not available to purchase 
     #       by calling do_buy("quill") and capture the output
@@ -844,7 +863,6 @@ def test_do_examine_item_in_inventory(capsys):
 def test_do_examine_item_not_in_inventory_current_place(capsys):
     # Given: Player is in current place
     adventure.PLAYER["place"] = "somewhere"
-    # breakpoint()
     # And: add an item not in current place
     adventure.PLACES["somewhere"] = {
         "name": "anywhere but here",

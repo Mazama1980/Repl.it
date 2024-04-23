@@ -2,7 +2,7 @@
 addopts = [
 	"-s",           # needed if using pdbr
 	"-v",           # verbose mode
-#   "-x",           # exit on first failure
+    "-x",           # exit on first failure
 #   "--pdb",        # start the debugger on exception (or failure?)
     "--tb=short",   # shorter traceback
 ]
