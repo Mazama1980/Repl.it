@@ -840,23 +840,21 @@ def do_take(args: list):
 
 def do_warp(args: list):
     """Creator (Original Player) warps or jumps to another area."""
+    # breakpoint()
     debug(f'Trying to warp to: {args}')
     # checking that a valid place has been asked
     if not args:
         error("Choose a place that you created.")
         return
-    # write more tests for this function
-    # putting args from a list to a string                 
-    new_place = args[0].lower()
-    valid_place = PLACES.get(new_place)
-    if not valid_place:
+    # write a test_do_warp_invalid_place for this function
+    # putting args from a list to a string
+    warp_place = args[0].lower()
+    valid_warp = PLACES.get(warp_place)
+    if not valid_warp:
         error(f"This place {args} does not exist. Choose from these places: ...")
-    if not new_place:
-        error(f"Sorry, you can't go to the {new_place}.")
-        return
     # Update Player to new place and describe new place
-    PLAYER["place"] = new_place
-    print(new_place)
+    PLAYER["place"] = warp_place
+    print(warp_place)
     do_look()
 
 def main():

@@ -406,6 +406,18 @@ def test_do_warp(capsys):
     # And: the Player should be in the new location
     assert adventure.PLAYER["place"] == "desert"
 
+def test_do_warp_no_args(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    adventure.PLACES["name"] = {
+        "name": "Somewhere out there",
+    }
+    # When: call do_warp([args])
+    do_warp([])
+    output = capsys.readouterr().err
+    # Then: Statement should print "Choose a place that you created."
+    assert "Choose a place that you created."
+
 def test_do_go(capsys):
     # Given: Player is in the current place
     adventure.PLAYER["place"] = "somewhere"
