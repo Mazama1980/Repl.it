@@ -846,14 +846,15 @@ def do_warp(args: list):
     if not args:
         error("Choose a place that you created.")
         return
-    # write a test_do_warp_invalid_place for this function
+    # Make sure all tests pass especially test_do_warp
     # putting args from a list to a string
     warp_place = args[0].lower()
     valid_warp = PLACES.get(warp_place)
     if not valid_warp:
         error(f"This place {args} does not exist. Choose from these places: ...")
+        return
     # Update Player to new place and describe new place
-    PLAYER["place"] = warp_place
+    PLAYER["place"] = valid_warp
     print(warp_place)
     do_look()
 

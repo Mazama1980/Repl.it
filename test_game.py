@@ -416,7 +416,21 @@ def test_do_warp_no_args(capsys):
     do_warp([])
     output = capsys.readouterr().err
     # Then: Statement should print "Choose a place that you created."
-    assert "Choose a place that you created."
+    assert "Choose a place that you created." in output
+
+def test_do_warp_invalid_place(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere out there",
+    }
+    # When: call do_warp(["ocean"]) as a fake place
+    do_warp(["ocean"])
+    output = capsys.readouterr().out
+    # Then: a statement should print "This place..."
+    assert "This place" in output
+    # And: Player's current place should be "somewhere"
+    assert adventure.PLAYER["place"] == "somewhere"
 
 def test_do_go(capsys):
     # Given: Player is in the current place
