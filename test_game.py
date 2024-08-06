@@ -392,7 +392,6 @@ def test_do_warp(capsys):
     adventure.PLACES["somewhere"] = {
         "name": "somewhere out there",
     }
-    # breakpoint()
     # And: The place where the Player warps (jumps) to exists
     adventure.PLACES["desert"] = {
         "name": "desert",
@@ -412,10 +411,11 @@ def test_do_warp_no_args(capsys):
     adventure.PLACES["name"] = {
         "name": "Somewhere out there",
     }
+    # breakpoint()
     # When: call do_warp([args])
     do_warp([])
-    output = capsys.readouterr().err
-    # Then: Statement should print "Choose a place that you created."
+    output = capsys.readouterr().out
+    # Then: Statement should print "Choose a place..."
     assert "Choose a place that you created." in output
 
 def test_do_warp_invalid_place(capsys):
@@ -427,7 +427,7 @@ def test_do_warp_invalid_place(capsys):
     # When: call do_warp(["ocean"]) as a fake place
     do_warp(["ocean"])
     output = capsys.readouterr().out
-    # Then: a statement should print "This place..."
+    # Then: a statement should print "This place {args} does not exist..."
     assert "This place" in output
     # And: Player's current place should be "somewhere"
     assert adventure.PLAYER["place"] == "somewhere"
