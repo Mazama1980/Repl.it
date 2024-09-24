@@ -52,16 +52,16 @@ DRAGONS = [
 ITEMS_ALIASES = {}
 ITEMS = {
 # Crystal Ball      faintly glowing ball       5
-    "crystal ball": {
-        "key": "crystal ball",
+    "crystal-ball": {
+        "key": "crystal-ball",
         "name": "Crystal ball",
         "aliases": ["ball", "globe", "light"],
         "summary": "a faintly glowing ball",
         "description": "All it does is glow faintly; could be used in dark places.",
         "price": -5,
     },
-    "short dagger": {
-        "key": "short dagger",
+    "dagger": {
+        "key": "dagger",
         "name": "Short dagger",
         "aliases": ["knife", "sword", "stabby thing", "dagger",],
         "summary": "double edged blade",
@@ -72,8 +72,8 @@ ITEMS = {
         ),
         "price": -22,
     },
-    "green potion": {
-        "key": "green potion",
+    "potion": {
+        "key": "potion",
         "name": "Green potion",
         "aliases": ["green", "green drink", "health", "potion",],
         "summary": "a health potion ",
@@ -102,8 +102,8 @@ ITEMS = {
             "but you know you must only nibble at it sparingly.",
         ),
     },
-    "fishing tackle": {
-        "key": "fishing tackle",
+    "fishing-tackle": {
+        "key": "fishing-tackle",
         "name": "Fishing tackle",
         "aliases": ["tackle", "fishing gear", "fish stuff", "hook", "pole",],
         "summary": "gear for catching fish",
@@ -294,7 +294,7 @@ PLACES = {
             "brick pavers leading to the front door. "
             "Inside there are many things to buy."
         ),
-        "items": ["crystal ball", "short dagger", "green potion", "waybread", "fishing tackle",],
+        "items": ["crystal-ball", "dagger", "potion", "waybread", "fishing-tackle",],
         "can": ["shop", "buy", "warp"],
     },
     "cave": {
@@ -569,8 +569,8 @@ def do_consume(action: str, args: list):
         error(f'Sorry, You do not have any {name} to {action}.')
         return
     # check if the item can be eaten or is drinkable
-    # breakpoint()
-    item = get_item(name)
+    # breakpoint() 
+    item = get_item(name) #need to fix name so it doesn't call the whole dictionary. I already changed it to (["name"])which made it a list that broke the game.
     if not item.get(f'{action}_message'):
         error(f'Silly, you can not {action} this {item}.')
         return

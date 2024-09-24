@@ -411,7 +411,6 @@ def test_do_warp_no_args(capsys):
     adventure.PLACES["name"] = {
         "name": "Somewhere out there",
     }
-    # breakpoint()
     # When: call do_warp([args])
     do_warp([])
     output = capsys.readouterr().out
