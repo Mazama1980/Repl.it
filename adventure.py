@@ -572,7 +572,7 @@ def do_consume(action: str, args: list):
     # breakpoint() 
     item = get_item(name) #need to fix name so it doesn't call the whole dictionary. I already changed it to (["name"])which made it a list that broke the game.
     if not item.get(f'{action}_message'):
-        error(f'Silly, you can not {action} this {item}.')
+        error(f'Silly, you can not {action} this {name}.')
         return
     print()
     sentences = item[f"{action}_message"]
