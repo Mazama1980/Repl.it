@@ -1080,7 +1080,20 @@ def test_do_consume(capsys, action, item,):
     # breakpoint()
     assert lines[0] in output
 
-
+def test_do_consume_inventory_change(capsys, action, item):
+    # Given: An item exists
+    name = item["name"]
+    adventure.items[name] = item
+    # And: Player should have the item in their inventory
+    inventory_change(name)
+    # And: set width to and extra large number to avoid wrapping of the message
+    adventure.WIDTH = (200)
+    # And the aliases are added to the aliases dictionary
+    setup_aliases()
+    # When: call do_consume(action, [item]) to eat or drink the food item
+    do_consume(action, [item])
+    # Then: item should be gone from Player's inventory
+    assert [item] not in adventure.PLAYER["inventory"] #rewrite assert; there is a bug. Take out the capsys - not necessary
 
 # @pytest.mark.skip(reason="work in progress (12.2)")
 def test_do_read_no_args(capsys):

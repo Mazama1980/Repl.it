@@ -197,8 +197,7 @@ ITEMS = {
         ),
         "can_take": True,
         "eat_message": (
-            "You pass by some bushes with fruit growing on them.",
-            "You try one. It tastes tart but good.",
+            "You try a berry. It tastes tart but good.",
             "You decide to spend some time picking the fruits.",
             "Your fingers turn purple after a while.",
         ),
@@ -321,7 +320,7 @@ def abort(message: str):
 
 def debug(message: str):
     """If the Global Variable DEBUG is True then the message will print in colors for the Player"""
-    if DEBUG == True:
+    if DEBUG == True: #set this to False to adjust the spacing of the text. also add some color to text headings
         # fg = foreground; bg = background
         debug_color = fg.lightblack + fx.italic
         print(MARGIN*" ", debug_color("Debug:" + message), sep="")
@@ -334,7 +333,6 @@ def error(message: str):
 
 def get_item(key: str) -> dict:
     """Getting (or returning) an item from the ITEMS dictionary"""
-    # breakpoint()
     item = ITEMS_ALIASES.get(key)
     if not item:
         abort(f"Woops! The information about the item {key} seems to be missing.")
@@ -549,7 +547,7 @@ def do_buy(args: list):
     place_remove(key)
     wrap(f"You bought a {key}.")
 
-def do_consume(action: str, args: list):
+def do_consume(action: str, args: list): # make the consumable item set to zero then call inventory_change function
     """Player can eat or drink an item using the 'eat' or 'drink' command.
     
     Args:
@@ -569,8 +567,7 @@ def do_consume(action: str, args: list):
         error(f'Sorry, You do not have any {name} to {action}.')
         return
     # check if the item can be eaten or is drinkable
-    # breakpoint() 
-    item = get_item(name) #need to fix name so it doesn't call the whole dictionary. I already changed it to (["name"])which made it a list that broke the game.
+    item = get_item(name) 
     if not item.get(f'{action}_message'):
         error(f'Silly, you can not {action} this {name}.')
         return
@@ -580,7 +577,6 @@ def do_consume(action: str, args: list):
         wrap(sentence)
         print()
         sleep(DELAY)
-    # continue with 15.5 C
     
     
 def do_drop(args: list):
@@ -846,7 +842,6 @@ def do_warp(args: list):
     if not args:
         error("Choose a place that you created.")
         return
-    # Look at game: go thru it to tweak it and finishing touches
     # putting args from a list to a string
     warp_place = args[0].lower()
     valid_warp = PLACES.get(warp_place)
