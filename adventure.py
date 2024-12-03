@@ -294,7 +294,7 @@ PLACES = {
             "Inside there are many things to buy."
         ),
         "items": ["crystal-ball", "dagger", "potion", "waybread", "fishing-tackle",],
-        "can": ["shop", "buy", "warp"],
+        "can": ["shop", "buy",],
     },
     "cave": {
         "key": "cave",
@@ -547,7 +547,7 @@ def do_buy(args: list):
     place_remove(key)
     wrap(f"You bought a {key}.")
 
-def do_consume(action: str, args: list): # make the consumable item set to zero then call inventory_change function
+def do_consume(action: str, args: list): # make the consumable item set to zero; add then call inventory_change function
     """Player can eat or drink an item using the 'eat' or 'drink' command.
     
     Args:
@@ -571,6 +571,9 @@ def do_consume(action: str, args: list): # make the consumable item set to zero 
     if not item.get(f'{action}_message'):
         error(f'Silly, you can not {action} this {name}.')
         return
+    # set the consumable item to zero
+    # call inventory_change to take item out of Player's inventory
+    inventory_change(name, -1)
     print()
     sentences = item[f"{action}_message"]
     for sentence in sentences:

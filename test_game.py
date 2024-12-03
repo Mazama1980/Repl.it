@@ -1080,10 +1080,42 @@ def test_do_consume(capsys, action, item,):
     # breakpoint()
     assert lines[0] in output
 
-def test_do_consume_inventory_change(capsys, action, item):
+@pytest.mark.parametrize(
+        ["action", "item"],
+        [
+            (
+                "eat",
+                {
+                    "name": "snozzberry",
+                    "health": 30,
+                    "eat_message": (
+                        "You pick some purple berries to save for later.",
+                        "You try one and it tastes a little tart but good.",
+                        "It seems that your mind suddenly becomes calm and clear",
+                        "so you decide that these berries will be useful at the right time.",
+                    ),
+                },
+            ),
+            (
+                "drink",
+                {
+                    "name": "fizzy pop",
+                    "health": -5,
+                    "drink_message": (
+                        "You purchase a flask of bubbly drink.",
+                        "It hisses softly when you take off the cork.",
+                        "When you take a sip it makes your mouth and nose tickle",
+                        "and your heart begins to race a little.",
+                    ),
+                },
+            ),
+        ]
+)
+
+def test_do_consume_inventory_change(action, item):
     # Given: An item exists
     name = item["name"]
-    adventure.items[name] = item
+    adventure.ITEMS[name] = item
     # And: Player should have the item in their inventory
     inventory_change(name)
     # And: set width to and extra large number to avoid wrapping of the message
@@ -1091,9 +1123,9 @@ def test_do_consume_inventory_change(capsys, action, item):
     # And the aliases are added to the aliases dictionary
     setup_aliases()
     # When: call do_consume(action, [item]) to eat or drink the food item
-    do_consume(action, [item])
+    do_consume(action, [name])
     # Then: item should be gone from Player's inventory
-    assert [item] not in adventure.PLAYER["inventory"] #rewrite assert; there is a bug. Take out the capsys - not necessary
+    assert name not in adventure.PLAYER["inventory"] #rewrite assert; there is a bug. 
 
 # @pytest.mark.skip(reason="work in progress (12.2)")
 def test_do_read_no_args(capsys):
