@@ -1118,14 +1118,14 @@ def test_do_consume_inventory_change(action, item):
     adventure.ITEMS[name] = item
     # And: Player should have the item in their inventory
     inventory_change(name)
-    # And: set width to and extra large number to avoid wrapping of the message
+    # And: set width to an extra large number to avoid wrapping of the message
     adventure.WIDTH = (200)
     # And the aliases are added to the aliases dictionary
     setup_aliases()
-    # When: call do_consume(action, [item]) to eat or drink the food item
+    # When: call do_consume(action, [name]) to eat or drink the food item
     do_consume(action, [name])
     # Then: item should be gone from Player's inventory
-    assert name not in adventure.PLAYER["inventory"] #rewrite assert; there is a bug. 
+    assert name not in adventure.PLAYER["inventory"] 
 
 # @pytest.mark.skip(reason="work in progress (12.2)")
 def test_do_read_no_args(capsys):

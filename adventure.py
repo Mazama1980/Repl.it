@@ -14,7 +14,7 @@ from time import sleep
 
 WIDTH = 60
 MARGIN = 2
-DELAY = 2
+DELAY = .5
 DEBUG = True
 COMPASS = ("north", "south", "east", "west")
 COLORS = ["red", "blue", "green",]
@@ -26,7 +26,7 @@ BAR = ProgressBar(
 )
 PLAYER = {
     "place": "home",
-    "inventory": {"gems": 50},
+    "inventory": {"gems": 0},
     "health": MAX_HEALTH,
 
 }
@@ -98,8 +98,8 @@ ITEMS = {
         "eat_message": (
             "You unwrap the bread from it's covering.",
             "You try a small bite.",
-            "You want to eat the whole wafer,",
-            "but you know you must only nibble at it sparingly.",
+            "It is delicious.",
+            "You eat the whole wafer.",
         ),
     },
     "fishing-tackle": {
@@ -198,16 +198,16 @@ ITEMS = {
         "can_take": True,
         "eat_message": (
             "You try a berry. It tastes tart but good.",
-            "You decide to spend some time picking the fruits.",
-            "Your fingers turn purple after a while.",
+            "You feel better as if the berries",
+            "are healthful and have healing properties."
         ),
     },
     "gems": {
         "key": "gems",
         "name": "Gems",
         "aliases": ["rocks", "stones", "jewels"],
-        "summary": "various sized  gems",
-        "description": "A pile of sparkling gems of different sizes and colors.",
+        "summary": "various sized gems",
+        "description": "Piles of sparkling gems of different sizes and colors.",
     },
     "dragon": {
     "key": "dragon",
@@ -320,7 +320,7 @@ def abort(message: str):
 
 def debug(message: str):
     """If the Global Variable DEBUG is True then the message will print in colors for the Player"""
-    if DEBUG == True: #set this to False to adjust the spacing of the text. also add some color to text headings
+    if DEBUG == False: #set this to False to adjust the spacing of the text. also add some color to text headings
         # fg = foreground; bg = background
         debug_color = fg.lightblack + fx.italic
         print(MARGIN*" ", debug_color("Debug:" + message), sep="")
