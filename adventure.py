@@ -14,7 +14,7 @@ from time import sleep
 
 WIDTH = 60
 MARGIN = 2
-DELAY = .5
+DELAY = .75
 DEBUG = True
 COMPASS = ("north", "south", "east", "west")
 COLORS = ["red", "blue", "green",]
@@ -120,7 +120,7 @@ ITEMS = {
         "aliases": ["story", "hints", "diary",],
         "title": "My Adventures",
         "summary": "a book about a dragon's adventures.",
-        "description": "A soft leather bound book laying on the desk at home. There may be useful information in it.",
+        "description": "A soft leather bound book laying on the desk. There may be useful information in it.",
         "message": (
             "At the edge of the woods is a cave that is home to a three "
             "headed dragon, each with a different temperament. ",
@@ -254,8 +254,9 @@ PLACES = {
         "east": "market",
         "description": (
             "An obelisk sits on a platform in the center of the square. " 
-            "The obelisk is about three feet tall and made of a shiny, "
-            "black material much like obsidian." 
+            "There are markings on the surface. You take note of what it says: "
+            "l = look; e = examine; t = take; i = inventory; g = go; r = read; q = quit"
+            " buy; shop; eat; drink; pet. Use these commands wisely." 
         ),
         "items": [],
     },
@@ -277,7 +278,7 @@ PLACES = {
         "key": "lake",
         "name": "Lake Pukaki",
         "south": "home",
-        "can": ["pick",],
+        #"can": ["pick",],
         "description": (
             "The lake is a deep blue in color but it will change "
             "to a purple hue when its mood is unsettled. "
@@ -860,7 +861,11 @@ def main():
     """Game User interface (UI). The game starts here."""
     debug("Hello")
     setup_aliases()
-    header(fg.lightyellow("Welcome!"))
+    print(fg.lightyellow("Welcome!"))
+    with fg.lightcyan:
+           print("Take a look around;")
+           print("you may find something")
+           print("useful for your travels.")
     while True:
         debug(f"You are at: {PLAYER['place']}")
         reply = input("> ").strip()
