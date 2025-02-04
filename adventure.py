@@ -79,6 +79,7 @@ ITEMS = {
         "summary": "a health potion ",
         "description": "Drinking this potion will make you feel refreshed.",
         "price": -30,
+        "health_points": 50,
         "drink_message": (
             "You take the cork off the green flask.",
             "You try a small taste. It tastes light and fruity",
@@ -95,6 +96,7 @@ ITEMS = {
             "It doesn't spoil so it works well for traveling."
         ),
         "price": -5,
+        "health_points": 70,
         "eat_message": (
             "You unwrap the bread from it's covering.",
             "You try a small bite.",
@@ -178,6 +180,7 @@ ITEMS = {
             "It's water tight so it works well as a water bottle.",
         ),
         "can_take": True,
+        "health_points": 30,
         "drink_message": (
             "You take off the wooden topper",
             "and take a long drink of the cool water.",
@@ -196,6 +199,7 @@ ITEMS = {
             "many, many of them to be filling."
         ),
         "can_take": True,
+        "health_points": 70,
         "eat_message": (
             "You try a berry. It tastes tart but good.",
             "You feel better as if the berries",
@@ -267,11 +271,11 @@ PLACES = {
         "south": "cave",
         "description": (
             "There is a deep forest of Redwood trees with "
-            "ferns and bushs growing on the forest floor. "
+            "ferns and bushes growing on the forest floor. "
             "An inviting path is running through it. "
             "You notice that it's quiet and peaceful." 
         ),
-        "items": ["berries",],
+        "items": ["berry bush",],
         "can": ["pick"]
     },
     "lake": {
@@ -581,6 +585,7 @@ def do_consume(action: str, args: list): # make the consumable item set to zero;
         wrap(sentence)
         print()
         sleep(DELAY)
+    health_change(item["health_points"])
     
     
 def do_drop(args: list):

@@ -1127,6 +1127,51 @@ def test_do_consume_inventory_change(action, item):
     # Then: item should be gone from Player's inventory
     assert name not in adventure.PLAYER["inventory"] 
 
+@pytest.mark.parametrize(
+        ["health", "item"],
+        [
+            (
+                "eat",
+                {
+                    "name": "snozzberry",
+                    "health": 30,
+                    "eat_message": (
+                        "You pick some purple berries to save for later.",
+                        "You try one and it tastes a little tart but good.",
+                        "It seems that your mind suddenly becomes calm and clear",
+                        "so you decide that these berries will be useful at the right time.",
+                    ),
+                },
+            ),
+            (
+                "drink",
+                {
+                    "name": "fizzy pop",
+                    "health": -5,
+                    "drink_message": (
+                        "You purchase a flask of bubbly drink.",
+                        "It hisses softly when you take off the cork.",
+                        "When you take a sip it makes your mouth and nose tickle",
+                        "and your heart begins to race a little.",
+                    ),
+                },
+            ),
+        ]
+)
+
+def test_do_consume_health_change(health, item):
+    # Given: An item exists
+    name = item["name"]
+    adventure.ITEMS[name] = item
+    # And: Player should have the item in their inventory
+    inventory_change(name)
+    # And the aliases are added to the aliases dictionary
+    setup_aliases()
+    # When: call do_consume(health, [name]) to change Player's health status
+    do_consume(health, [name])
+    # Then: Player's health staus should be changed Note: Think about what to assert: maybe health_change "before" vs "after"
+    # or print the health points to see the change
+
 # @pytest.mark.skip(reason="work in progress (12.2)")
 def test_do_read_no_args(capsys):
     # Given: Player is in current place 
