@@ -1128,13 +1128,13 @@ def test_do_consume_inventory_change(action, item):
     assert name not in adventure.PLAYER["inventory"] 
 
 @pytest.mark.parametrize(
-        ["health", "item"],
+        ["action", "item"],
         [
             (
                 "eat",
                 {
                     "name": "snozzberry",
-                    "health": 30,
+                    "health_points": 30,
                     "eat_message": (
                         "You pick some purple berries to save for later.",
                         "You try one and it tastes a little tart but good.",
@@ -1147,7 +1147,7 @@ def test_do_consume_inventory_change(action, item):
                 "drink",
                 {
                     "name": "fizzy pop",
-                    "health": -5,
+                    "health_points": -5,
                     "drink_message": (
                         "You purchase a flask of bubbly drink.",
                         "It hisses softly when you take off the cork.",
@@ -1159,18 +1159,23 @@ def test_do_consume_inventory_change(action, item):
         ]
 )
 
-def test_do_consume_health_change(health, item):
+def test_do_consume_health_change(capsys, action, item):
     # Given: An item exists
     name = item["name"]
     adventure.ITEMS[name] = item
+    # And: Player has a set amount of health
+    adventure.PLAYER["health"] = 50
     # And: Player should have the item in their inventory
     inventory_change(name)
     # And the aliases are added to the aliases dictionary
     setup_aliases()
-    # When: call do_consume(health, [name]) to change Player's health status
-    do_consume(health, [name])
-    # Then: Player's health staus should be changed Note: Think about what to assert: maybe health_change "before" vs "after"
-    # or print the health points to see the change
+    # When: call do_consume(action, [name]) to change Player's health status
+    do_consume(action, [name])
+    output = capsys.readouterr().out
+    # Then: Player's health status should be changed
+    assert "Your health is now 80 points." in output
+    assert "your health is now 45 points." in output
+    # need to change the assert statements to make the amounts (80,45) as perameters in the parametrize above. Use test_health_change as a guide
 
 # @pytest.mark.skip(reason="work in progress (12.2)")
 def test_do_read_no_args(capsys):
@@ -1457,7 +1462,7 @@ def test_do_pet_skeptical_dragon(capsys):
     adventure.PLAYER["inventory"] = {"gems": 50}
     # And: Player has some health
     adventure.PLAYER["health"] = 90
-    # When: call do_pet9() with a valid argument
+    # When: call do_pet() with a valid argument
     do_pet(["blue"])
     output = capsys.readouterr().out
     # Then: a statement should print "You picked the dragon's skeptical blue head."
