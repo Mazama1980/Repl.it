@@ -1128,9 +1128,9 @@ def test_do_consume_inventory_change(action, item):
     assert name not in adventure.PLAYER["inventory"] 
 
 @pytest.mark.parametrize(
-        ["action", "item"],
-        [
-            (
+        ["start", "action", "item", "expected"], [
+            [
+                50,
                 "eat",
                 {
                     "name": "snozzberry",
@@ -1142,8 +1142,10 @@ def test_do_consume_inventory_change(action, item):
                         "so you decide that these berries will be useful at the right time.",
                     ),
                 },
-            ),
-            (
+                80,
+            ],
+            [
+                50,
                 "drink",
                 {
                     "name": "fizzy pop",
@@ -1155,16 +1157,17 @@ def test_do_consume_inventory_change(action, item):
                         "and your heart begins to race a little.",
                     ),
                 },
-            ),
+                45,
+            ],
         ]
 )
 
-def test_do_consume_health_change(capsys, action, item):
+def test_do_consume_health_change(capsys,start, action, item, expected):
     # Given: An item exists
     name = item["name"]
     adventure.ITEMS[name] = item
     # And: Player has a set amount of health
-    adventure.PLAYER["health"] = 50
+    adventure.PLAYER["health"] = start
     # And: Player should have the item in their inventory
     inventory_change(name)
     # And the aliases are added to the aliases dictionary
@@ -1173,9 +1176,11 @@ def test_do_consume_health_change(capsys, action, item):
     do_consume(action, [name])
     output = capsys.readouterr().out
     # Then: Player's health status should be changed
-    assert "Your health is now 80 points." in output
-    assert "your health is now 45 points." in output
-    # need to change the assert statements to make the amounts (80,45) as perameters in the parametrize above. Use test_health_change as a guide
+    assert (f"Your health is now {expected} points.") in output
+    # assert "your health is now 45 points." in output
+    # run the test and go through the debugger.
+
+
 
 # @pytest.mark.skip(reason="work in progress (12.2)")
 def test_do_read_no_args(capsys):
@@ -1496,6 +1501,32 @@ def test_health_change(start, amount, health, diff, message):
     # And: the value returned should be the difference in points
     assert result == diff
     
+def add(a, b):
+    return a + b
+
+def test_add_1_plus_1():
+    result = add(1, 1);
+    assert result == 2
+
+def test_add_2_plus_2():
+    result = add(2, 2);
+    assert result == 4
+
+def test_add_3_plus_3():
+    result = add(3, 3);
+    assert result == 6
+
+
+#@pytest.mark.parametrize(["a", "b", "expected"], [
+ #   [1, 1, 2],
+  #  [2, 2, 4],
+   # [3, 3, 6,]
+#]
+
+#def test_add(a, b, expected):
+ #   result = add(a, b);
+  #  assert result == expected
+                         
 
 # @pytest.mark.skip(reason="work in progress (12.6)")
 def test_wrap(capsys):
