@@ -1178,7 +1178,7 @@ def test_do_consume_health_change(capsys,start, action, item, expected):
     # Then: Player's health status should be changed
     assert (f"Your health is now {expected} points.") in output
     # assert "your health is now 45 points." in output
-    # run the test and go through the debugger.
+    # run the test and go through the debugger.Check Players health before running the health_change function. If its not 50 the problem in in the test
 
 
 
