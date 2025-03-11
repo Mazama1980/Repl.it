@@ -586,9 +586,9 @@ def do_consume(action: str, args: list): # make the consumable item set to zero;
         print()
         sleep(DELAY)
     # change Player's health points after consuming an item
-    breakpoint()
+    # breakpoint()
     new_health = health_change(item["health_points"])
-    print(f'Your health is now {new_health} points.')
+    print(f'Your health is now {PLAYER["health"]} points.')
     
     
 def do_drop(args: list):

@@ -1162,7 +1162,7 @@ def test_do_consume_inventory_change(action, item):
         ]
 )
 
-def test_do_consume_health_change(capsys,start, action, item, expected):
+def test_do_consume_health_change(capsys, start, action, item, expected):
     # Given: An item exists
     name = item["name"]
     adventure.ITEMS[name] = item
@@ -1177,10 +1177,35 @@ def test_do_consume_health_change(capsys,start, action, item, expected):
     output = capsys.readouterr().out
     # Then: Player's health status should be changed
     assert (f"Your health is now {expected} points.") in output
-    # assert "your health is now 45 points." in output
-    # run the test and go through the debugger.Check Players health before running the health_change function. If its not 50 the problem in in the test
 
 
+@pytest.mark.parametrize(["start", "action", "expected",],[[
+    50,
+    "eat",
+    50
+]
+])
+def test_do_consume_item_no_health_points(capsys, start, action, expected):
+    # Given: an item exists that can be consumed but no health_points
+    adventure.ITEMS["candy"] = {
+        "name": "candy",
+        "health_points": 0,
+        "eat_message": ("You eat a candy bar",
+                        "thinking it will give you energy,",
+                        "but it doesn't really help.",),
+    }
+    # And: Player has the item in inventory
+    adventure.PLAYER["inventory"] = {"candy": 1}
+    # And: Aliases are added to the ITEMS_ALIASES dictionary
+    # And: Player has health points
+    adventure.PLAYER["health"] = start
+    setup_aliases()
+    # When: call do_consume(action, ["candy"]) with the action("eat") and the argument ["candy"]
+    do_consume(action, ["candy"])
+    output = capsys.readouterr().out
+    # Then: assert that Player health has not changed
+    assert (f'Your health is now {expected} points.') in output
+    # Need to add to the function in the game to accomadate an item having no health_points
 
 # @pytest.mark.skip(reason="work in progress (12.2)")
 def test_do_read_no_args(capsys):
