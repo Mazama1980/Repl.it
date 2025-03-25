@@ -576,6 +576,7 @@ def do_consume(action: str, args: list): # make the consumable item set to zero;
     if not item.get(f'{action}_message'):
         error(f'Silly, you can not {action} this {name}.')
         return
+    # breakpoint()
     # set the consumable item to zero
     # call inventory_change to take item out of Player's inventory
     inventory_change(name, -1)
@@ -585,8 +586,11 @@ def do_consume(action: str, args: list): # make the consumable item set to zero;
         wrap(sentence)
         print()
         sleep(DELAY)
+    # check if the item has any health points 
+    if not item.get("health_points"):
+        print(f'The {name} has no health points.')
+        return
     # change Player's health points after consuming an item
-    # breakpoint()
     new_health = health_change(item["health_points"])
     print(f'Your health is now {PLAYER["health"]} points.')
     

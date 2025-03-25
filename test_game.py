@@ -1189,7 +1189,6 @@ def test_do_consume_item_no_health_points(capsys, start, action, expected):
     # Given: an item exists that can be consumed but no health_points
     adventure.ITEMS["candy"] = {
         "name": "candy",
-        "health_points": 0,
         "eat_message": ("You eat a candy bar",
                         "thinking it will give you energy,",
                         "but it doesn't really help.",),
@@ -1203,9 +1202,11 @@ def test_do_consume_item_no_health_points(capsys, start, action, expected):
     # When: call do_consume(action, ["candy"]) with the action("eat") and the argument ["candy"]
     do_consume(action, ["candy"])
     output = capsys.readouterr().out
+    # breakpoint()
     # Then: assert that Player health has not changed
-    assert (f'Your health is now {expected} points.') in output
-    # Need to add to the function in the game to accomadate an item having no health_points
+    assert (f'The candy has no health points.') in output
+    # Try to make items repopulate in store or inventory or consume part of an item. Or tweak
+    # the Items dictionary to add more consumables and health_points
 
 # @pytest.mark.skip(reason="work in progress (12.2)")
 def test_do_read_no_args(capsys):
