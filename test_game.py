@@ -489,6 +489,19 @@ def test_do_go_unallowed_direction(capsys):
     assert "Sorry, you can't go west from here." in output
 
 
+# Make an item regenerate in a place ie. 'berries' in the woods.
+# Player can take berries and eat them each time the woods are visited.
+# Add a new item in PLACES dictionary "persistent": ["berries"].
+# In the do_go function check to see if the item is in the list;
+# if not then add it so Player sees its available as part of the description.
+
+def test_do_go_check_items(): #Run tests to be sure I did'nt break anything when fixing bugs
+    ...
+    # Given: Player is in current place.
+    # And: current place has an item that repopulates each time the place is revisited.
+    # When:
+    # Then:
+
 def test_do_take(capsys):
     # Given: Item and quantity in Player's inventory
     adventure.PLAYER["inventory"]["sword"] = 1
@@ -1526,7 +1539,7 @@ def test_health_change(start, amount, health, diff, message):
     assert adventure.PLAYER["health"] == health, message
     # And: the value returned should be the difference in points
     assert result == diff
-    
+
 def add(a, b):
     return a + b
 

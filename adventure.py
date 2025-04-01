@@ -125,10 +125,10 @@ ITEMS = {
         "description": "A soft leather bound book laying on the desk. There may be useful information in it.",
         "message": (
             "At the edge of the woods is a cave that is home to a three "
-            "headed dragon, each with a different temperament. ",
+            "headed dragon, each with a different color and corresponding temperament. ",
 
             "Legend says that if you happen upon the dragon sleeping, the "
-            "brave may pet one of its three heads. ",
+            "brave may pet one of its three heads; red, green, or blue. ",
             
             "Choose the right head and you will be rewarded with great "
             "fortunes. ",
@@ -260,7 +260,9 @@ PLACES = {
             "An obelisk sits on a platform in the center of the square. " 
             "There are markings on the surface. You take note of what it says: "
             "l = look; e = examine; t = take; i = inventory; g = go; r = read; q = quit"
-            " buy; shop; eat; drink; pet. Use these commands wisely." 
+            " buy; shop; eat; drink; pet." 
+            "Items with two words are special and must be hyphenated."
+            "Use these commands wisely." 
         ),
         "items": [],
     },
@@ -275,7 +277,7 @@ PLACES = {
             "An inviting path is running through it. "
             "You notice that it's quiet and peaceful." 
         ),
-        "items": ["berry bush",],
+        "items": ["berries",],
         "can": ["pick"]
     },
     "lake": {
@@ -576,7 +578,6 @@ def do_consume(action: str, args: list): # make the consumable item set to zero;
     if not item.get(f'{action}_message'):
         error(f'Silly, you can not {action} this {name}.')
         return
-    # breakpoint()
     # set the consumable item to zero
     # call inventory_change to take item out of Player's inventory
     inventory_change(name, -1)
@@ -618,7 +619,7 @@ def do_examine(args: list):
     """Player can examine an item using the 'x', 'exam' or 'examine' command"""
     debug(f'Trying to examine {args}')
     if not args:
-        error("What do you want to exam?")
+        error("What do you want to examine?")
         return
     #Checking if the current place of the player has the item or the player has the item.
     name = args[0].lower()
