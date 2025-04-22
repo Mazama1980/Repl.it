@@ -495,12 +495,26 @@ def test_do_go_unallowed_direction(capsys):
 # In the do_go function check to see if the item is in the list;
 # if not then add it so Player sees its available as part of the description.
 
-def test_do_go_check_items(): #Run tests to be sure I did'nt break anything when fixing bugs
-    ...
-    # Given: Player is in current place.
-    # And: current place has an item that repopulates each time the place is revisited.
-    # When:
-    # Then:
+def test_do_go_check_items(capsys): #Run tests to be sure I did'nt break anything when fixing bugs
+    # ...
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "nowhere"
+    # And: Player moves to another place
+    adventure.PLACES["nowhere"] = {
+        "name": "nowhere is here",
+        "east": "somewhere",
+    }
+    # And: new place has an item that repopulates each time the place is revisited.
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere out there",
+        "persistent_items": ["flower",],
+        "can": ["pick"],
+    }
+    # When: call do_go(["east"])
+    do_go(["east"])
+    output = capsys.readouterr().out
+    # Then: item that is already used will reappear when area is revisited
+    assert "You see a flower" in output
 
 def test_do_take(capsys):
     # Given: Item and quantity in Player's inventory
