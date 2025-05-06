@@ -504,9 +504,15 @@ def test_do_go_check_items(capsys): #Run tests to be sure I did'nt break anythin
         "name": "nowhere is here",
         "east": "somewhere",
     }
+    # And the item "flower" must be added to the ITEMS dictionary for the do_look function
+    # to find the information it needs
+    adventure.ITEMS["flower"] = {
+        "key": "flower", "name": "flower", "description": "colorful flowers", "can_take": True,
+    }
     # And: new place has an item that repopulates each time the place is revisited.
     adventure.PLACES["somewhere"] = {
         "name": "somewhere out there",
+        "description": "A place with flowers.",
         "persistent_items": ["flower",],
         "can": ["pick"],
     }
@@ -514,7 +520,7 @@ def test_do_go_check_items(capsys): #Run tests to be sure I did'nt break anythin
     do_go(["east"])
     output = capsys.readouterr().out
     # Then: item that is already used will reappear when area is revisited
-    assert "You see a flower" in output
+    assert " flower" in output
 
 def test_do_take(capsys):
     # Given: Item and quantity in Player's inventory

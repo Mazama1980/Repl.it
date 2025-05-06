@@ -656,12 +656,17 @@ def do_go(args: list):
         return
     # update Player to new place and describe new place
     PLAYER["place"] = new_name
-    # check if a "persistent_item" exists in new_name.
-    items = PLACES.get("persistent_items")
+    new_place = get_place(new_name)
+    # check if a "persistent_item" exists in new_place.
+    items = new_place.get("persistent_items")
+    for item in items:
+        # breakpoint()
+        place_add(item)
     # Write a For Loop to itirate over all items in the persistent_items list
     # Read thru the For Loop section in Alissa's tutorial
     # If there is an item but it's been used, then add it back to the list
     # Try using the place_add function to add the item back to the PLACES dictionary if its gone
+    # do_look can't find the item. The key is missing. Need to fix that.
     do_look()
 
 
