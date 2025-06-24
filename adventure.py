@@ -206,6 +206,20 @@ ITEMS = {
             "are healthful and have healing properties."
         ),
     },
+    "mushrooms": {
+        "key": "mushrooms",
+        "name": "Mushrooms",
+        "aliases": ["toadstools", "fungus",],
+        "summary": "various types of edible mushrooms",
+        "description": ("Several types of fungus are available growing in the woods."
+                        "All mushrooms that you see are edible."
+                        "Some varieties may have different effects on you."),
+        "can_take": True,
+        "health_points": 30,
+        "eat_message": ("You pop a mushroom in your mouth;",
+                        "it tastes earthy.",
+                        "you feel a little more healthful."),
+    },
     "gems": {
         "key": "gems",
         "name": "Gems",
@@ -277,7 +291,7 @@ PLACES = {
             "An inviting path is running through it. "
             "You notice that it's quiet and peaceful." 
         ),
-        "items": ["berries",],
+        "persistent_items": ["berries", "mushrooms",],
         "can": ["pick"]
     },
     "lake": {
@@ -301,6 +315,7 @@ PLACES = {
             "Inside there are many things to buy."
         ),
         "items": ["crystal-ball", "dagger", "potion", "waybread", "fishing-tackle",],
+        "persistent_items": ["potion", "waybread",],
         "can": ["shop", "buy",],
     },
     "cave": {
@@ -342,7 +357,7 @@ def get_item(key: str) -> dict:
     """Getting (or returning) an item from the ITEMS dictionary"""
     item = ITEMS_ALIASES.get(key)
     if not item:
-        abort(f"Woops! The information about the item {key} seems to be missing.")
+        abort(f"Woops! The information about the item {key} seems to be missing. (Check if the setup_aliases() needs to be called.)")
     return item
 
 def get_place(key: str =None) -> dict:
@@ -660,13 +675,13 @@ def do_go(args: list):
     # check if a "persistent_item" exists in new_place.
     items = new_place.get("persistent_items")
     for item in items:
-        # breakpoint()
         place_add(item)
     # Write a For Loop to itirate over all items in the persistent_items list
     # Read thru the For Loop section in Alissa's tutorial
     # If there is an item but it's been used, then add it back to the list
     # Try using the place_add function to add the item back to the PLACES dictionary if its gone
-    # do_look can't find the item. The key is missing. Need to fix that.
+    # Write a test to determine why game breaks after taking mushrooms and berries then trying to go somewhere else
+    # even after consuming the mushroom. Run the game to see the error codes.
     do_look()
 
 

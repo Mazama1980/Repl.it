@@ -491,11 +491,11 @@ def test_do_go_unallowed_direction(capsys):
 
 # Make an item regenerate in a place ie. 'berries' in the woods.
 # Player can take berries and eat them each time the woods are visited.
-# Add a new item in PLACES dictionary "persistent": ["berries"].
+# Add a new item in PLACES dictionary "persistent_items": ["berries"].
 # In the do_go function check to see if the item is in the list;
 # if not then add it so Player sees its available as part of the description.
 
-def test_do_go_check_items(capsys): #Run tests to be sure I did'nt break anything when fixing bugs
+def test_do_go_check_items(capsys): #Run tests to be sure I didn't break anything when fixing bugs
     # ...
     # Given: Player is in current place
     adventure.PLAYER["place"] = "nowhere"
@@ -504,10 +504,15 @@ def test_do_go_check_items(capsys): #Run tests to be sure I did'nt break anythin
         "name": "nowhere is here",
         "east": "somewhere",
     }
-    # And the item "flower" must be added to the ITEMS dictionary for the do_look function
+    # And: the ITEMS_ALIASES dictionary exists
+    adventure.ITEMS_ALIASES = {}
+    # And: the item "flower" must be added to the ITEMS dictionary for the do_look function
     # to find the information it needs
     adventure.ITEMS["flower"] = {
-        "key": "flower", "name": "flower", "description": "colorful flowers", "can_take": True,
+        "key": "flower",
+        "name": "flower", 
+        "description": "colorful flowers", 
+        "can_take": True,
     }
     # And: new place has an item that repopulates each time the place is revisited.
     adventure.PLACES["somewhere"] = {
@@ -516,6 +521,8 @@ def test_do_go_check_items(capsys): #Run tests to be sure I did'nt break anythin
         "persistent_items": ["flower",],
         "can": ["pick"],
     }
+    # And: the aliases are added to the ITEMS_ALIASES dictionary by calling setup_aliases()
+    setup_aliases()
     # When: call do_go(["east"])
     do_go(["east"])
     output = capsys.readouterr().out
