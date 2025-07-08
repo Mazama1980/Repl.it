@@ -74,7 +74,16 @@ for name, species, age in pets:
 	# like saying name, species, age = pets[_] ; where _ is each index number
 	... # name="Gizmo", species="dog", age=8 the first time
 ```
+## NONETYPE Error
 
+Add the empty list brackets as a second
+     argument so if a place doesn't have a 'persistent_items' key then it can continue instead
+     of getting a NONETYPE error
+```python
+ items = new_place.get("persistent_items", [])
+    for item in items:
+      place_add(item)
+```
 ## Key Error
 
  When you get the KeyError use the `.get()` method so that the program can return something or `NONE`. The program is trying to find the key and value for the key; if the key does not exist then an error will occur but using `.get()` method says 'Oh well, I don't see the missing key so I will return NONE'. Be sure to use `()` instead of `[]` as it is a method.

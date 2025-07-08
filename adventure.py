@@ -672,18 +672,15 @@ def do_go(args: list):
     # update Player to new place and describe new place
     PLAYER["place"] = new_name
     new_place = get_place(new_name)
-    # check if a "persistent_item" exists in new_place.
-    items = new_place.get("persistent_items")
+    # check if a "persistent_item" exists in new_place. Add the empty list brackets as a second
+    # argument so if a place doesn't have a 'persistent_items' key then it can continue instead
+    # of getting a NONETYPE error
+    items = new_place.get("persistent_items", [])
     for item in items:
-        place_add(item)
-    # Write a For Loop to itirate over all items in the persistent_items list
-    # Read thru the For Loop section in Alissa's tutorial
-    # If there is an item but it's been used, then add it back to the list
-    # Try using the place_add function to add the item back to the PLACES dictionary if its gone
-    # Write a test to determine why game breaks after taking mushrooms and berries then trying to go somewhere else
-    # even after consuming the mushroom. Run the game to see the error codes.
+      place_add(item)
     do_look()
 
+# tweak the 'persistent_items' add more items; make them consumable; add health, etc.
 
 def do_inventory():
     """Listing the Player's current health and inventory. Called when the player types the
