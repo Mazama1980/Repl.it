@@ -46,6 +46,7 @@ def setup():
     ITEMS_ALIASES_STATE = deepcopy(adventure.ITEMS_ALIASES)
     WIDTH_STATE = deepcopy(adventure.WIDTH)
     adventure.DELAY = 0
+    adventure.DEBUG = True
 
     # this is where the test is run
     yield
@@ -470,6 +471,7 @@ def test_do_go_invalid_direction(capsys):
     # When: call do_go(["up"])
     do_go(["up"])
     output = capsys.readouterr().out
+    breakpoint()
     # Then: debug should say "Trying to go up"
     assert "Trying to go: ['up']" in output
     # And: error should say "Which way do you want to go?"
@@ -495,7 +497,7 @@ def test_do_go_unallowed_direction(capsys):
 # In the do_go function check to see if the item is in the list;
 # if not then add it so Player sees its available as part of the description.
 
-def test_do_go_check_items(capsys): #Run tests to be sure I didn't break anything when fixing bugs
+def test_do_go_check_items(capsys):
     # ...
     # Given: Player is in current place
     adventure.PLAYER["place"] = "nowhere"

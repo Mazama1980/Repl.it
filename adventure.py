@@ -173,7 +173,7 @@ ITEMS = {
     "waterskin": {
         "key": "waterskin",
         "name": "Waterskin",
-        "aliases": ["water bottle", "pouch", "water",],
+        "aliases": ["water bottle", "pouch",],
         "summary": "a waterskin",
         "description": (
             "An oval shaped bag made of hide.",
@@ -220,10 +220,30 @@ ITEMS = {
                         "it tastes earthy.",
                         "you feel a little more healthful."),
     },
+    "pebbles": {
+        "key": "pebbles",
+        "name": "colorful pebbles",
+        "aliases": ["rocks", "stones",],
+        "summary": "pebbles that are various colors",
+        "description": "the lake shore is made up of different"
+        "colored pebbles. They are rounded as if already partly"
+        "posished. You may want to put a few in your bag.",
+        "can_take": True, 
+    },
+    "water":{
+        "key": "water",
+        "name": "water",
+        "aliases": ["H2O","liquid",],
+        "summary": "clear water from lake Pukaki",
+        "description": "The water from Lake Pukaki"
+        "is clear and delicious. You can fill your"
+        "waterskin with the refreshing liquid.",
+        "can_take": True,
+    },
     "gems": {
         "key": "gems",
         "name": "Gems",
-        "aliases": ["rocks", "stones", "jewels"],
+        "aliases": ["shiny", "jewels"],
         "summary": "various sized gems",
         "description": "Piles of sparkling gems of different sizes and colors.",
     },
@@ -298,7 +318,7 @@ PLACES = {
         "key": "lake",
         "name": "Lake Pukaki",
         "south": "home",
-        #"can": ["pick",],
+        "persistent_items": ["colorful pebbles","water",],
         "description": (
             "The lake is a deep blue in color but it will change "
             "to a purple hue when its mood is unsettled. "
@@ -340,7 +360,7 @@ def abort(message: str):
     error(message)
     exit(1)
 
-def debug(message: str):
+def debug(message: str):#put a breakpoint in the debug function to see where debug is failing
     """If the Global Variable DEBUG is True then the message will print in colors for the Player"""
     if DEBUG == False: #set this to False to adjust the spacing of the text. also add some color to text headings
         # fg = foreground; bg = background
@@ -654,6 +674,7 @@ def do_examine(args: list):
 
 def do_go(args: list):
     """Player is moving to another area"""
+    breakpoint()
     debug(f"Trying to go: {args}")
     # checking that a valid direction has been asked
     if not args:
