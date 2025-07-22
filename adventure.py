@@ -15,7 +15,7 @@ from time import sleep
 WIDTH = 60
 MARGIN = 2
 DELAY = .75
-DEBUG = True
+DEBUG = False
 COMPASS = ("north", "south", "east", "west")
 COLORS = ["red", "blue", "green",]
 MAX_HEALTH = 100
@@ -209,7 +209,7 @@ ITEMS = {
     "mushrooms": {
         "key": "mushrooms",
         "name": "Mushrooms",
-        "aliases": ["toadstools", "fungus",],
+        "aliases": ["toadstools", "fungus", "shrooms",],
         "summary": "various types of edible mushrooms",
         "description": ("Several types of fungus are available growing in the woods."
                         "All mushrooms that you see are edible."
@@ -222,12 +222,12 @@ ITEMS = {
     },
     "pebbles": {
         "key": "pebbles",
-        "name": "colorful pebbles",
+        "name": "pebbles",
         "aliases": ["rocks", "stones",],
         "summary": "pebbles that are various colors",
         "description": "the lake shore is made up of different"
         "colored pebbles. They are rounded as if already partly"
-        "posished. You may want to put a few in your bag.",
+        "polished. You may want to put a few in your bag.",
         "can_take": True, 
     },
     "water":{
@@ -294,8 +294,8 @@ PLACES = {
             "An obelisk sits on a platform in the center of the square. " 
             "There are markings on the surface. You take note of what it says: "
             "l = look; e = examine; t = take; i = inventory; g = go; r = read; q = quit"
-            " buy; shop; eat; drink; pet." 
-            "Items with two words are special and must be hyphenated."
+            " buy; shop; eat; drink; pet. " 
+            "Items with two words are special and must be hyphenated. "
             "Use these commands wisely." 
         ),
         "items": [],
@@ -318,12 +318,14 @@ PLACES = {
         "key": "lake",
         "name": "Lake Pukaki",
         "south": "home",
-        "persistent_items": ["colorful pebbles","water",],
         "description": (
             "The lake is a deep blue in color but it will change "
             "to a purple hue when its mood is unsettled. "
             "There are mysteries to be found in Lake Pukaki's dark waters."
         ),
+        "persistent_items": ["pebbles", "water",],
+        "can": ["take"],
+        "items": ["pebbles", "water",],
     },
     "market": {
         "key": "market",
@@ -360,9 +362,9 @@ def abort(message: str):
     error(message)
     exit(1)
 
-def debug(message: str):#put a breakpoint in the debug function to see where debug is failing
+def debug(message: str):
     """If the Global Variable DEBUG is True then the message will print in colors for the Player"""
-    if DEBUG == False: #set this to False to adjust the spacing of the text. also add some color to text headings
+    if DEBUG == True: 
         # fg = foreground; bg = background
         debug_color = fg.lightblack + fx.italic
         print(MARGIN*" ", debug_color("Debug:" + message), sep="")
@@ -674,7 +676,6 @@ def do_examine(args: list):
 
 def do_go(args: list):
     """Player is moving to another area"""
-    breakpoint()
     debug(f"Trying to go: {args}")
     # checking that a valid direction has been asked
     if not args:
@@ -718,7 +719,8 @@ def do_inventory():
         write(f'{item["name"]:<15} {qty:>4}')
     print()
 
-
+# Add more persistent_items to PLACES. Try adding a function that can refill the waterskin.
+# Try making a point to playing the game.
 def do_look():
     """Player can look around in their current place using the 'l' or 'look' command. 
     Player can also look in a direction"""
@@ -753,7 +755,7 @@ def do_look():
         text = text + last
 
         print()
-        write(f"You see a {text}. \n")
+        write(f"You see (a) {text}. \n")
     print()
 
     # Printing what can be seen in a north, south, east, or west direction
@@ -892,7 +894,7 @@ def do_take(args: list):
     #Adding the item to the player's inventory
     inventory_change(key)
     print()
-    wrap(f"You pick up a {key} and put it in your pack.")
+    wrap(f"You pick up (a) {key} and put it in your pack.")
     # if new_place not in valid_place:
 
 def do_warp(args: list):

@@ -309,7 +309,7 @@ def test_do_look(capsys, items, items_text, message):
     assert "Hard to tell where you are." in output
     # And: it should print a list of items in the place
     # breakpoint()
-    assert f"You see a {items_text}." in output, message 
+    assert f"You see (a) {items_text}." in output, message 
     # And: should print nearby places
     assert f"To the north is fire swamp." in output
     assert f"To the east is pit of despair." in output
@@ -471,7 +471,6 @@ def test_do_go_invalid_direction(capsys):
     # When: call do_go(["up"])
     do_go(["up"])
     output = capsys.readouterr().out
-    breakpoint()
     # Then: debug should say "Trying to go up"
     assert "Trying to go: ['up']" in output
     # And: error should say "Which way do you want to go?"
@@ -562,7 +561,7 @@ def test_do_take(capsys):
     assert adventure.PLACES ["somewhere"]["items"] == [], "The items list should be empty when the sword is taken"
 
     # And: Print for player should say item was picked up
-    assert "pick up a sword" in output, "A message should be printed telling the Player that they took the item."
+    assert "pick up (a) sword" in output, "A message should be printed telling the Player that they took the item."
 
 
 def test_do_drop(capsys):
