@@ -719,8 +719,8 @@ def do_inventory():
         write(f'{item["name"]:<15} {qty:>4}')
     print()
 
-# Add more persistent_items to PLACES. Try adding a function that can refill the waterskin.
-# Try making a point to playing the game.
+# Add more persistent_items to PLACES. Try adding a function that can refill the waterskin and a fishing function.
+# Try making a flow (a point) to playing the game.
 def do_look():
     """Player can look around in their current place using the 'l' or 'look' command. 
     Player can also look in a direction"""
