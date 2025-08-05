@@ -26,6 +26,7 @@ from adventure import (
     setup_aliases,
     do_consume,
     do_warp,
+    do_talk,
 )
 # import pdbr
 from copy import deepcopy
@@ -1250,6 +1251,27 @@ def test_do_consume_item_no_health_points(capsys, start, action, expected):
     # the Items dictionary to add more consumables and health_points
 
 # @pytest.mark.skip(reason="work in progress (12.2)")
+def test_do_talk(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And a talking character exists in current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items": ["lady"],
+    }
+    # And the character (item) exists
+    adventure.ITEMS["lady"] = {
+        "name": "lady",
+        "speech": "Be at peace",
+    }
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
+    #  When: Player tries to talk to a game character
+    do_talk(["lady"])
+    output = capsys.readouterr().out
+    #  Then: message should contain "Be at peace"
+    assert "Be at peace" in output
+
 def test_do_read_no_args(capsys):
     # Given: Player is in current place 
     adventure.PLAYER["place"] = "somewhere"

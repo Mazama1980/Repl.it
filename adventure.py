@@ -240,6 +240,19 @@ ITEMS = {
         "waterskin with the refreshing liquid.",
         "can_take": True,
     },
+    "lady":{
+        "key": "lady",
+        "name": "Lady of the Lake",
+        "aliases": ["girl", "woman", "Graceful",],
+        "summary": "A lady that lives in the water of Lake Pukaki",
+        "description":("A lady lives in Lake Pukaki.",
+            "You might be able to call upon her to speak to her.",
+            "Perhaps skipping a pretty pebble will bring her to the surface.",),
+        "speech": ("You are seeking a locket."
+            "I will return it to you if you will accept this quest:"
+            "A crystal-ball was stolen from me - return it to me and I will",
+            "give you your locket."),
+    },
     "gems": {
         "key": "gems",
         "name": "Gems",
@@ -325,7 +338,7 @@ PLACES = {
         ),
         "persistent_items": ["pebbles", "water",],
         "can": ["take"],
-        "items": ["pebbles", "water",],
+        "items": ["pebbles", "water", "lady",],
     },
     "market": {
         "key": "market",
@@ -897,9 +910,26 @@ def do_take(args: list):
     wrap(f"You pick up (a) {key} and put it in your pack.")
     # if new_place not in valid_place:
 
+def do_talk(args:list): #change verbage for game start in cabin. 
+                        #write a skipping test and function to call the lady
+    if not args:
+        error("who do you want to talk to?")
+        return
+    # checking if current place of player has someone to talk to.
+    name = args[0].lower()
+    if not (place_has(name)):
+        error(f"Sorry, {name} is not here.")
+        return
+    item = get_item(name)
+    if not item.get("speech"):
+        error(f"Sorry, this person is mute.")
+        return
+    print()
+    print("They are saying.... ")
+    wrap(item["speech"], indent=-2)
+
 def do_warp(args: list):
     """Creator (Original Player) warps or jumps to another area."""
-    # breakpoint()
     debug(f'Trying to warp to: {args}')
     # checking that a valid place has been asked
     if not args:
@@ -961,6 +991,8 @@ def main():
             do_consume(command, args)
         elif command == "warp":
             do_warp(args)
+        elif command == "talk":
+            do_talk(args)
         else:
             error("No such command.")
             continue
