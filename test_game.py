@@ -27,6 +27,7 @@ from adventure import (
     do_consume,
     do_warp,
     do_talk,
+    do_skip,
 )
 # import pdbr
 from copy import deepcopy
@@ -1251,6 +1252,20 @@ def test_do_consume_item_no_health_points(capsys, start, action, expected):
     # the Items dictionary to add more consumables and health_points
 
 # @pytest.mark.skip(reason="work in progress (12.2)")
+def test_do_skip(capsys):
+    # Given: Player has item in inventory
+    adventure.PLAYER["inventory"] = {"pebble"}
+    # And: the item exists in the ITEMS dictionary
+    adventure.ITEMS["pebble"] = {
+        "name": "pebble",
+    }
+    # When: Player calls do_skip(["pebble"])
+    do_skip(["pebble"])
+    output = capsys.readouterr().out
+    # Then: message should contain "You skipped a pebble"
+    assert "You skipped a pebble" in output
+
+
 def test_do_talk(capsys):
     # Given: Player is in current place
     adventure.PLAYER["place"] = "somewhere"
@@ -1271,6 +1286,48 @@ def test_do_talk(capsys):
     output = capsys.readouterr().out
     #  Then: message should contain "Be at peace"
     assert "Be at peace" in output
+
+def test_do_talk_no_args(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # When: Player tries to talk without any args
+    do_talk([])
+    output = capsys.readouterr().out
+    # Then: "Who do you want to talk to?" should be in output
+    assert "Who do you want to talk to?" in output
+
+def test_do_talk_no_character(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: current place has no character to talk to 
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items": [],
+    }
+    # When: Player calls do_talk(["lady"]
+    do_talk(["lady"])
+    output = capsys.readouterr().out
+    # Then: message should contain "Sorry"
+    assert "Sorry" in output
+
+def test_do_talk_no_speech(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: Place has a character but doesn't have speech
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "item": ["wizard"],
+    }
+    # And: the item wizard has no speech
+    adventure.ITEMS["wizard"] = {
+        "name": "wizard",
+        "speech": [],
+    }
+    # When: Player calls do_talk(["speech"])
+    do_talk(["speech"])
+    output = capsys.readouterr().out
+    # Then: a message should print "Sorry, this person is mute."
+    assert "Sorry, this person is mute."
 
 def test_do_read_no_args(capsys):
     # Given: Player is in current place 

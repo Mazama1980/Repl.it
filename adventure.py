@@ -228,7 +228,12 @@ ITEMS = {
         "description": "the lake shore is made up of different"
         "colored pebbles. They are rounded as if already partly"
         "polished. You may want to put a few in your bag.",
-        "can_take": True, 
+        "can_take": True,
+        "skip_message": ("You skip a pebble on the",
+                         "surface of the lake.",
+                         "The ripples grow larger,",
+                         "and a lady rises above the blue",
+                         "of the water.")
     },
     "water":{
         "key": "water",
@@ -243,7 +248,7 @@ ITEMS = {
     "lady":{
         "key": "lady",
         "name": "Lady of the Lake",
-        "aliases": ["girl", "woman", "Graceful",],
+        "aliases": ["girl", "woman", "Graceful", "watery-tart",],
         "summary": "A lady that lives in the water of Lake Pukaki",
         "description":("A lady lives in Lake Pukaki.",
             "You might be able to call upon her to speak to her.",
@@ -885,6 +890,20 @@ def do_shop():
         write("No items in this place.")
     print()
 
+def do_skip(action: str, args: list):
+    """Player can skip an object in current place using the 'skip' command.
+    Args:
+    * action (str): "skip"
+    * args (list[str]): input from the player will be turned into a list
+    """
+    # check if you can skip things in current place
+    if not place_can("skip"):
+        error("Sorry, you can't skip things here.")
+        return
+    debug("Trying to skip a pebble.")
+# keep writing this command function. Use do_consume and do_pet for reference.
+# especially use player_has(); inventory_change
+
 def do_take(args: list):
     """Player can take an item and add it to their inventory using the 't',
     'take' or 'grab' command"""
@@ -913,7 +932,7 @@ def do_take(args: list):
 def do_talk(args:list): #change verbage for game start in cabin. 
                         #write a skipping test and function to call the lady
     if not args:
-        error("who do you want to talk to?")
+        error("Who do you want to talk to?")
         return
     # checking if current place of player has someone to talk to.
     name = args[0].lower()
@@ -993,6 +1012,8 @@ def main():
             do_warp(args)
         elif command == "talk":
             do_talk(args)
+        elif command == "skip":
+            do_skip(args)
         else:
             error("No such command.")
             continue
