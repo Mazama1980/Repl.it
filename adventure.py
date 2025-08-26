@@ -229,7 +229,7 @@ ITEMS = {
         "colored pebbles. They are rounded as if already partly"
         "polished. You may want to put a few in your bag.",
         "can_take": True,
-        "skip_message": ("You skip a pebble on the",
+        "throw_message": ("You skip a pebble on the",
                          "surface of the lake.",
                          "The ripples grow larger,",
                          "and a lady rises above the blue",
@@ -342,7 +342,7 @@ PLACES = {
             "There are mysteries to be found in Lake Pukaki's dark waters."
         ),
         "persistent_items": ["pebbles", "water",],
-        "can": ["take"],
+        "can": ["take", "throw"],
         "items": ["pebbles", "water", "lady",],
     },
     "market": {
@@ -890,19 +890,43 @@ def do_shop():
         write("No items in this place.")
     print()
 
-def do_skip(action: str, args: list):
-    """Player can skip an object in current place using the 'skip' command.
+def do_throw(action: str, args: list):
+    """Player can throw an object in current place using the 'throw' command.
     Args:
-    * action (str): "skip"
+    * action (str): "throw"
     * args (list[str]): input from the player will be turned into a list
     """
-    # check if you can skip things in current place
-    if not place_can("skip"):
-        error("Sorry, you can't skip things here.")
+    # check if you can throw things in current place
+    if not place_can("throw"):
+        error(f"Sorry, you can't {action} things here.")
         return
-    debug("Trying to skip a pebble.")
+    # breakpoint()
+    debug(f"Trying to {action} a {args}.")
+    # get the item entered by Player and make it lowercase
+    name = " ".join(args).lower()
+    # check if the item is in the Player's inventory
+    if not player_has(name):
+        error(f'Sorry, You do not have any {name} to {action}.')
+        return
+    # check if the item can be thrown
+    item = get_item(name)
+    if not item.get(f'{action}_message'):
+        error(f'Unfortunately, you can not {action} this {name}.')
+        return
+    # set the throwable item to zero
+    # call inventory_change to take item out of Player's inventory
+    inventory_change(name, -1)
+    print()
+    sentences = item[f'{action}_message']
+    for sentence in sentences:
+        wrap(sentence)
+        print()
+        sleep(DELAY)
+    
 # keep writing this command function. Use do_consume and do_pet for reference.
 # especially use player_has(); inventory_change
+# continue debugging; take out the action argument from the command and test. That part doesn't 
+# need to be like do_consume; there is no choice like 'eat' and 'drink'. 
 
 def do_take(args: list):
     """Player can take an item and add it to their inventory using the 't',
@@ -1012,8 +1036,8 @@ def main():
             do_warp(args)
         elif command == "talk":
             do_talk(args)
-        elif command == "skip":
-            do_skip(args)
+        elif command == "throw":
+            do_throw(args)
         else:
             error("No such command.")
             continue

@@ -27,7 +27,7 @@ from adventure import (
     do_consume,
     do_warp,
     do_talk,
-    do_skip,
+    do_throw,
 )
 # import pdbr
 from copy import deepcopy
@@ -1252,18 +1252,33 @@ def test_do_consume_item_no_health_points(capsys, start, action, expected):
     # the Items dictionary to add more consumables and health_points
 
 # @pytest.mark.skip(reason="work in progress (12.2)")
-def test_do_skip(capsys):
-    # Given: Player has item in inventory
-    adventure.PLAYER["inventory"] = {"pebble"}
+@pytest.mark.parametrize(["action"],[
+    ("throw",),
+])
+def test_do_throw(capsys, action):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: an item exists in current place with the ability to action (["throw"]) the item
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items": ["pebble"],
+        "can": ["throw"]
+    }
+    # And: Player has item in inventory
+    adventure.PLAYER["inventory"] = {"pebble": 1}
     # And: the item exists in the ITEMS dictionary
     adventure.ITEMS["pebble"] = {
         "name": "pebble",
+        "throw_message": ["You skip a pebble"],
     }
+    # And: aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
     # When: Player calls do_skip(["pebble"])
-    do_skip(["pebble"])
+    do_throw(action, ["pebble"])
     output = capsys.readouterr().out
+    breakpoint()
     # Then: message should contain "You skipped a pebble"
-    assert "You skipped a pebble" in output
+    assert "You skip a pebble " in output
 
 
 def test_do_talk(capsys):
