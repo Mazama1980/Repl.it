@@ -1252,10 +1252,10 @@ def test_do_consume_item_no_health_points(capsys, start, action, expected):
     # the Items dictionary to add more consumables and health_points
 
 # @pytest.mark.skip(reason="work in progress (12.2)")
-@pytest.mark.parametrize(["action"],[
-    ("throw",),
-])
-def test_do_throw(capsys, action):
+# @pytest.mark.parametrize(["action"],[
+    # ("throw",),
+# ])
+def test_do_throw(capsys):
     # Given: Player is in current place
     adventure.PLAYER["place"] = "somewhere"
     # And: an item exists in current place with the ability to action (["throw"]) the item
@@ -1273,12 +1273,12 @@ def test_do_throw(capsys, action):
     }
     # And: aliases are added to the ITEMS_ALIASES dictionary
     setup_aliases()
-    # When: Player calls do_skip(["pebble"])
-    do_throw(action, ["pebble"])
+    # When: Player calls do_throw(["pebble"])
+    do_throw (["pebble"])
     output = capsys.readouterr().out
-    breakpoint()
-    # Then: message should contain "You skipped a pebble"
-    assert "You skip a pebble " in output
+    # breakpoint()
+    # Then: message should contain "You skip a pebble"
+    assert "You skip a pebble" in output
 
 
 def test_do_talk(capsys):

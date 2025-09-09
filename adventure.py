@@ -229,11 +229,11 @@ ITEMS = {
         "colored pebbles. They are rounded as if already partly"
         "polished. You may want to put a few in your bag.",
         "can_take": True,
-        "throw_message": ("You skip a pebble on the",
-                         "surface of the lake.",
-                         "The ripples grow larger,",
-                         "and a lady rises above the blue",
-                         "of the water.")
+        "throw_message": (f"You skip a pebble on the",
+                         f"surface of the lake.",
+                         f"The ripples grow larger,",
+                         f"and a lady rises above the blue",
+                         f"of the water.")
     },
     "water":{
         "key": "water",
@@ -890,34 +890,33 @@ def do_shop():
         write("No items in this place.")
     print()
 
-def do_throw(action: str, args: list):
+def do_throw(args: list):
     """Player can throw an object in current place using the 'throw' command.
     Args:
-    * action (str): "throw"
     * args (list[str]): input from the player will be turned into a list
     """
     # check if you can throw things in current place
     if not place_can("throw"):
-        error(f"Sorry, you can't {action} things here.")
+        error(f"Sorry, you can't throw things here.")
         return
     # breakpoint()
-    debug(f"Trying to {action} a {args}.")
+    debug(f"Trying to throw.")
     # get the item entered by Player and make it lowercase
     name = " ".join(args).lower()
     # check if the item is in the Player's inventory
     if not player_has(name):
-        error(f'Sorry, You do not have any {name} to {action}.')
+        error(f'Sorry, You do not have any {name} to throw.')
         return
     # check if the item can be thrown
     item = get_item(name)
-    if not item.get(f'{action}_message'):
-        error(f'Unfortunately, you can not {action} this {name}.')
+    if not item.get:
+        error(f'Unfortunately, you can not throw this {name}.')
         return
     # set the throwable item to zero
     # call inventory_change to take item out of Player's inventory
     inventory_change(name, -1)
     print()
-    sentences = item[f'{action}_message']
+    sentences = item[f'throw_message']
     for sentence in sentences:
         wrap(sentence)
         print()
@@ -926,8 +925,8 @@ def do_throw(action: str, args: list):
 # keep writing this command function. Use do_consume and do_pet for reference.
 # especially use player_has(); inventory_change
 # continue debugging; take out the action argument from the command and test. That part doesn't 
-# need to be like do_consume; there is no choice like 'eat' and 'drink'. 
-
+# write a test_cannot_throw_in_current_place; test_do_throw_no_item; test_do_throw_cannot_throw
+# in test_do_throw: add another assert statement testing for inventory change
 def do_take(args: list):
     """Player can take an item and add it to their inventory using the 't',
     'take' or 'grab' command"""
