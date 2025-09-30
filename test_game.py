@@ -740,17 +740,14 @@ def test_place_can_when_false():
 def test_do_buy_when_place_cannot_buy(capsys):
     # Given: the player is in a current place
     adventure.PLAYER["place"] = "somewhere"
-
     # And: the current place does not have the 'can':'buy' key
     adventure.PLACES["somewhere"] = {
         "name": "Somewhere out there",
         "can": [],
     }
-
     # When: call do_buy and capture the output
     do_buy([])
     output = capsys.readouterr().out
-
     # Then: an error message saying you can't buy anything in the current place should print
     assert "Sorry, you can't buy things here." in output, "The statement should print"
 
@@ -1279,7 +1276,41 @@ def test_do_throw(capsys):
     # breakpoint()
     # Then: message should contain "You skip a pebble"
     assert "You skip a pebble" in output
+    assert ("pebble") not in adventure.PLAYER["inventory"]
 
+def test_cannot_throw_in_current_place(capsys):
+    # Given: the player is in a current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: the current place does not have the 'throw_message'
+    adventure.PLACES["somewhere"] = {
+        "name": "Somewhere out there",
+    }
+    # When: call do_throw and capture the output
+    do_throw ([])
+    output = capsys.readouterr().out
+    # Then: an error message "Sorry, you can't throw things here." will print
+    assert "Sorry, you can't throw things here." in output
+
+def test_do_throw_no_item(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # Given: Player does not have the item in inventory
+    adventure.PLAYER["inventory"] = {'pie': 0}
+    # And: the item exists in the ITEMS dictionary
+    adventure.ITEMS["pie"] = {
+        "name": "pie",
+        "throw_message": (f"you throw a pie")
+    }
+    # And: Player is in a place that allows to throw
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "can": ["throw"]
+    }
+    # When: call do_throw() with the "pie " key
+    do_throw("pie")
+    output = capsys.readouterr().out
+    # Then: the message "Sorry, You do not have any" should print
+    assert "Sorry, You do not have any" in output
 
 def test_do_talk(capsys):
     # Given: Player is in current place

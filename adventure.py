@@ -924,9 +924,10 @@ def do_throw(args: list):
     
 # keep writing this command function. Use do_consume and do_pet for reference.
 # especially use player_has(); inventory_change
-# continue debugging; take out the action argument from the command and test. That part doesn't 
-# write a test_cannot_throw_in_current_place; test_do_throw_no_item; test_do_throw_cannot_throw
-# in test_do_throw: add another assert statement testing for inventory change
+# continue debugging;
+# write a test_do_throw_cannot_throw; You wrote 3 tests that passed WOOHOO!(no_item, cannot_throw,
+# and Player inventory check in do_throw)
+
 def do_take(args: list):
     """Player can take an item and add it to their inventory using the 't',
     'take' or 'grab' command"""
