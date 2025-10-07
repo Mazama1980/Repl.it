@@ -253,9 +253,9 @@ ITEMS = {
         "description":("A lady lives in Lake Pukaki.",
             "You might be able to call upon her to speak to her.",
             "Perhaps skipping a pretty pebble will bring her to the surface.",),
-        "speech": ("You are seeking a locket."
-            "I will return it to you if you will accept this quest:"
-            "A crystal-ball was stolen from me - return it to me and I will",
+        "speech": ("You are seeking a locket. "
+            "I will return it to you if you will accept this quest: "
+            "A crystal-ball was stolen from me - return it to me and I will "
             "give you your locket."),
     },
     "gems": {
@@ -895,21 +895,25 @@ def do_throw(args: list):
     Args:
     * args (list[str]): input from the player will be turned into a list
     """
+    # check if Player typed an item to throw
+    if not args:
+        error("What would you like to throw?")
+        return
     # check if you can throw things in current place
     if not place_can("throw"):
         error(f"Sorry, you can't throw things here.")
         return
-    # breakpoint()
-    debug(f"Trying to throw.")
     # get the item entered by Player and make it lowercase
     name = " ".join(args).lower()
+    debug(f"Trying to throw {name}.")
     # check if the item is in the Player's inventory
+    # breakpoint()
     if not player_has(name):
         error(f'Sorry, You do not have any {name} to throw.')
         return
     # check if the item can be thrown
     item = get_item(name)
-    if not item.get:
+    if not item.get("throw_message"):
         error(f'Unfortunately, you can not throw this {name}.')
         return
     # set the throwable item to zero
@@ -922,11 +926,13 @@ def do_throw(args: list):
         print()
         sleep(DELAY)
     
-# keep writing this command function. Use do_consume and do_pet for reference.
+# Write a do_give function.
 # especially use player_has(); inventory_change
 # continue debugging;
-# write a test_do_throw_cannot_throw; You wrote 3 tests that passed WOOHOO!(no_item, cannot_throw,
-# and Player inventory check in do_throw)
+# write a do_give test
+# add verbage at beginning of game giving the look, go and examine commands. Add the talk,
+# throw, etc. commands to the obelisk in the market square
+# 
 
 def do_take(args: list):
     """Player can take an item and add it to their inventory using the 't',

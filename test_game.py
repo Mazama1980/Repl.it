@@ -1278,6 +1278,19 @@ def test_do_throw(capsys):
     assert "You skip a pebble" in output
     assert ("pebble") not in adventure.PLAYER["inventory"]
 
+def test_do_throw_no_args(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: the current place exists
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+    }
+    # When: call do_throw without an args do_throw()
+    do_throw([])
+    output = capsys.readouterr().out
+    # Then: message should print "What would you like to throw?"
+    assert "What would you like to throw?" in output
+
 def test_cannot_throw_in_current_place(capsys):
     # Given: the player is in a current place
     adventure.PLAYER["place"] = "somewhere"
@@ -1294,7 +1307,7 @@ def test_cannot_throw_in_current_place(capsys):
 def test_do_throw_no_item(capsys):
     # Given: Player is in current place
     adventure.PLAYER["place"] = "somewhere"
-    # Given: Player does not have the item in inventory
+    # And: Player does not have the item in inventory
     adventure.PLAYER["inventory"] = {'pie': 0}
     # And: the item exists in the ITEMS dictionary
     adventure.ITEMS["pie"] = {
@@ -1306,11 +1319,35 @@ def test_do_throw_no_item(capsys):
         "name": "somewhere",
         "can": ["throw"]
     }
-    # When: call do_throw() with the "pie " key
-    do_throw("pie")
+    # When: call do_throw() with the ["pie"] key
+    do_throw(["pie"])
     output = capsys.readouterr().out
     # Then: the message "Sorry, You do not have any" should print
     assert "Sorry, You do not have any" in output
+
+def test_do_throw_cannot_throw_item(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: Player has item in inventory
+    adventure.PLAYER["inventory"] = {'flower': 1}
+    # And: current place allows to throw
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "can": ["throw"],
+    }
+    # And: the item exists in the items dictionary
+    adventure.ITEMS["flower"] = {
+        "name": "flower",
+        "throw_message": []
+    }
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
+    # When: call do_throw() with the ["flower"] key
+    do_throw(["flower"])
+    output = capsys.readouterr().out
+    # breakpoint()
+    # Then: part of a message should print "Unfortunately,"
+    assert f'Unfortunately, you can not throw this ' in output
 
 def test_do_talk(capsys):
     # Given: Player is in current place
