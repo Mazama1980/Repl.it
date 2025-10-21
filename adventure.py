@@ -59,6 +59,14 @@ ITEMS = {
         "summary": "a faintly glowing ball",
         "description": "All it does is glow faintly; could be used in dark places.",
         "price": -5,
+        "can_give": True,
+        "give_message": (
+            "You pull the faintly glowing orb from your clothing. ",
+            "You extend your hand toward the Lady of the Lake. ",
+            "The crystal ball gently floats away from your hand, across ",
+            "the water, towards the Lady. She says ",
+            "Thank you for accepting this quest; as promised, here is your locket."
+        )
     },
     "dagger": {
         "key": "dagger",
@@ -299,7 +307,14 @@ PLACES = {
         "east": "town-square",
         "south": "woods",
         "north": "lake",
-        "description": "a cozy cabin nestled in the tall trees",
+        "description": (
+            "A cozy cabin nestled in the tall trees. Nailed to the ",
+            "back of the door are these commands:",
+            "look = 'l'",
+            "go = 'g'",
+            "examine = 'x'",
+            "use these commands often."
+        ),
         # "items": ["book", "desk", "stick", "bag"],
         "items": ["desk", "book", "stick", "bag", "waterskin",],
     },
@@ -342,7 +357,7 @@ PLACES = {
             "There are mysteries to be found in Lake Pukaki's dark waters."
         ),
         "persistent_items": ["pebbles", "water",],
-        "can": ["take", "throw"],
+        "can": ["take", "throw", "give"],
         "items": ["pebbles", "water", "lady",],
     },
     "market": {
@@ -692,6 +707,44 @@ def do_examine(args: list):
         print()
     wrap(item["description"])
 
+def do_give(args: list):
+    """Player can give an item from their inventory using the 'give' command.
+    Args:
+    * args (list[str]): input from the player will be turned into a list
+    """
+    # check if Player typed an item to give
+    if not args:
+        error("What would you like to give?")
+        return
+    # check if you can give things in current place
+    if not place_can("give"):
+        error("Sorry, you can't give things here.")
+        return
+    # get the item entered by Player and make it lowercase
+    name = " ".join(args).lower()
+    debug(f'Trying to throw {name}.')
+    # check if the item is in Player's inventory
+    if not player_has(name):
+        error(f'Sorry, You do not have any {name} to give.')
+        return
+    # check if the item can be given
+    item = get_item(name)
+    if not item.get("give_message"):
+        error(f'Unfortunately, you can not give this {name}.')
+        return
+    # set the given item to zero
+    # call inventory_change to take item out of Player's inventory
+    inventory_change(name, -1)
+    print()
+    sentences = item[f'give_message']
+    for sentence in sentences:
+        wrap(sentence)
+        print()
+        sleep(DELAY)
+
+
+
+
 def do_go(args: list):
     """Player is moving to another area"""
     debug(f"Trying to go: {args}")
@@ -907,7 +960,6 @@ def do_throw(args: list):
     name = " ".join(args).lower()
     debug(f"Trying to throw {name}.")
     # check if the item is in the Player's inventory
-    # breakpoint()
     if not player_has(name):
         error(f'Sorry, You do not have any {name} to throw.')
         return
@@ -926,12 +978,12 @@ def do_throw(args: list):
         print()
         sleep(DELAY)
     
-# Write a do_give function.
-# especially use player_has(); inventory_change
+# Finish Writing a do_give function. After basic tests/function passes then
+# add Player getting the locket added to inventory
+# especially use do_throw; player_has(); inventory_change
 # continue debugging;
-# write a do_give test
-# add verbage at beginning of game giving the look, go and examine commands. Add the talk,
-# throw, etc. commands to the obelisk in the market square
+# keep writing the do_give test
+# Add the talk, throw, etc. commands to the obelisk in the market square
 # 
 
 def do_take(args: list):
@@ -1044,6 +1096,8 @@ def main():
             do_talk(args)
         elif command == "throw":
             do_throw(args)
+        elif command == "give":
+            do_give(args)
         else:
             error("No such command.")
             continue

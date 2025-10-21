@@ -28,6 +28,7 @@ from adventure import (
     do_warp,
     do_talk,
     do_throw,
+    do_give,
 )
 # import pdbr
 from copy import deepcopy
@@ -1348,6 +1349,30 @@ def test_do_throw_cannot_throw_item(capsys):
     # breakpoint()
     # Then: part of a message should print "Unfortunately,"
     assert f'Unfortunately, you can not throw this ' in output
+
+def test_do_give(capsys):
+    # Given: Player in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: an item exists in current place with ability to action (["give"]) the item
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items": ["flower"],
+        "can": ["give"]
+    }
+    # And: item to give is in Player's inventory
+    adventure.PLAYER["inventory"] = {'flower': 1}
+    # And: item exists in ITEMS dictionary
+    adventure.ITEMS["flower"] = {
+        "name": "flower",
+        "give_message": ["You give a flower."],
+    }
+    # And: aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
+    # When: call do_give(["flower"])
+    do_give(["flower"])
+    output = capsys.readouterr().out
+    # Then: part of the message should print "You have given"
+    assert "You have given" in output
 
 def test_do_talk(capsys):
     # Given: Player is in current place
