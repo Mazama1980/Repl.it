@@ -1371,8 +1371,83 @@ def test_do_give(capsys):
     # When: call do_give(["flower"])
     do_give(["flower"])
     output = capsys.readouterr().out
-    # Then: part of the message should print "You have given"
-    assert "You have given" in output
+    # Then: part of the message should print "You give a flower."
+    assert "You give a flower." in output
+
+def test_do_give_no_args(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: current place exists
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+    }
+    # When: call do_give without an args do_give()
+    do_give([])
+    output =capsys.readouterr().out
+    # Then: message should print "What would you like to give?"
+    assert "What would you like to give?" in output
+
+def test_cannot_give_current_place(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: current place does not have the 'give_message'
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+    }
+    # When: call do_give(["flower"]) and capture the output
+    do_give(["flower"])
+    output = capsys.readouterr().out
+    # Then: an error message "Sorry, you can't give things here."
+    assert "Sorry, you can't give things here." in output
+
+def test_do_give_no_item(capsys):
+    # Given:Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: Player does not have the item in inventory
+    adventure.PLAYER["inventory"] = {'hug': 0}
+    # And: the item exists in the ITEMS dictionary
+    adventure.ITEMS["hug"] = {
+        "name": "hug",
+        "give_message": (f'you give a big hug.')
+    }
+    # And: Player is in a place that allows items to be given
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "can": ["give"]
+    }
+    # When: call do_give("hug") with the "hug" key
+    do_give(["hug"])
+    output = capsys.readouterr().out
+    # Then: an error message should say "You do not have any "
+    assert "You do not have any" in output
+
+def test_do_give_cannot_give_item(capsys):
+    # Given: Player is in current place
+    adventure.PLAYER["place"] = "somewhere"
+    # And: Player has item in inventory
+    adventure.PLAYER["inventory"] = {'flower': 1}
+    # And: current place allows to throw
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "can": ["give"],
+    }
+    # And: the item exists in the ITEMS dictionary
+    adventure.ITEMS["flower"] = {
+        "name": "flower",
+        "give_message": []
+    }
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
+    # Then: call do_give(["flower"])
+    do_give(["flower"])
+    output = capsys.readouterr().out
+    # When: an error message should say "Unfortunately, "
+    assert "Unfortunately, " in output
+
+def test_do_give_inventory_change():
+    # Given: put this test in do_give rather than writing a new one
+    # When:
+    # Then:
 
 def test_do_talk(capsys):
     # Given: Player is in current place

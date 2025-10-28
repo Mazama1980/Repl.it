@@ -266,6 +266,13 @@ ITEMS = {
             "A crystal-ball was stolen from me - return it to me and I will "
             "give you your locket."),
     },
+    "locket": {
+        "key": "locket",
+        "name": "locket",
+        "aliases": ["necklace",],
+        "summary": "a locket with sentimental value".
+        "discription": "A gold locket with a picture inside.",
+    },
     "gems": {
         "key": "gems",
         "name": "Gems",
@@ -735,6 +742,7 @@ def do_give(args: list):
     # set the given item to zero
     # call inventory_change to take item out of Player's inventory
     inventory_change(name, -1)
+    inventory_change("locket")
     print()
     sentences = item[f'give_message']
     for sentence in sentences:
@@ -978,11 +986,11 @@ def do_throw(args: list):
         print()
         sleep(DELAY)
     
-# Finish Writing a do_give function. After basic tests/function passes then
-# add Player getting the locket added to inventory
-# especially use do_throw; player_has(); inventory_change
-# continue debugging;
 # keep writing the do_give test
+# Finish Writing a do_give function. After basic tests/function passes then
+# add Player getting the locket added to inventory using another inventory_change("locket")
+# add verbage to give_message about recieving the locket
+# write tests for inventory change
 # Add the talk, throw, etc. commands to the obelisk in the market square
 # 
 
