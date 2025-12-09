@@ -1299,8 +1299,15 @@ def test_cannot_throw_in_current_place(capsys):
     adventure.PLACES["somewhere"] = {
         "name": "Somewhere out there",
     }
+    # And: an item exists in the ITEMS Dictionary
+    adventure.ITEMS["pebble"] = {
+        "name": "pebble",
+        "throw_message": ["You skip a pebble"],
+    }
+    # And: Player has a pebble in inventory
+    adventure.PLAYER["inventory"] = {"pebble": 1}
     # When: call do_throw and capture the output
-    do_throw ([])
+    do_throw (["pebble"])
     output = capsys.readouterr().out
     # Then: an error message "Sorry, you can't throw things here." will print
     assert "Sorry, you can't throw things here." in output
@@ -1373,6 +1380,10 @@ def test_do_give(capsys):
     output = capsys.readouterr().out
     # Then: part of the message should print "You give a flower."
     assert "You give a flower." in output
+    # And: make sure Player's inventory changes to zero for the item
+    assert "flower" not in adventure.PLAYER["inventory"]
+    # And: make sure a locket is added to Player's inventory
+    assert "locket" in adventure.PLAYER["inventory"]
 
 def test_do_give_no_args(capsys):
     # Given: Player is in current place
@@ -1444,10 +1455,6 @@ def test_do_give_cannot_give_item(capsys):
     # When: an error message should say "Unfortunately, "
     assert "Unfortunately, " in output
 
-def test_do_give_inventory_change():
-    # Given: put this test in do_give rather than writing a new one
-    # When:
-    # Then:
 
 def test_do_talk(capsys):
     # Given: Player is in current place

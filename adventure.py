@@ -270,7 +270,7 @@ ITEMS = {
         "key": "locket",
         "name": "locket",
         "aliases": ["necklace",],
-        "summary": "a locket with sentimental value".
+        "summary": "a locket with sentimental value",
         "discription": "A gold locket with a picture inside.",
     },
     "gems": {
@@ -334,7 +334,7 @@ PLACES = {
             "An obelisk sits on a platform in the center of the square. " 
             "There are markings on the surface. You take note of what it says: "
             "l = look; e = examine; t = take; i = inventory; g = go; r = read; q = quit"
-            " buy; shop; eat; drink; pet. " 
+            " buy; shop; eat; drink; talk; throw; give; pet. " 
             "Items with two words are special and must be hyphenated. "
             "Use these commands wisely." 
         ),
@@ -719,6 +719,10 @@ def do_give(args: list):
     Args:
     * args (list[str]): input from the player will be turned into a list
     """
+    # check if a locket exists for this function
+    locket = get_item("locket")
+    if not locket:
+        abort
     # check if Player typed an item to give
     if not args:
         error("What would you like to give?")
@@ -985,14 +989,12 @@ def do_throw(args: list):
         wrap(sentence)
         print()
         sleep(DELAY)
-    
-# keep writing the do_give test
-# Finish Writing a do_give function. After basic tests/function passes then
-# add Player getting the locket added to inventory using another inventory_change("locket")
-# add verbage to give_message about recieving the locket
-# write tests for inventory change
-# Add the talk, throw, etc. commands to the obelisk in the market square
-# 
+# Playing the game: the talk function works the same as the throw function to get the 
+# Lady of the Lake's attention. So the throw function isn't necessary unless I can make the 
+# throw function have to be used first.
+# Could change the values of price and health for items such as the crystal ball, berries,
+# mushrooms, etc. to make it a little harder for the Player.
+# write a test for line 723 in do_give function
 
 def do_take(args: list):
     """Player can take an item and add it to their inventory using the 't',
