@@ -1455,6 +1455,16 @@ def test_do_give_cannot_give_item(capsys):
     # When: an error message should say "Unfortunately, "
     assert "Unfortunately, " in output
 
+def test_do_give_no_item(capsys):
+    # Given: the item "locket" does not exist in the dictionary
+    adventure.ITEMS = {}
+    adventure.ITEMS_ALIASES = {}
+    # When: call do_give() without any args (arguments). The 'with' statement keeps the test from failing
+    with pytest.raises(SystemExit) as ex:
+        do_give("locket")
+    output = capsys.readouterr().out
+    # Then: the abort message should print "Woops! The information.... "
+    assert "Woops! The information " in output
 
 def test_do_talk(capsys):
     # Given: Player is in current place

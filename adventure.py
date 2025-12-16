@@ -34,12 +34,12 @@ PLAYER = {
 DRAGONS = [
         {
             "mood": "mischievous",
-            "treasure": (30, 100,),
+            "treasure": (15, 10,),
             "damage": (-15, -5),
             "message": ("throws {gems} gems at you causing you {health} damage."),
         },
         {   "mood": "affirming",
-            "treasure": (20, 80,),
+            "treasure": (30, 20,),
             "message": ("wants you to be happy and gives you {gems} gems.")
         },
         {   "mood": "skeptical",
@@ -58,7 +58,7 @@ ITEMS = {
         "aliases": ["ball", "globe", "light"],
         "summary": "a faintly glowing ball",
         "description": "All it does is glow faintly; could be used in dark places.",
-        "price": -5,
+        "price": -80,
         "can_give": True,
         "give_message": (
             "You pull the faintly glowing orb from your clothing. ",
@@ -86,7 +86,7 @@ ITEMS = {
         "aliases": ["green", "green drink", "health", "potion",],
         "summary": "a health potion ",
         "description": "Drinking this potion will make you feel refreshed.",
-        "price": -30,
+        "price": -40,
         "health_points": 50,
         "drink_message": (
             "You take the cork off the green flask.",
@@ -103,7 +103,7 @@ ITEMS = {
             "A bread like food that nourishes. "
             "It doesn't spoil so it works well for traveling."
         ),
-        "price": -5,
+        "price": -50,
         "health_points": 70,
         "eat_message": (
             "You unwrap the bread from it's covering.",
@@ -207,7 +207,7 @@ ITEMS = {
             "many, many of them to be filling."
         ),
         "can_take": True,
-        "health_points": 70,
+        "health_points": 5,
         "eat_message": (
             "You try a berry. It tastes tart but good.",
             "You feel better as if the berries",
@@ -223,7 +223,7 @@ ITEMS = {
                         "All mushrooms that you see are edible."
                         "Some varieties may have different effects on you."),
         "can_take": True,
-        "health_points": 30,
+        "health_points": 10,
         "eat_message": ("You pop a mushroom in your mouth;",
                         "it tastes earthy.",
                         "you feel a little more healthful."),
@@ -720,9 +720,7 @@ def do_give(args: list):
     * args (list[str]): input from the player will be turned into a list
     """
     # check if a locket exists for this function
-    locket = get_item("locket")
-    if not locket:
-        abort
+    get_item("locket")
     # check if Player typed an item to give
     if not args:
         error("What would you like to give?")
@@ -993,8 +991,8 @@ def do_throw(args: list):
 # Lady of the Lake's attention. So the throw function isn't necessary unless I can make the 
 # throw function have to be used first.
 # Could change the values of price and health for items such as the crystal ball, berries,
-# mushrooms, etc. to make it a little harder for the Player.
-# write a test for line 723 in do_give function
+# mushrooms, etc. to make it a little harder for the Player - 
+# I changed stuff - check to make sure that it works.
 
 def do_take(args: list):
     """Player can take an item and add it to their inventory using the 't',
