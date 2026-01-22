@@ -1357,6 +1357,31 @@ def test_do_throw_cannot_throw_item(capsys):
     # Then: part of a message should print "Unfortunately,"
     assert f'Unfortunately, you can not throw this ' in output
 
+def test_do_throw_add_item():
+    # Given: an item in Player's inventory
+    adventure.PLAYER["inventory"]["coin"] = 1
+    # And: Player is at a place where things can be thrown and item is in the current place
+    adventure.PLAYER["place"] = "somewhere"
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere out there",
+        "items": ["coin",],
+        "can": ["throw"]
+    }
+    # And: item can be taken
+    adventure.ITEMS["coin"] = {
+        "name": "coin",
+        "can_take": True,
+        "throw_message": "Make a wish!"
+    }
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
+    # When: call do_throw with the item
+    do_throw(["coin"])
+    # Then: pebble is gone from Player's inventory and "lady" has been added to 
+    # the current place (lake)
+    assert "coin" not in adventure.PLAYER["inventory"]
+    assert "lady" in adventure.PLACES["somewhere"]["items"]
+
 def test_do_give(capsys):
     # Given: Player in current place
     adventure.PLAYER["place"] = "somewhere"

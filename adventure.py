@@ -49,6 +49,7 @@ DRAGONS = [
 
 ]
 
+
 ITEMS_ALIASES = {}
 ITEMS = {
 # Crystal Ball      faintly glowing ball       5
@@ -333,8 +334,8 @@ PLACES = {
         "description": (
             "An obelisk sits on a platform in the center of the square. " 
             "There are markings on the surface. You take note of what it says: "
-            "l = look; e = examine; t = take; i = inventory; g = go; r = read; q = quit"
-            " buy; shop; eat; drink; talk; throw; give; pet. " 
+            "l = look; x = examine; t = take; i = inventory; g = go; r = read; q = quit"
+            " buy; drop; shop; eat; drink; talk; throw; give; pet. " 
             "Items with two words are special and must be hyphenated. "
             "Use these commands wisely." 
         ),
@@ -365,7 +366,7 @@ PLACES = {
         ),
         "persistent_items": ["pebbles", "water",],
         "can": ["take", "throw", "give"],
-        "items": ["pebbles", "water", "lady",],
+        "items": ["pebbles", "water",],
     },
     "market": {
         "key": "market",
@@ -496,6 +497,7 @@ def place_add(key: str):
     place = get_place()
     # Add the item key to the current place items list
     place.setdefault("items", [])
+    # breakpoint()
     if key not in place["items"]:
         place["items"].append(key)
 
@@ -953,47 +955,6 @@ def do_shop():
         write("No items in this place.")
     print()
 
-def do_throw(args: list):
-    """Player can throw an object in current place using the 'throw' command.
-    Args:
-    * args (list[str]): input from the player will be turned into a list
-    """
-    # check if Player typed an item to throw
-    if not args:
-        error("What would you like to throw?")
-        return
-    # check if you can throw things in current place
-    if not place_can("throw"):
-        error(f"Sorry, you can't throw things here.")
-        return
-    # get the item entered by Player and make it lowercase
-    name = " ".join(args).lower()
-    debug(f"Trying to throw {name}.")
-    # check if the item is in the Player's inventory
-    if not player_has(name):
-        error(f'Sorry, You do not have any {name} to throw.')
-        return
-    # check if the item can be thrown
-    item = get_item(name)
-    if not item.get("throw_message"):
-        error(f'Unfortunately, you can not throw this {name}.')
-        return
-    # set the throwable item to zero
-    # call inventory_change to take item out of Player's inventory
-    inventory_change(name, -1)
-    print()
-    sentences = item[f'throw_message']
-    for sentence in sentences:
-        wrap(sentence)
-        print()
-        sleep(DELAY)
-# Playing the game: the talk function works the same as the throw function to get the 
-# Lady of the Lake's attention. So the throw function isn't necessary unless I can make the 
-# throw function have to be used first.
-# Could change the values of price and health for items such as the crystal ball, berries,
-# mushrooms, etc. to make it a little harder for the Player - 
-# I changed stuff - check to make sure that it works.
-
 def do_take(args: list):
     """Player can take an item and add it to their inventory using the 't',
     'take' or 'grab' command"""
@@ -1036,6 +997,50 @@ def do_talk(args:list): #change verbage for game start in cabin.
     print()
     print("They are saying.... ")
     wrap(item["speech"], indent=-2)
+
+def do_throw(args: list):
+    """Player can throw an object in current place using the 'throw' command.
+    Args:
+    * args (list[str]): input from the player will be turned into a list
+    """
+    # check if Player typed an item to throw
+    if not args:
+        error("What would you like to throw?")
+        return
+    # check if you can throw things in current place
+    if not place_can("throw"):
+        error(f"Sorry, you can't throw things here.")
+        return
+    # get the item entered by Player and make it lowercase
+    name = " ".join(args).lower()
+    debug(f"Trying to throw {name}.")
+    # check if the item is in the Player's inventory
+    if not player_has(name):
+        error(f'Sorry, You do not have any {name} to throw.')
+        return
+    # check if the item can be thrown
+    item = get_item(name)
+    if not item.get("throw_message"):
+        error(f'Unfortunately, you can not throw this {name}.')
+        return
+    # set the throwable item to zero
+    # call inventory_change to take item out of Player's inventory
+    inventory_change(name, -1)
+    print()
+    sentences = item[f'throw_message']
+    for sentence in sentences:
+        wrap(sentence)
+        print()
+        sleep(DELAY)
+    place_add("lady")
+    
+# Playing the game: the talk function works the same as the throw function to get the 
+# Lady of the Lake's attention. So the throw function isn't necessary unless I can make the 
+# throw function have to be used first.THIS IS DONE!! PLAY THE GAME TO MAKE SURE
+# Could change the values of price and health for items such as the crystal ball, berries,
+# mushrooms, etc. to make it a little harder for the Player - 
+# I changed stuff - check to make sure that it works.
+#THIS IS DONE!! PLAY THE GAME TO MAKE SURE
 
 def do_warp(args: list):
     """Creator (Original Player) warps or jumps to another area."""

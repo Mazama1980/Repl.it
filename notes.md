@@ -141,3 +141,24 @@ def test_addition(number_one, number_two, result):
 	# the astrik tells python to make each item a separate argument instead just one argument together
     dragon["gems"] = random.randint(*possible_treasure)
 ```
+```python
+    Dictionary subscription: four ways to do it
+    1:ball = ITEMS["crystal-ball"] # Make a variable
+    2:ball = ITEMS.get("crystal-ball") # use the .get() function with a variable
+
+    if not ball: # You can check if item exists with .get()
+        error("whatever")
+        return
+
+    print(ball["name"]) # You can subscribe which part of dictionary you want
+    print(ball["summary"])
+
+    ball["summary"]# Another way You can subscribe which part of dictionary you want
+
+    3:ITEMS["crystal-ball"]["summary"] # subcribe a part of dictionary without a variable
+
+    # subcribe a part of dictionary without a variable then using empty curly braces and 0 amount
+    # to keep from getting errors
+    4:price = ITEMS.get("crystal-ball", {}).get("amount", 0)
+     total = price + something_else
+```
