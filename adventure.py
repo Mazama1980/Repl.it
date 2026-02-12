@@ -334,9 +334,9 @@ PLACES = {
         "description": (
             "An obelisk sits on a platform in the center of the square. " 
             "There are markings on the surface. You take note of what it says: "
-            "l = look; x = examine; t = take; i = inventory; g = go; r = read; q = quit"
+            "l = look; x = examine; t = take; i = inventory; g = go; r = read; q = quit;"
             " buy; drop; shop; eat; drink; talk; throw; give; pet. " 
-            "Items with two words are special and must be hyphenated. "
+            "Items in the shop with two words are special and must be hyphenated. "
             "Use these commands wisely." 
         ),
         "items": [],
@@ -1040,7 +1040,8 @@ def do_throw(args: list):
 # Could change the values of price and health for items such as the crystal ball, berries,
 # mushrooms, etc. to make it a little harder for the Player - 
 # I changed stuff - check to make sure that it works.
-#THIS IS DONE!! PLAY THE GAME TO MAKE SURE
+#THIS IS DONE!! PLAY THE GAME TO MAKE SURE. Update: the game breaks when trying to
+# pet a dragon with an error for the randint/randrange. There is no test for that.
 
 def do_warp(args: list):
     """Creator (Original Player) warps or jumps to another area."""
