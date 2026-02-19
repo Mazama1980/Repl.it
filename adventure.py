@@ -34,12 +34,12 @@ PLAYER = {
 DRAGONS = [
         {
             "mood": "mischievous",
-            "treasure": (15, 10,),
+            "treasure": (10, 15,),
             "damage": (-15, -5),
             "message": ("throws {gems} gems at you causing you {health} damage."),
         },
         {   "mood": "affirming",
-            "treasure": (30, 20,),
+            "treasure": (20, 30,),
             "message": ("wants you to be happy and gives you {gems} gems.")
         },
         {   "mood": "skeptical",

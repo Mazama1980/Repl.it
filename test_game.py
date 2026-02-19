@@ -1850,6 +1850,18 @@ def test_do_pet_skeptical_dragon(capsys):
     # And: a statement should print "caused you {damage} damage"
     assert f"gives you -10 damage" in output
 
+
+def test_do_pet_correct_randint_values():
+    # Given: the DRAGONS have treasure and damage values
+    # When: call do_pet()
+    # Then: assert an abort message if the values are not correct
+# this test is to make sure that the randint values are arranged correctly in their parentheses.
+# use the do_pet_skeptical_dragon test above as a template. No need to include inventory or health.
+# When this test is failing correctly then write a try/except block in the do_pet function.
+    ...
+
+
+
 # def test_health_bar():
     # When: call BAR(PLAYER["health"]) 
     # BAR(PLAYER["health"])
