@@ -755,8 +755,6 @@ def do_give(args: list):
         sleep(DELAY)
 
 
-
-
 def do_go(args: list):
     """Player is moving to another area"""
     debug(f"Trying to go: {args}")
@@ -884,13 +882,16 @@ def do_pet(args: list):
     debug(f"You picked the dragon's {dragon['mood']} {dragon['color']} head.")
     # getting the value of the treasure key
     possible_treasure = dragon.get("treasure", (0, 0))
-    # randomly choosing a number of gems from the range assigned to that dragon mood
-    dragon["gems"] = random.randint(*possible_treasure)
-    # adding treasure to Player's inventory
-    inventory_change("gems", dragon["gems"])
     # getting the amount of damage
     possible_damage = dragon.get("damage", (0,0))
-    dragon["health"] = random.randint(*possible_damage)
+    try:
+        # randomly choosing a number of gems and damage from the range assigned to that dragon's mood
+        dragon["gems"] = random.randint(*possible_treasure)
+        dragon["health"] = random.randint(*possible_damage)
+    except ValueError as ex:
+        abort ("Whoops, the values for the Dragon's treasure or damage may not be correct.")
+    # adding treasure to Player's inventory
+    inventory_change("gems", dragon["gems"])
     # reducing Player's health
     health_change(dragon["health"])
     # create a dramatic effect with timed (delayed) sentences
@@ -1034,14 +1035,7 @@ def do_throw(args: list):
         sleep(DELAY)
     place_add("lady")
     
-# Playing the game: the talk function works the same as the throw function to get the 
-# Lady of the Lake's attention. So the throw function isn't necessary unless I can make the 
-# throw function have to be used first.THIS IS DONE!! PLAY THE GAME TO MAKE SURE
-# Could change the values of price and health for items such as the crystal ball, berries,
-# mushrooms, etc. to make it a little harder for the Player - 
-# I changed stuff - check to make sure that it works.
-#THIS IS DONE!! PLAY THE GAME TO MAKE SURE. Update: the game breaks when trying to
-# pet a dragon with an error for the randint/randrange. There is no test for that.
+# Play the Game!!!
 
 def do_warp(args: list):
     """Creator (Original Player) warps or jumps to another area."""

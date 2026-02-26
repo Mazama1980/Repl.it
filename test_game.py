@@ -1851,13 +1851,29 @@ def test_do_pet_skeptical_dragon(capsys):
     assert f"gives you -10 damage" in output
 
 
-def test_do_pet_correct_randint_values():
-    # Given: the DRAGONS have treasure and damage values
-    # When: call do_pet()
-    # Then: assert an abort message if the values are not correct
-# this test is to make sure that the randint values are arranged correctly in their parentheses.
-# use the do_pet_skeptical_dragon test above as a template. No need to include inventory or health.
-# When this test is failing correctly then write a try/except block in the do_pet function.
+def test_do_pet_correct_randint_values(capsys):
+    # Given: Player is in current  place
+    adventure.PLAYER["place"] = "somewhere"
+    # And petting is allowed in current place
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "can": ["pet"],
+    }
+    # And: there is a blue dragon
+    adventure.COLORS = ["blue"]
+    # And: there is one dragon
+    adventure.DRAGONS = [{
+        "mood": "skeptical",
+        "damage": (10,-10),
+    }]
+    # And: aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
+    # When: call do_pet() with a valid argument in a exception block so it can abort correctly
+    with pytest.raises(SystemExit) as ex:
+        do_pet(["blue"])
+    output = capsys.readouterr().out
+    # Then: assert that an abort message prints if the values are not correct
+    assert "Whoops, the values for the Dragon's treasure or damage may not be correct." in output
     ...
 
 
