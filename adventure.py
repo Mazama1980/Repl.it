@@ -199,7 +199,7 @@ ITEMS = {
     "berries": {
         "key": "berries",
         "name": "Berries",
-        "aliases": ["wild food", "fruit",],
+        "aliases": ["wild food", "fruit", "berry", "berrie",],
         "summary": "wild fruit from the woods",
         "description": (
             "Berries that can be picked",
@@ -218,7 +218,7 @@ ITEMS = {
     "mushrooms": {
         "key": "mushrooms",
         "name": "Mushrooms",
-        "aliases": ["toadstools", "fungus", "shrooms",],
+        "aliases": ["toadstools", "fungus", "shrooms", "mushroom",],
         "summary": "various types of edible mushrooms",
         "description": ("Several types of fungus are available growing in the woods."
                         "All mushrooms that you see are edible."
@@ -232,10 +232,10 @@ ITEMS = {
     "pebbles": {
         "key": "pebbles",
         "name": "pebbles",
-        "aliases": ["rocks", "stones",],
+        "aliases": ["rocks", "stones", "pebble",],
         "summary": "pebbles that are various colors",
-        "description": "the lake shore is made up of different"
-        "colored pebbles. They are rounded as if already partly"
+        "description": "the lake shore is made up of different "
+        "colored pebbles. They are rounded as if already partly "
         "polished. You may want to put a few in your bag.",
         "can_take": True,
         "throw_message": (f"You skip a pebble on the",
@@ -257,7 +257,7 @@ ITEMS = {
     "lady":{
         "key": "lady",
         "name": "Lady of the Lake",
-        "aliases": ["girl", "woman", "Graceful", "watery-tart",],
+        "aliases": ["girl", "woman", "lady", "Lady", "watery-tart",],
         "summary": "A lady that lives in the water of Lake Pukaki",
         "description":("A lady lives in Lake Pukaki.",
             "You might be able to call upon her to speak to her.",
@@ -1035,7 +1035,7 @@ def do_throw(args: list):
         sleep(DELAY)
     place_add("lady")
     
-# Play the Game!!!
+# Play the Game!!! See why aliases are not all working. "lady" works but "pebble" does not, ect.
 
 def do_warp(args: list):
     """Creator (Original Player) warps or jumps to another area."""
