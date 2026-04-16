@@ -90,6 +90,20 @@ def fake_item():
 #     """This test demonstrates the concept of fixtures that yield."""
 #     print(f"====================== from the test: {yielding_fixture}")
 
+def test_setup_aliases_two():
+    # Given: the ITEMS_ALIASES() dictionary exists
+    adventure.ITEMS_ALIASES = {}
+    # And: an item has aliases
+    adventure.ITEMS["cookie"] = {
+        "key": "cookie",
+        "name": "cookie",
+        "aliases": {"biscuit", "wafer", "sweets",}
+    }
+    # When: call setup_aliases("wafer")
+    setup_aliases("wafer")
+    # Then: alias == item
+    assert ITEMS_ALIASES["wafer"] == "cookie"
+
 def test_is_for_sale():
     # GIVEN: an item with a price
     fake_item = {

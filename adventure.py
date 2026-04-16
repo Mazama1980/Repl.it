@@ -561,7 +561,7 @@ def setup_aliases():
     """Setting up ITEMS_ALIASES dictionary with alternate names or aliases that the Player could type for particular items of interest.
       There is no argument or returned value."""
     # A for loop will itirate over the items dictionary to aquire the key and item then iterate 
-    # over the ITEMS_ALIASES dictionary to check for alternate names (aliases) for that item.
+    # over that items's aliases list to check for alternate names (aliases) for that item.
     # for key, value in dictionary(): *getting the key and value pair from a dictionary*
     global ITEMS_ALIASES
     ITEMS_ALIASES = {}
@@ -801,7 +801,7 @@ def do_inventory():
     print()
 
 # Add more persistent_items to PLACES. Try adding a function that can refill the waterskin and a fishing function.
-# Try making a flow (a point) to playing the game.
+
 def do_look():
     """Player can look around in their current place using the 'l' or 'look' command. 
     Player can also look in a direction"""
@@ -964,6 +964,7 @@ def do_take(args: list):
         error("What are you trying to take?")
         return
     #Checking if the current place of the player has the item
+    breakpoint() #keep debugging this function to fix setup_aliases()
     key = args[0].lower()
     if not place_has(key):
         error(f"Sorry, I don't see a {key} here.")
