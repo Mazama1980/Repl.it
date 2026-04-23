@@ -514,18 +514,21 @@ def place_can(action: str) -> bool:
     else:
         return False
 
-def place_has(item_key: str) -> bool:
+def place_has(reference: str) -> bool:
     """"Return True if the place dictionary for the players current place
-        contains item_key in its "items" list, otherwise return False.
+        contains reference in its "items" list, otherwise return False.
 
         Args:
-        * item_key (str): Key from the ITEMS dictionary to look for in the place
+        * reference (str): Key or alias from the ITEMS_ALIASES dictionary to look for in the place
           "items" list
         """
+    item = ITEMS_ALIASES.get(reference)
+    key = item["key"]
     place = get_place()
+    breakpoint()
     if not place:
-        return
-    if item_key in place.get("items", []):
+        return False
+    if key in place.get("items", []):
         return True
     else:
         return False
@@ -964,7 +967,8 @@ def do_take(args: list):
         error("What are you trying to take?")
         return
     #Checking if the current place of the player has the item
-    breakpoint() #keep debugging this function to fix setup_aliases()
+    #breakpoint() #write a test (place_has_aliases) to make sure aliases for an item are found
+    # then original item is found (key = item["key"]) when the place.get("items", []) function gets called
     key = args[0].lower()
     if not place_has(key):
         error(f"Sorry, I don't see a {key} here.")
