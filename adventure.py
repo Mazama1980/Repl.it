@@ -522,10 +522,12 @@ def place_has(reference: str) -> bool:
         * reference (str): Key or alias from the ITEMS_ALIASES dictionary to look for in the place
           "items" list
         """
+    # Finding aliases for the item (reference) 
     item = ITEMS_ALIASES.get(reference)
+    # Getting the original item added to the aliases that were found above
     key = item["key"]
     place = get_place()
-    breakpoint()
+    # breakpoint()
     if not place:
         return False
     if key in place.get("items", []):

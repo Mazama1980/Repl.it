@@ -512,6 +512,13 @@ def test_do_go_unallowed_direction(capsys):
 # Add a new item in PLACES dictionary "persistent_items": ["berries"].
 # In the do_go function check to see if the item is in the list;
 # if not then add it so Player sees its available as part of the description.
+# 4/29/26 make a new function get_item_key() to call from other functions
+# - write a new function (and test) called get_item_key()
+#   which will look up an item by the key OR alias and return the key
+# - put the code from lines 525 - 528 in the place_has function in the new function and return the key
+# - replace those lines in the place_has() function with a call to your new get_item_key() function
+# - call your new function in place_remove() to get the item key, so that when we try to remove the key from place["items"], it removes the key, not the alias
+# - figure out if there are other places that are broken due to the alias/key mismatch and call your new function there too
 
 def test_do_go_check_items(capsys):
     # ...
@@ -2012,6 +2019,29 @@ def test_setup_aliases():
     assert adventure.ITEMS_ALIASES["stabby thing"] == adventure.ITEMS["sword"]
     # And: make sure that the key is in the ITEMS dictionary and the ITEMS_ALIASES dictionary
     assert adventure.ITEMS_ALIASES["sword"] == adventure.ITEMS["sword"]
+
+def test_place_has_aliases():
+    # Given:Player is in current place
+    adventure.PLAYER["place"] ="somewhere"
+    # And the ITEMS_ALIASES dictionary exists
+    adventure.ITEMS_ALIASES = {}
+    # And: the current place exists
+    adventure.PLACES["somewhere"] = {
+        "name": "somewhere",
+        "items": ["pen"]
+    }
+    # And an item exists in the ITEMS dictionary
+    adventure.ITEMS["pen"] = {
+        "name": "pen",
+        "key": "pen",
+        "aliases": ["pencil", "chalk"]
+    }
+    # And the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
+    # When: Call place_has("pencil") with the argument
+    result = place_has("pencil")
+    # Then: result should return True 
+    assert result
 
 ###############################################
 # example of how to test an expected exception
