@@ -29,6 +29,7 @@ from adventure import (
     do_talk,
     do_throw,
     do_give,
+    get_item_key,
 )
 # import pdbr
 from copy import deepcopy
@@ -515,10 +516,11 @@ def test_do_go_unallowed_direction(capsys):
 # 4/29/26 make a new function get_item_key() to call from other functions
 # - write a new function (and test) called get_item_key()
 #   which will look up an item by the key OR alias and return the key
-# - put the code from lines 525 - 528 in the place_has function in the new function and return the key
+# - put the code from lines 533 - 536 in the place_has function in the new function and return the key
 # - replace those lines in the place_has() function with a call to your new get_item_key() function
 # - call your new function in place_remove() to get the item key, so that when we try to remove the key from place["items"], it removes the key, not the alias
 # - figure out if there are other places that are broken due to the alias/key mismatch and call your new function there too
+# - add a test to make sure that it returns a key when a key (rather than an alias) is passed as an arguement
 
 def test_do_go_check_items(capsys):
     # ...
@@ -2019,6 +2021,22 @@ def test_setup_aliases():
     assert adventure.ITEMS_ALIASES["stabby thing"] == adventure.ITEMS["sword"]
     # And: make sure that the key is in the ITEMS dictionary and the ITEMS_ALIASES dictionary
     assert adventure.ITEMS_ALIASES["sword"] == adventure.ITEMS["sword"]
+
+def test_get_item_key():
+    # Given: the ITEMS_ALIASES dictionary exists
+    adventure.ITEMS_ALIASES = {}
+    # And: an item has an alias
+    adventure.ITEMS["pen"] = {
+        "name": "pen",
+        "key": "pen",
+        "aliases": ["pencil", "chalk"],
+    }
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
+    # When: call the get_item_key("pencil")
+    result = get_item_key("pencil")
+    # Then: the function is returning the key that is associated with the alias
+    assert result == "pen"
 
 def test_place_has_aliases():
     # Given:Player is in current place

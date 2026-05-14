@@ -423,6 +423,14 @@ def get_item(key: str) -> dict:
         abort(f"Woops! The information about the item {key} seems to be missing. (Check if the setup_aliases() needs to be called.)")
     return item
 
+def get_item_key(key_alias: str):
+    """Getting the key associated with it's aliases"""
+    # Finding aliases for the item (key_alias)
+    item = ITEMS_ALIASES.get(key_alias)
+    # Getting the original item added to the aliases that wre found above
+    key = item["key"]
+    return key
+
 def get_place(key: str =None) -> dict:
     """Getting (returns the current place) where the Player is at currently in the game"""
     # Getting the current Player place if there is no key 
@@ -514,7 +522,7 @@ def place_can(action: str) -> bool:
     else:
         return False
 
-def place_has(reference: str) -> bool:
+def place_has(key_alias: str) -> bool:
     """"Return True if the place dictionary for the players current place
         contains reference in its "items" list, otherwise return False.
 
@@ -523,7 +531,7 @@ def place_has(reference: str) -> bool:
           "items" list
         """
     # Finding aliases for the item (reference) 
-    item = ITEMS_ALIASES.get(reference)
+    item = ITEMS_ALIASES.get(key_alias)
     # Getting the original item added to the aliases that were found above
     key = item["key"]
     place = get_place()
