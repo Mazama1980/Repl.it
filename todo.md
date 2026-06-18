@@ -1,53 +1,69 @@
 ****
 # To Do
-
+# Make an item regenerate in a place ie. 'berries' in the woods.
+# Player can take berries and eat them each time the woods are visited.
+# Add a new item in PLACES dictionary "persistent_items": ["berries"].
+# In the do_go function check to see if the item is in the list;
+# if not then add it so Player sees its available as part of the description.
+# 4/29/26 make a new function get_item_key() to call from other functions
+# - write a new function (and test) called get_item_key()
+#   which will look up an item by the key OR alias and return the key
+# - put the code from lines 533 - 536 in the place_has function in the new function and return the key
+# - replace those lines in the place_has() function with a call to your new get_item_key() function
+# - call your new function in place_remove() to get the item key, so that when we try to remove the key from place["items"], 
+# - it removes the key, not the alias
+# - figure out if there are other places that are broken due to the alias/key mismatch and call your new function there too
+# - add a test to make sure that it returns a key when a key (rather than an alias) is passed as an arguement
+# - 6/17/2026: keep working on other places that may be broken as mentioned above and then write these 
+# - write test_get_item_key_no_item() for when there is no item in ITEMS_ALIASES with a key matching key_alias
+# - write test_get_item_key_no_key() for when there is no "key" listed for that item
 ## future to learn / do
 
-[x] add annotations and docstrings to 1-2 functions until they are all done
-[ ] respond to the TODO comments above some functions and fix the stuff
-[ ] for at least some, add an "Args:" section (to get practice)
-[x] add tests for
-    [x] place_has() #continue with writing this test 8/8/23
+* [x] add annotations and docstrings to 1-2 functions until they are all done
+* [ ] respond to the TODO comments above some functions and fix the stuff
+* [ ] for at least some, add an "Args:" section (to get practice)
+* [x] add tests for
+    * [x] place_has() #continue with writing this test 8/8/23
 
 ### Part 10.2 (tests)
 
-[x] write a test_place_can_true() test
-[x] in it, make a fake place that has a "can" key that contains a fake command string
-[x] call it with that string
-[x] assert that it is true
+* [x] write a test_place_can_true() test
+* [x] in it, make a fake place that has a "can" key that contains a fake command string
+* [x] call it with that string
+* [x] assert that it is true
 
-[x] write a test_place_can_false() test
-[x] figure out how to write this test
+* [x] write a test_place_can_false() test
+* [x] figure out how to write this test
 
-[x] do 10.2 A
-[x] do 10.2 C
-[x] write test for do_buy() command
-[-] do 10.3
-[x] finish do_buy() (to add the message about how many gems the player has and
+* [x] do 10.2 A
+* [x] do 10.2 C
+* [x] write test for do_buy() command
+* [-] do 10.3
+* [x] finish do_buy() (to add the message about how many gems the player has and
     the price of the item)
-[x] Fix inventory_change() as per failing test: test_inventory_change_with_negative_quantity
-[x] write a test_do_buy_actually_buy() for when the user really buys it
-[x] finish do_buy() to actually buy the item
-[x] 10.4 do the string formatting for the do_shop function list that prints out
-[ ] add tests for any do_*() functions that deal with items to include quotes in
+* [x] Fix inventory_change() as per failing test: test_inventory_change_with_negative_quantity
+* [x] write a test_do_buy_actually_buy() for when the user really buys it
+* [x] finish do_buy() to actually buy the item
+* [x] 10.4 do the string formatting for the do_shop function list that prints out
+* [ ] add tests for any do_*() functions that deal with items to include quotes in
     the key name, for example do_examine()
-[x] change tests to reflect changes made to 'key' and 'name' in the game functions
-[x] change your all your "name" keys in your ITEMS dictionary to be "summary"
-[x] go through all your do_*() functions to see where item["name"] is used, and see if you meant to use "name" or "summary"
-[x] change formatting on inventory
-[x] add tests for do_examine:
-    [x] when item is in the current place
-    [x] when item is in inventory
-    [x] when item not in inventory or the current place
-[x] Look at the way items are printed in the following commands, and check that
+* [x] change tests to reflect changes made to 'key' and 'name' in the game functions
+* [x] change your all your "name" keys in your ITEMS dictionary to be "summary"
+* [x] go through all your do_*() functions to see where item["name"] is used, and see if you meant to use "name" or "summary"
+* [x] change formatting on inventory
+* [x] add tests for do_examine:
+    * [x] when item is in the current place
+    * [x] when item is in inventory
+    * [x] when item not in inventory or the current place
+* [x] Look at the way items are printed in the following commands, and check that
     you are using the item["name"], item["key"], item["summary"], and
     item["description"] correctly
     [x] do_examine()
     [x] do_take()
     [x] do_buy()
     [x] do_drop
-[x] Do 10.4 C
-[x] Do 10.4 D first test is done. Need to implement code in do_examine
+* [x] Do 10.4 C
+* [x] Do 10.4 D first test is done. Need to implement code in do_examine
 
 ### Reorganize adventure.py
 
@@ -63,22 +79,22 @@ Proposed order of file is:
 
 ### Aliases function
 
-[x] write a test_setup_aliases() test
-    [x] ...
-[x] write a function setup_aliases() 
-    [x] write a for loop iterating over ITEMS.items() getting two variables `key` (str) and `item` (dict)
-        [x] nest a for loop iterating over item['aliases'] (list) getting the variable `alias` (str)
-            [x] add to ITEMS_ALIASES (dict) with the key `alias`(str) and the value `item` (dict) 
-    [x] add to ITEMS_ALIASES with the key `key` (str) and the value `item` (dict)
-[x] add ITEMS_ALIASES to tests and call setup_aliases() in tests (Alissa to figure this part out)
-[x] add 'aliases' key to each item where needed in the ITEMS dicionary
-    [x] add a list of possible words for each item as a dictionary in the 'aliases' key   
-[x] make a new global dicitionary ITEMS_ALIASES that's empty    
-[x] write or modify a test_get_item() test to reflect pulling from ITEMS_ALIASES
-    [x] make sure it works with the original item key, any alias in the aliases list, and for items with no "aliases" key
-[x] change the get_item() function to get items from ITEMS_ALIASES instead of ITEMS
-[x] call the function setup_aliases() in main()
-[x] might need to change some tests if any of them broke
+* [x] write a test_setup_aliases() test
+    * [x] ...
+* [x] write a function setup_aliases() 
+    * [x] write a for loop iterating over ITEMS.items() getting two variables `key` (str) and `item` (dict)
+        * [x] nest a for loop iterating over item['aliases'] (list) getting the variable `alias` (str)
+            * [x] add to ITEMS_ALIASES (dict) with the key `alias`(str) and the value `item` (dict) 
+    * [x] add to ITEMS_ALIASES with the key `key` (str) and the value `item` (dict)
+* [x] add ITEMS_ALIASES to tests and call setup_aliases() in tests (Alissa to figure this part out)
+* [x] add 'aliases' key to each item where needed in the ITEMS dicionary
+    * [x] add a list of possible words for each item as a dictionary in the 'aliases' key   
+* [x] make a new global dicitionary ITEMS_ALIASES that's empty    
+* [x] write or modify a test_get_item() test to reflect pulling from ITEMS_ALIASES
+    * [x] make sure it works with the original item key, any alias in the aliases list, and for items with no "aliases" key
+* [x] change the get_item() function to get items from ITEMS_ALIASES instead of ITEMS
+* [x] call the function setup_aliases() in main()
+* [x] might need to change some tests if any of them broke
 
 ```python
 # imaginary ITEMS dict

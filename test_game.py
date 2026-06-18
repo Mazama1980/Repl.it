@@ -91,20 +91,6 @@ def fake_item():
 #     """This test demonstrates the concept of fixtures that yield."""
 #     print(f"====================== from the test: {yielding_fixture}")
 
-def test_setup_aliases_two():
-    # Given: the ITEMS_ALIASES() dictionary exists
-    adventure.ITEMS_ALIASES = {}
-    # And: an item has aliases
-    adventure.ITEMS["cookie"] = {
-        "key": "cookie",
-        "name": "cookie",
-        "aliases": {"biscuit", "wafer", "sweets",}
-    }
-    # When: call setup_aliases("wafer")
-    setup_aliases("wafer")
-    # Then: alias == item
-    assert ITEMS_ALIASES["wafer"] == "cookie"
-
 def test_is_for_sale():
     # GIVEN: an item with a price
     fake_item = {
@@ -208,8 +194,11 @@ def test_place_has():
         "items": "sword",
     }
     adventure.ITEMS["sword"] = {
+        "key": "sword",
         "name": "sword",
     } 
+    # And: the aliases are added to the ITEMS_ALIASES dictionary
+    setup_aliases()
     # When: call place_has() with one argument (item)
     result = place_has("sword")
     # Then: result will return True if the item is in the current place
@@ -508,19 +497,7 @@ def test_do_go_unallowed_direction(capsys):
     assert "Sorry, you can't go west from here." in output
 
 
-# Make an item regenerate in a place ie. 'berries' in the woods.
-# Player can take berries and eat them each time the woods are visited.
-# Add a new item in PLACES dictionary "persistent_items": ["berries"].
-# In the do_go function check to see if the item is in the list;
-# if not then add it so Player sees its available as part of the description.
-# 4/29/26 make a new function get_item_key() to call from other functions
-# - write a new function (and test) called get_item_key()
-#   which will look up an item by the key OR alias and return the key
-# - put the code from lines 533 - 536 in the place_has function in the new function and return the key
-# - replace those lines in the place_has() function with a call to your new get_item_key() function
-# - call your new function in place_remove() to get the item key, so that when we try to remove the key from place["items"], it removes the key, not the alias
-# - figure out if there are other places that are broken due to the alias/key mismatch and call your new function there too
-# - add a test to make sure that it returns a key when a key (rather than an alias) is passed as an arguement
+
 
 def test_do_go_check_items(capsys):
     # ...

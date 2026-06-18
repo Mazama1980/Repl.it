@@ -427,6 +427,7 @@ def get_item_key(key_alias: str):
     """Getting the key associated with it's aliases"""
     # Finding aliases for the item (key_alias)
     item = ITEMS_ALIASES.get(key_alias)
+    # breakpoint()
     # Getting the original item added to the aliases that wre found above
     key = item["key"]
     return key
@@ -531,11 +532,9 @@ def place_has(key_alias: str) -> bool:
           "items" list
         """
     # Finding aliases for the item (reference) 
-    item = ITEMS_ALIASES.get(key_alias)
-    # Getting the original item added to the aliases that were found above
-    key = item["key"]
-    place = get_place()
     # breakpoint()
+    key = get_item_key(key_alias)
+    place = get_place()
     if not place:
         return False
     if key in place.get("items", []):
@@ -547,7 +546,8 @@ def place_remove(key: str):
     """Remove an item from a current place"""
     # Get the current place
     place = get_place()
-
+    # finding aliases for the item (reference)
+    key = get_item_key()
     # Making sure that the item key is in the current place items list
     if not place_has(key):
         return
