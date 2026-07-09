@@ -428,8 +428,10 @@ def get_item_key(key_alias: str):
     # Finding aliases for the item (key_alias)
     item = ITEMS_ALIASES.get(key_alias)
     # breakpoint()
-    # Getting the original item added to the aliases that wre found above
-    key = item["key"]
+    # Getting the original item added to the aliases that were found above
+    key = item.get("key")
+    if not key:
+        abort(f'The key about the item {item["name"]} seems to be missing.')
     return key
 
 def get_place(key: str =None) -> dict:

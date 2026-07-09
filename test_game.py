@@ -2015,6 +2015,19 @@ def test_get_item_key():
     # Then: the function is returning the key that is associated with the alias
     assert result == "pen"
 
+def test_get_item_key_no_key(capsys):
+    # Given: the ITEMS_ALIASES dictionary exists with an item but no "key"
+    adventure.ITEMS_ALIASES["pen"] = {
+        "name": "pen",
+        "aliases": ["pencil", "chalk"]
+    }
+    # When: call get_item_key("pencil")
+    with pytest.raises(SystemExit) as ex:
+        get_item_key("pen")
+    output = capsys.readouterr().out
+    # Then: the function should abort because a "key" needs to be returned
+    assert "The information about the item " in output
+
 def test_place_has_aliases():
     # Given:Player is in current place
     adventure.PLAYER["place"] ="somewhere"

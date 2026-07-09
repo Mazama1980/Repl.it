@@ -1,23 +1,23 @@
 ****
-# To Do
-# Make an item regenerate in a place ie. 'berries' in the woods.
-# Player can take berries and eat them each time the woods are visited.
-# Add a new item in PLACES dictionary "persistent_items": ["berries"].
-# In the do_go function check to see if the item is in the list;
-# if not then add it so Player sees its available as part of the description.
-# 4/29/26 make a new function get_item_key() to call from other functions
-# - write a new function (and test) called get_item_key()
-#   which will look up an item by the key OR alias and return the key
-# - put the code from lines 533 - 536 in the place_has function in the new function and return the key
-# - replace those lines in the place_has() function with a call to your new get_item_key() function
-# - call your new function in place_remove() to get the item key, so that when we try to remove the key from place["items"], 
-# - it removes the key, not the alias
-# - figure out if there are other places that are broken due to the alias/key mismatch and call your new function there too
-# - add a test to make sure that it returns a key when a key (rather than an alias) is passed as an arguement
-# - 6/17/2026: keep working on other places that may be broken as mentioned above and then write these 
-# - write test_get_item_key_no_item() for when there is no item in ITEMS_ALIASES with a key matching key_alias
-# - write test_get_item_key_no_key() for when there is no "key" listed for that item
-## future to learn / do
+* [ ] To Do
+* [x] Make an item regenerate in a place ie. 'berries' in the woods.
+* [x] Player can take berries and eat them each time the woods are visited.
+* [x] Add a new item in PLACES dictionary "persistent_items": ["berries"].
+* [x] In the do_go function check to see if the item is in the list;
+* [x] if not then add it so Player sees its available as part of the description.
+* [x] 4/29/26 make a new function get_item_key() to call from other functions
+*  [x] write a new function (and test) called get_item_key()
+*  [x] which will look up an item by the key OR alias and return the key
+*  [x] put the code from lines 533 - 536 in the place_has function in the new function and return the key
+*  [x] replace those lines in the place_has() function with a call to your new get_item_key() function
+*  [x] call your new function in place_remove() to get the item key, so that when we try to remove the key from place ["items"], 
+*  [x] it removes the key, not the alias
+*  [x] figure out if there are other places that are broken due to the alias/key mismatch and call your new  function there too
+*  [x] add a test to make sure that it returns a key when a key (rather than an alias) is passed as an arguement
+*  [ ] 6/17/2026: keep working on other places that may be broken as mentioned above and then write these 
+*  [ ] write test_get_item_key_no_item() for when there is no item in ITEMS_ALIASES with a key matching key_alias
+*  [x] write test_get_item_key_no_key() for when there is no "key" listed for that item
+*  [ ]  future to learn / do
 
 * [x] add annotations and docstrings to 1-2 functions until they are all done
 * [ ] respond to the TODO comments above some functions and fix the stuff
